@@ -1,0 +1,74 @@
+#----------------------------------#
+#           BeaconShield           #
+#----------------------------------#
+
+# Configuration file for the BeaconShield plugin.
+# This file contains all customizable settings for the server owner.
+#
+# If you have any questions or need assistance, feel free to contact me:
+# Discord: @cykvta
+# GitHub: https://github.com/cykvta
+
+#----------------------------------#
+#          Beacon Settings         #
+#----------------------------------#
+
+# The maximum number of beacons a player can place.
+max-beacons-per-player: 1
+
+# The maximum number of chunks a single beacon can protect.
+# This includes the chunk where the beacon is placed.
+max-chunks-per-beacon: 9
+
+# The block used to display chunk borders in preview mode.
+preview-block: "minecraft:gold_block"
+
+# Greeting and farewell messages shown when a player enters or leaves a beacon-protected area.
+# Set the message to "" to disable it.
+greeting:
+  message: "&7You have entered the beacon area of &b{0}"
+  title: "&bProtection of {0}"
+  subtitle: "&7You have entered the beacon area of &b{0}"
+
+farewell:
+  message: "&7You have left the beacon area of &b{0}"
+  title: "&bProtection of {0}"
+  subtitle: "&7You have left the beacon area of &b{0}"
+
+#----------------------------------#
+#          Economy Settings        #
+#----------------------------------#
+# The economy system is optional and requires Vault to be installed.
+
+# The base price of a chunk.
+base-price: 100
+
+# If enabled, the formula will be used to calculate the chunk's price.
+use-formula: true
+
+# The formula for calculating the chunk's price.
+# %distance% -> Represents the distance between the beacon chunk and the claimed chunk, calculated using the Manhattan distance.
+# %base_price% -> Represents the base price of the chunk.
+# %chunks_owned% -> Represents the number of chunks that the territory has.
+#
+# WARNING: Ensure the formula is not too complex, as it may cause performance issues.
+formula: "%base_price% * %distance%"
+
+#----------------------------------#
+#           Fuel Settings          #
+#----------------------------------#
+
+# Enables or disables particle effects when fuel is burning.
+fuel-particles: true
+
+# List of fuel items that can be used to keep the beacon active.
+# - item: The item ID.
+# - burn-time: Duration (in seconds) that the item provides fuel.
+# - custom-model-data: Custom model data for the item (set to 0 if not used).
+fuel-items:
+  - item: "minecraft:coal"
+    burn-time: 60
+    custom-model-data: 0
+  - item: "minecraft:coal_block"
+    burn-time: 540
+    custom-model-data: 0
