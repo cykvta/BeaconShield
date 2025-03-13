@@ -16,15 +16,6 @@ public final class BeaconShield extends JavaPlugin {
     private BeaconDataManager beaconDataManager;
     private HookHandler hookHandler;
 
-    /**
-     * TODO Current:
-     *      - add fuel system to the beacon via inventory ** Need to be tested, a lot of bugs
-     *      - add a system to add upgrades to the beacon (disable mob spawn, disable friendly fire, etc)
-     * <p>
-     * TODO Future:
-     *      - add a system to raid beacons based on chunk conquest
-     */
-
     @Override
     public void onEnable() {
         // Metrics
