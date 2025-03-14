@@ -5,7 +5,7 @@ import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.data.UpgradeHandler;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
-import icu.cykuta.beaconshield.utils.PluginConfiguration;
+import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;

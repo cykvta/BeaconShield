@@ -6,7 +6,7 @@ import icu.cykuta.beaconshield.data.BeaconDataManager;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
 import icu.cykuta.beaconshield.gui.views.ConfirmationGUI;
 import icu.cykuta.beaconshield.utils.GUIHelper;
-import icu.cykuta.beaconshield.utils.PluginConfiguration;
+import icu.cykuta.beaconshield.config.PluginConfiguration;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -24,7 +24,7 @@ public abstract class GUI {
     private final Map<Integer, Consumer<GUIClick>> buttonActions = new HashMap<>();
     private final String inventoryName;
     private Storage storage;
-    private final PluginConfiguration guiConfig = BeaconShield.getPlugin().getFileHandler().getGui();
+    protected final PluginConfiguration guiConfig = BeaconShield.getPlugin().getFileHandler().getGui();
 
     public GUI(String inventoryName, int chestSize) {
         this.chestSize = chestSize;

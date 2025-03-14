@@ -1,9 +1,7 @@
 package icu.cykuta.beaconshield.gui.views;
 
-import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIClick;
-import icu.cykuta.beaconshield.utils.PluginConfiguration;
 
 import java.util.function.Consumer;
 
@@ -25,8 +23,7 @@ public class ConfirmationGUI extends GUI {
                 18, 19, 20, 21, 22, 23, 24, 25, 26
         );
 
-        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
-        this.addInventoryButton(11, "yes", this.consumer);
-        this.addInventoryButton(15, "no", (guiClick) -> this.openGUI(guiClick.getClicker(), this.previousGUI));
+        this.addInventoryButton(11, "confirm", this.consumer);
+        this.addInventoryButton(15, "deny", (guiClick) -> this.openGUI(guiClick.getClicker(), this.previousGUI));
     }
 }

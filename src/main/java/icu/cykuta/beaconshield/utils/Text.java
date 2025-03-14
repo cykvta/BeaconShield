@@ -2,8 +2,11 @@ package icu.cykuta.beaconshield.utils;
 
 import net.md_5.bungee.api.ChatColor;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Text {
 
@@ -48,5 +51,12 @@ public class Text {
         }
 
         return result.toString();
+    }
+
+    public static List<String> replace(@Nullable List<String> text, String... replacements) {
+        if (text == null) {
+            return new java.util.ArrayList<>();
+        }
+        return text.stream().map(s -> replace(s, replacements)).collect(Collectors.toList());
     }
 }

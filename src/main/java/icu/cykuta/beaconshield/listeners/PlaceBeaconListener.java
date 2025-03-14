@@ -6,7 +6,7 @@ import icu.cykuta.beaconshield.data.BeaconDataManager;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.events.BeaconShieldPlaceEvent;
 import icu.cykuta.beaconshield.utils.Chat;
-import icu.cykuta.beaconshield.utils.PluginConfiguration;
+import icu.cykuta.beaconshield.config.PluginConfiguration;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;

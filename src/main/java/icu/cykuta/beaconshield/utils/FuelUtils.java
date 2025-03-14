@@ -1,6 +1,7 @@
 package icu.cykuta.beaconshield.utils;
 
 import icu.cykuta.beaconshield.BeaconShield;
+import icu.cykuta.beaconshield.config.PluginConfiguration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

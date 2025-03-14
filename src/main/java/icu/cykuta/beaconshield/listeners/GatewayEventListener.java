@@ -4,7 +4,7 @@ import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.events.PlayerProtectedChunkGatewayEvent;
 import icu.cykuta.beaconshield.utils.Chat;
-import icu.cykuta.beaconshield.utils.PluginConfiguration;
+import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

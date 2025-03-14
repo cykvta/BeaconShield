@@ -2,6 +2,7 @@ package icu.cykuta.beaconshield.utils;
 
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
+import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIHolder;
 import org.bukkit.Bukkit;

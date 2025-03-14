@@ -1,10 +1,8 @@
 package icu.cykuta.beaconshield.config;
 
 import icu.cykuta.beaconshield.BeaconShield;
-import icu.cykuta.beaconshield.utils.PluginConfiguration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;

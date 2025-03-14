@@ -4,6 +4,7 @@ import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.PlayerRole;
 import icu.cykuta.beaconshield.beacon.ProtectedChunk;
+import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.data.HookHandler;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.gui.GUI;
@@ -42,8 +43,6 @@ public class TerritoryGUI extends GUI {
                 27, 28, 29,            33, 34, 35,
                     37, 38, 39,    41, 42, 43, 44
         );
-
-        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
 
         // Arrow buttons
         this.addInventoryButton(4, "move-north", (guiClick) -> this.moveMiddleChunk(0, -1));
@@ -176,7 +175,6 @@ public class TerritoryGUI extends GUI {
     public void renderChunks() {
         List<Integer> slots = Arrays.asList(12, 13, 14, 21, 22, 23, 30, 31, 32);
         ProtectedChunk[][] chunks = this.getChunksAround(this.middleChunk);
-        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -184,40 +182,24 @@ public class TerritoryGUI extends GUI {
                 ChunkType chunkType = this.getChunkType(chunk);
                 int slot = slots.get(i * 3 + j);
 
-                Material material = switch (chunkType) {
-                    case CORE -> Material.BEACON;
-                    case CLAIMED -> Material.DIAMOND_BLOCK;
-                    case OCCUPIED -> Material.REDSTONE_BLOCK;
-                    case AVAILABLE -> Material.GRASS_BLOCK;
-                    case UNREACHABLE -> Material.BARRIER;
-                };
-
-                String name = switch (chunkType) {
-                    case CORE -> lang.getString("territory-core");
-                    case CLAIMED -> lang.getString("territory-claimed");
-                    case OCCUPIED -> lang.getString("territory-occupied");
-                    case AVAILABLE -> lang.getString("territory-available");
-                    case UNREACHABLE -> lang.getString("territory-unreachable");
+                ItemStack itemstack = switch (chunkType) {
+                    case CORE -> this.guiConfig.getItemStack("chunk-core", new ItemStack(Material.BEACON));
+                    case CLAIMED -> this.guiConfig.getItemStack("chunk-claimed", new ItemStack(Material.DIAMOND_BLOCK));
+                    case OCCUPIED -> this.guiConfig.getItemStack("chunk-occupied", new ItemStack(Material.REDSTONE_BLOCK));
+                    case AVAILABLE -> this.guiConfig.getItemStack("chunk-available", new ItemStack(Material.GRASS_BLOCK));
+                    case UNREACHABLE -> this.guiConfig.getItemStack("chunk-unreachable", new ItemStack(Material.BARRIER));
                 };
 
                 double chunkPrice = this.getChunkPrice(chunk);
                 Consumer<GUIClick> action = getGuiClickConsumer(chunk, chunkType, chunkPrice);
 
-                String rightClickInfo = chunkType == ChunkType.AVAILABLE ?
-                        Text.color(lang.getString("preview-chunk-info")) : null;
-
-                ItemStack item = new ItemStack(material);
-                ItemMeta meta = item.getItemMeta();
-                meta.setDisplayName(Text.color(name));
-                List<String> lore = Arrays.asList(
-                        Text.color(Text.replace(lang.getString("chunk-price"), String.valueOf(chunkPrice))),
-                        Text.color("&7(" + chunk.getX() + ", " + chunk.getZ() + ")"),
-                        rightClickInfo
-                );
+                ItemMeta meta = itemstack.getItemMeta();
+                List<String> lore = Text.replace(meta.getLore(), String.valueOf(chunkPrice),
+                        String.valueOf(chunk.getX()), String.valueOf(chunk.getZ()));
                 meta.setLore(lore);
-                item.setItemMeta(meta);
+                itemstack.setItemMeta(meta);
 
-                this.addInventoryButton(slot, item, action);
+                this.addInventoryButton(slot, itemstack, action);
             }
         }
     }

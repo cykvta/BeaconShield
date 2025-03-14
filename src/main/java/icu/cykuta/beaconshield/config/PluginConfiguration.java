@@ -1,5 +1,6 @@
-package icu.cykuta.beaconshield.utils;
+package icu.cykuta.beaconshield.config;
 
+import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -94,8 +95,8 @@ public class PluginConfiguration extends YamlConfiguration {
             return def;
         }
 
-        String itemId = getString(path + ".item-id", def.getType().name());
-        String itemName = getString(path + ".item-name", def.getItemMeta() != null ? def.getItemMeta().getDisplayName() : "");
+        String itemId = getString(path + ".item", def.getType().name());
+        String itemName = getString(path + ".name", def.getItemMeta() != null ? def.getItemMeta().getDisplayName() : "");
         List<String> lore = getStringList(path + ".lore");
         int customModelData = getInt(path + ".custom-model-data", 0);
 

@@ -1,7 +1,5 @@
 package icu.cykuta.beaconshield.config;
 
-import icu.cykuta.beaconshield.utils.PluginConfiguration;
-
 public class FileHandler {
     private final PluginConfig config;
     private final PluginConfig lang;

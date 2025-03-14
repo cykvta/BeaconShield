@@ -3,6 +3,7 @@ package icu.cykuta.beaconshield.gui.views;
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.PlayerRole;
+import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIClick;
 import icu.cykuta.beaconshield.gui.GUIHolder;
@@ -36,7 +37,6 @@ public class BeaconGUI extends GUI {
                 36, 37, 38, 39, 40, 41, 42, 43, 44
         );
 
-        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
         this.addInventoryButton(10, "territory", (guiClick) -> openGUI(guiClick.getClicker(), new TerritoryGUI()));
         this.addInventoryButton(11, "members", (guiClick) -> openGUI(guiClick.getClicker(), new MembersGUI()));
         this.addInventoryButton(14, "destroy", (guiClick) -> openConfirmationGUI(guiClick.getClicker(), this::destroyBeaconShield));
@@ -54,18 +54,17 @@ public class BeaconGUI extends GUI {
      * Render the beacon information slot.
      */
     public void renderInfoSlot() {
-        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        ItemStack item = this.getBeaconBlock().canProtect() ?
+                this.guiConfig.getItemStack("info-protected", new ItemStack(Material.STONE)) :
+                this.guiConfig.getItemStack("info-unprotected", new ItemStack(Material.STONE));
 
-        Material material = this.getBeaconBlock().canProtect() ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE;
-        ItemStack infoItem = new ItemStack(material);
-        ItemMeta meta = infoItem.getItemMeta();
-
-        String name = lang.getString("protection-time");
-        meta.setDisplayName(Text.replace(Text.color(name), getFuelExpireTime()));
-        infoItem.setItemMeta(meta);
+        ItemMeta meta = item.getItemMeta();
+        List<String> lore = Text.replace(meta.getLore(), this.getFuelExpireTime());
+        meta.setLore(lore);
+        item.setItemMeta(meta);
 
         for (int slot : INFO_SLOTS) {
-            this.inventory.setItem(slot, infoItem);
+            this.inventory.setItem(slot, item);
         }
     }
 
@@ -104,7 +103,6 @@ public class BeaconGUI extends GUI {
         beaconShieldBlock.getBlock().setType(Material.AIR);
 
         // Drop the stored items and clear the storage
-        // BUG: for some reason storedItems has AIR item in it, but the problem is not in this method.
         for (ItemStack itemStack : this.getBeaconBlock().getStoredItemsFromPDC().values()) {
             beaconShieldBlock.getBlock().getWorld().dropItem(beaconShieldBlock.getBlock().getLocation(), itemStack);
         }

@@ -7,7 +7,7 @@ import icu.cykuta.beaconshield.data.BeaconDataManager;
 import icu.cykuta.beaconshield.gui.GUIHolder;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
 import icu.cykuta.beaconshield.utils.FuelUtils;
-import icu.cykuta.beaconshield.utils.PluginConfiguration;
+import icu.cykuta.beaconshield.config.PluginConfiguration;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;

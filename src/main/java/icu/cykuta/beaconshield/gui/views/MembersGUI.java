@@ -4,8 +4,7 @@ import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.PlayerRole;
 import icu.cykuta.beaconshield.gui.PaginationGUI;
 import icu.cykuta.beaconshield.utils.HeadManager;
-import icu.cykuta.beaconshield.utils.PluginConfiguration;
-import org.bukkit.Material;
+import icu.cykuta.beaconshield.config.PluginConfiguration;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
