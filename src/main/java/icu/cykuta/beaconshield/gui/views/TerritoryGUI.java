@@ -183,11 +183,11 @@ public class TerritoryGUI extends GUI {
                 int slot = slots.get(i * 3 + j);
 
                 ItemStack itemstack = switch (chunkType) {
-                    case CORE -> this.guiConfig.getItemStack("chunk-core", new ItemStack(Material.BEACON));
-                    case CLAIMED -> this.guiConfig.getItemStack("chunk-claimed", new ItemStack(Material.DIAMOND_BLOCK));
-                    case OCCUPIED -> this.guiConfig.getItemStack("chunk-occupied", new ItemStack(Material.REDSTONE_BLOCK));
-                    case AVAILABLE -> this.guiConfig.getItemStack("chunk-available", new ItemStack(Material.GRASS_BLOCK));
-                    case UNREACHABLE -> this.guiConfig.getItemStack("chunk-unreachable", new ItemStack(Material.BARRIER));
+                    case CORE -> this.guiConfig.getItemStack("chunk-core");
+                    case CLAIMED -> this.guiConfig.getItemStack("chunk-claimed");
+                    case OCCUPIED -> this.guiConfig.getItemStack("chunk-occupied");
+                    case AVAILABLE -> this.guiConfig.getItemStack("chunk-available");
+                    case UNREACHABLE -> this.guiConfig.getItemStack("chunk-unreachable");
                 };
 
                 double chunkPrice = this.getChunkPrice(chunk);

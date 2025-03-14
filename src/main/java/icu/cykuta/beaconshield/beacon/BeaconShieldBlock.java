@@ -3,10 +3,16 @@ package icu.cykuta.beaconshield.beacon;
 import com.jeff_media.customblockdata.CustomBlockData;
 import com.jeff_media.morepersistentdatatypes.DataType;
 import icu.cykuta.beaconshield.BeaconShield;
+import icu.cykuta.beaconshield.config.FileHandler;
+import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.data.DataKeys;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.data.BeaconDataManager;
+import icu.cykuta.beaconshield.data.UpgradeHandler;
+import icu.cykuta.beaconshield.gui.views.BeaconGUI;
+import icu.cykuta.beaconshield.upgrade.Upgrade;
 import icu.cykuta.beaconshield.utils.FileUtils;
+import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -272,11 +278,12 @@ public class BeaconShieldBlock implements Serializable {
      * @return The BeaconShield item.
      */
     public static @NotNull ItemStack createBeaconItem() {
+        PluginConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
+
         ItemStack item = new ItemStack(Material.BEACON);
         ItemMeta meta = item.getItemMeta();
-
-        assert meta != null;
-        meta.setDisplayName("BeaconShield");
+        meta.setDisplayName(Text.color(config.getString("beacon-name")));
+        meta.setLore(config.getStringList("beacon-lore"));
         meta.getPersistentDataContainer().set(IS_BEACONSHIELD, PersistentDataType.BOOLEAN, true);
         item.setItemMeta(meta);
         return item;

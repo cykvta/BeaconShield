@@ -89,7 +89,7 @@ public class PluginConfiguration extends YamlConfiguration {
      * @return The ItemStack value.
      */
     @Override
-    public org.bukkit.inventory.ItemStack getItemStack(@NotNull String path, ItemStack def) {
+    public ItemStack getItemStack(@NotNull String path, ItemStack def) {
         if (!isSet(path)) {
             setItemStack(path, def);
             return def;
@@ -107,7 +107,6 @@ public class PluginConfiguration extends YamlConfiguration {
 
         ItemStack item = new ItemStack(material);
         ItemMeta itemMeta = item.getItemMeta();
-
         if (itemMeta != null) {
             if (!itemName.isEmpty()) {
                 itemMeta.setDisplayName(Text.color(itemName));
@@ -118,9 +117,33 @@ public class PluginConfiguration extends YamlConfiguration {
             if (customModelData != 0) {
                 itemMeta.setCustomModelData(customModelData);
             }
+
             item.setItemMeta(itemMeta);
         }
 
+        return item;
+    }
+
+    /**
+     * Get the {@link ItemStack} from the path, no default value.
+     * @param path Path of the ItemStack to get.
+     * @return The ItemStack value.
+     */
+    public ItemStack getItemStack(@NotNull String path) {
+        return getItemStack(path, getDefaultItemStack(path));
+    }
+
+    /**
+     * Get the {@link ItemStack} from the path, no default value.
+     * @param path Path of the ItemStack to get.
+     * @return The ItemStack value.
+     */
+    public ItemStack getDefaultItemStack(@NotNull String path) {
+        ItemStack item = new ItemStack(Material.STONE);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName("???");
+        meta.setLore(List.of("No value found (" + this.getName() + ":" + path + ")"));
+        item.setItemMeta(meta);
         return item;
     }
 

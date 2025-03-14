@@ -23,6 +23,14 @@ max-chunks-per-beacon: 9
 # The block used to display chunk borders in preview mode.
 preview-block: "minecraft:gold_block"
 
+# The display name of the beacon item.
+beacon-name: "&bBeacon"
+
+# The lore of the beacon item.
+beacon-lore:
+  - "&7Place this beacon to protect"
+  - "&7a chunk of land."
+
 # Greeting and farewell messages shown when a player enters or leaves a beacon-protected area.
 # Set the message to "" to disable it.
 greeting:

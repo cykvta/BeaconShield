@@ -57,7 +57,7 @@ public abstract class GUI {
                 continue;
             }
 
-            ItemStack decorationItemStack = this.guiConfig.getItemStack("decoration", new ItemStack(Material.STONE));
+            ItemStack decorationItemStack = this.guiConfig.getItemStack("decoration");
             this.inventory.setItem(i, decorationItemStack);
         }
     }
@@ -69,7 +69,7 @@ public abstract class GUI {
      * @param consumer The action to run when the button is clicked.
      */
     protected void addInventoryButton(int slot, String path, Consumer<GUIClick> consumer) {
-        ItemStack itemStack = this.guiConfig.getItemStack(path, new ItemStack(Material.STONE));
+        ItemStack itemStack = this.guiConfig.getItemStack(path);
         addInventoryButton(slot, itemStack, consumer);
     }
 

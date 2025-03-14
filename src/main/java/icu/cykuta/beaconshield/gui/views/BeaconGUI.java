@@ -1,9 +1,7 @@
 package icu.cykuta.beaconshield.gui.views;
 
-import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.PlayerRole;
-import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIClick;
 import icu.cykuta.beaconshield.gui.GUIHolder;
@@ -55,8 +53,8 @@ public class BeaconGUI extends GUI {
      */
     public void renderInfoSlot() {
         ItemStack item = this.getBeaconBlock().canProtect() ?
-                this.guiConfig.getItemStack("info-protected", new ItemStack(Material.STONE)) :
-                this.guiConfig.getItemStack("info-unprotected", new ItemStack(Material.STONE));
+                this.guiConfig.getItemStack("info-protected") :
+                this.guiConfig.getItemStack("info-unprotected");
 
         ItemMeta meta = item.getItemMeta();
         List<String> lore = Text.replace(meta.getLore(), this.getFuelExpireTime());
