@@ -2,7 +2,6 @@ package icu.cykuta.beaconshield.utils;
 
 import icu.cykuta.beaconshield.BeaconShield;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class Chat {
@@ -11,18 +10,14 @@ public class Chat {
     }
 
     public static String getMessage(String messagePath) {
-        FileConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
         String message = lang.getString(messagePath);
-
-        if (message == null) {
-            message = "Can't find message: " + messagePath + " in lang.yml";
-        }
 
         return format(message);
     }
 
     public static String getPrefix() {
-        FileConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
         String prefix = lang.getString("prefix");
         return prefix == null ? "" : prefix;
     }

@@ -7,10 +7,10 @@ import icu.cykuta.beaconshield.data.BeaconDataManager;
 import icu.cykuta.beaconshield.gui.GUIHolder;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
 import icu.cykuta.beaconshield.utils.FuelUtils;
+import icu.cykuta.beaconshield.utils.PluginConfiguration;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class FuelConsume extends BukkitRunnable {
     private final BeaconShield plugin = BeaconShield.getPlugin();
-    private final FileConfiguration config = plugin.getFileHandler().getConfig();
+    private final PluginConfiguration config = plugin.getFileHandler().getConfig();
     private final BeaconDataManager beaconDataManager = plugin.getBeaconDataManager();
 
     /**

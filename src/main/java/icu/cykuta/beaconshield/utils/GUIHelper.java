@@ -5,7 +5,6 @@ import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIHolder;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 
 public class GUIHelper {
@@ -18,7 +17,7 @@ public class GUIHelper {
     public static Inventory createInventory(GUI gui, BeaconShieldBlock beacon) {
         GUIHolder holder = new GUIHolder(beacon, gui);
 
-        FileConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
         String inventoryName = lang.getString(gui.getInventoryName());
 
         if (inventoryName == null) {

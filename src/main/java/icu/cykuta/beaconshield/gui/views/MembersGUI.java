@@ -4,9 +4,9 @@ import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.PlayerRole;
 import icu.cykuta.beaconshield.gui.PaginationGUI;
 import icu.cykuta.beaconshield.utils.HeadManager;
+import icu.cykuta.beaconshield.utils.PluginConfiguration;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 public class MembersGUI extends PaginationGUI {
@@ -19,7 +19,7 @@ public class MembersGUI extends PaginationGUI {
      */
     @Override
     protected void render() {
-        FileConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
 
         // Add buttons
         this.addInventoryButton(36, lang.getString("button-back"), Material.ARROW, (guiClick) -> this.openGUI(guiClick.getClicker(), new BeaconGUI()));

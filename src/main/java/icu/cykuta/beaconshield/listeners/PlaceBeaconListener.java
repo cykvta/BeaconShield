@@ -6,9 +6,9 @@ import icu.cykuta.beaconshield.data.BeaconDataManager;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.events.BeaconShieldPlaceEvent;
 import icu.cykuta.beaconshield.utils.Chat;
+import icu.cykuta.beaconshield.utils.PluginConfiguration;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -25,7 +25,7 @@ public class PlaceBeaconListener implements Listener {
             return;
         }
         BeaconDataManager beaconDataManager = BeaconShield.getPlugin().getBeaconDataManager();
-        FileConfiguration config = BeaconShield.getPlugin().getConfig();
+        PluginConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
         int maxBeaconShieldBlocks = config.getInt("max-beacons-per-player");
 
         // Check has more than maxBeaconShieldBlocks

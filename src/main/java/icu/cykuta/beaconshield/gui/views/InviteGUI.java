@@ -6,9 +6,9 @@ import icu.cykuta.beaconshield.beacon.PlayerRole;
 import icu.cykuta.beaconshield.gui.PaginationGUI;
 import icu.cykuta.beaconshield.utils.Chat;
 import icu.cykuta.beaconshield.utils.HeadManager;
+import icu.cykuta.beaconshield.utils.PluginConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -25,7 +25,7 @@ public class InviteGUI extends PaginationGUI {
      */
     @Override
     protected void render() {
-        FileConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
 
         // Back button
         this.addInventoryButton(36, lang.getString("button-back"), Material.ARROW,

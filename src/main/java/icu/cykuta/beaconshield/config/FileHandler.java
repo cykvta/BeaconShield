@@ -1,6 +1,6 @@
 package icu.cykuta.beaconshield.config;
 
-import org.bukkit.configuration.file.YamlConfiguration;
+import icu.cykuta.beaconshield.utils.PluginConfiguration;
 
 public class FileHandler {
     private final PluginConfig config;
@@ -26,11 +26,11 @@ public class FileHandler {
         this.lang.reload();
     }
 
-    public YamlConfiguration getConfig() {
+    public PluginConfiguration getConfig() {
         return this.config.getFileConfiguration();
     }
 
-    public YamlConfiguration getLang() {
+    public PluginConfiguration getLang() {
         return this.lang.getFileConfiguration();
     }
 }

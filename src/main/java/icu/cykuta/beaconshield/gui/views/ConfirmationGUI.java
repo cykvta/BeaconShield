@@ -3,9 +3,8 @@ package icu.cykuta.beaconshield.gui.views;
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIClick;
+import icu.cykuta.beaconshield.utils.PluginConfiguration;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 
 import java.util.function.Consumer;
 
@@ -27,7 +26,7 @@ public class ConfirmationGUI extends GUI {
                 18, 19, 20, 21, 22, 23, 24, 25, 26
         );
 
-        FileConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
         this.addInventoryButton(11, lang.getString("button-yes"), Material.GREEN_WOOL, this.consumer);
         this.addInventoryButton(15, lang.getString("button-no"), Material.RED_WOOL,
                 (guiClick) -> this.openGUI(guiClick.getClicker(), this.previousGUI));

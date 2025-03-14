@@ -8,15 +8,10 @@ import icu.cykuta.beaconshield.data.HookHandler;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIClick;
-import icu.cykuta.beaconshield.utils.Chat;
-import icu.cykuta.beaconshield.utils.MathUtils;
-import icu.cykuta.beaconshield.utils.ProtectionUtils;
-import icu.cykuta.beaconshield.utils.Text;
+import icu.cykuta.beaconshield.utils.*;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.*;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
@@ -46,7 +41,7 @@ public class TerritoryGUI extends GUI {
                     37, 38, 39,    41, 42, 43, 44
         );
 
-        FileConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
 
         // Arrow buttons
         this.addInventoryButton(4,  lang.getString("button-move-up"), Material.ARROW,
@@ -184,7 +179,7 @@ public class TerritoryGUI extends GUI {
     public void renderChunks() {
         List<Integer> slots = Arrays.asList(12, 13, 14, 21, 22, 23, 30, 31, 32);
         ProtectedChunk[][] chunks = this.getChunksAround(this.middleChunk);
-        FileConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -211,7 +206,8 @@ public class TerritoryGUI extends GUI {
                 double chunkPrice = this.getChunkPrice(chunk);
                 Consumer<GUIClick> action = getGuiClickConsumer(chunk, chunkType, chunkPrice);
 
-                String rightClickInfo = chunkType == ChunkType.AVAILABLE ? Text.color(lang.getString("preview-chunk-info")) : null;
+                String rightClickInfo = chunkType == ChunkType.AVAILABLE ?
+                        Text.color(lang.getString("preview-chunk-info")) : null;
 
                 this.addInventoryButton(slot, name, material, action,
                         Text.color(Text.replace(lang.getString("chunk-price"), String.valueOf(chunkPrice))),
@@ -253,9 +249,9 @@ public class TerritoryGUI extends GUI {
     private void showChunkBorder(GUIClick guiClick, ProtectedChunk selectedChunk) {
         Player player = guiClick.getClicker();
         List<Location> highestEdges = selectedChunk.getChunkEdges();
-        YamlConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
+        PluginConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
 
-        Material previewBlock = Material.matchMaterial(config.getString("preview-block"));
+        Material previewBlock = Material.matchMaterial(config.getString("preview-block", "minecraft:gold_block"));
         highestEdges.forEach(edge -> player.sendBlockChange(edge, previewBlock.createBlockData()));
         player.closeInventory();
         Chat.send(player, "preview-chunk",
@@ -279,7 +275,7 @@ public class TerritoryGUI extends GUI {
             return;
         }
 
-        YamlConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
+        PluginConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
         if (config.getInt("max-chunks-per-beacon") <= this.getBeaconBlock().getProtectedChunks().size()) {
             Chat.send(player, "max-chunks-reached");
             return;
@@ -310,7 +306,7 @@ public class TerritoryGUI extends GUI {
      * @return The price of the chunk.
      */
     private double getChunkPrice(ProtectedChunk selectedChunk) {
-        YamlConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
+        PluginConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
 
         ProtectedChunk coreChunk = this.getBeaconBlock().getCoreChunk();
         int distance = this.getManhattanDistance(coreChunk, selectedChunk);

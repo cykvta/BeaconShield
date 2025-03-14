@@ -5,11 +5,11 @@ import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.data.UpgradeHandler;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
+import icu.cykuta.beaconshield.utils.PluginConfiguration;
 import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -65,7 +65,7 @@ public abstract class Upgrade implements Listener {
     }
 
     public static ItemStack itemMaker(Material material, String namePath, String lorePath) {
-        YamlConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         assert meta != null;

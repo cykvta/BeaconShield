@@ -7,12 +7,8 @@ import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIClick;
 import icu.cykuta.beaconshield.gui.GUIHolder;
 import icu.cykuta.beaconshield.gui.Storage;
-import icu.cykuta.beaconshield.utils.Chat;
-import icu.cykuta.beaconshield.utils.Date;
-import icu.cykuta.beaconshield.utils.FuelUtils;
-import icu.cykuta.beaconshield.utils.Text;
+import icu.cykuta.beaconshield.utils.*;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -40,7 +36,7 @@ public class BeaconGUI extends GUI {
                 36, 37, 38, 39, 40, 41, 42, 43, 44
         );
 
-        FileConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
         this.addInventoryButton(10, lang.getString("button-territory"), Material.FILLED_MAP,
                 (guiClick) -> openGUI(guiClick.getClicker(), new TerritoryGUI()));
         this.addInventoryButton(11, lang.getString("button-members"), Material.PLAYER_HEAD,
@@ -61,7 +57,7 @@ public class BeaconGUI extends GUI {
      * Render the beacon information slot.
      */
     public void renderInfoSlot() {
-        FileConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
 
         Material material = this.getBeaconBlock().canProtect() ? Material.GREEN_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE;
         ItemStack infoItem = new ItemStack(material);
