@@ -6,12 +6,11 @@ import icu.cykuta.beaconshield.data.BeaconDataManager;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
 import icu.cykuta.beaconshield.gui.views.ConfirmationGUI;
 import icu.cykuta.beaconshield.utils.GUIHelper;
-import icu.cykuta.beaconshield.utils.Text;
+import icu.cykuta.beaconshield.utils.PluginConfiguration;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -25,6 +24,7 @@ public abstract class GUI {
     private final Map<Integer, Consumer<GUIClick>> buttonActions = new HashMap<>();
     private final String inventoryName;
     private Storage storage;
+    private final PluginConfiguration guiConfig = BeaconShield.getPlugin().getFileHandler().getGui();
 
     public GUI(String inventoryName, int chestSize) {
         this.chestSize = chestSize;
@@ -57,10 +57,7 @@ public abstract class GUI {
                 continue;
             }
 
-            ItemStack decorationItemStack = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-            ItemMeta meta = decorationItemStack.getItemMeta();
-            meta.setDisplayName(" ");
-            decorationItemStack.setItemMeta(meta);
+            ItemStack decorationItemStack = this.guiConfig.getItemStack("decoration", new ItemStack(Material.STONE));
             this.inventory.setItem(i, decorationItemStack);
         }
     }
@@ -68,17 +65,11 @@ public abstract class GUI {
     /**
      * Add a button to the inventory.
      * @param slot The slot to add the button.
-     * @param name The name of the button.
-     * @param material The material of the button.
+     * @param path The path of the button.
      * @param consumer The action to run when the button is clicked.
-     * @param lore The lore of the button.
      */
-    protected void addInventoryButton(int slot, String name, Material material, Consumer<GUIClick> consumer, String... lore) {
-        ItemStack itemStack = new ItemStack(material);
-        ItemMeta meta = itemStack.getItemMeta();
-        meta.setDisplayName(Text.color("&f" + name));
-        meta.setLore(Arrays.stream(lore).filter(Objects::nonNull).map(Text::color).collect(Collectors.toList()));
-        itemStack.setItemMeta(meta);
+    protected void addInventoryButton(int slot, String path, Consumer<GUIClick> consumer) {
+        ItemStack itemStack = this.guiConfig.getItemStack(path, new ItemStack(Material.STONE));
         addInventoryButton(slot, itemStack, consumer);
     }
 

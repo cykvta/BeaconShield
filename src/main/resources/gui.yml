@@ -1,0 +1,122 @@
+#---------------------------------#
+#     BeaconShield Gui Config     #
+#---------------------------------#
+
+# This file contains all the GUI configuration for the BeaconShield plugin.
+
+# GLOBAL ITEMS
+decoration:
+  item-id: "minecraft:black_stained_glass_pane"
+  item-name: ""
+  item-lore: []
+  custom-model-data: 0
+
+back:
+  item-id: "minecraft:arrow"
+  item-name: "&bBack"
+  item-lore: []
+  custom-model-data: 0
+
+next:
+  item-id: "minecraft:arrow"
+  item-name: "&bNext"
+  item-lore: []
+  custom-model-data: 0
+
+previous:
+  item-id: "minecraft:arrow"
+  item-name: "&bPrevious"
+  item-lore: []
+  custom-model-data: 0
+
+# CONFIRMATION GUI
+yes:
+  item-id: "minecraft:green_wool"
+  item-name: "&aYes"
+  item-lore: []
+  custom-model-data: 0
+
+no:
+  item-id: "minecraft:red_wool"
+  item-name: "&cNo"
+  item-lore: []
+  custom-model-data: 0
+
+# BEACON GUI
+territory:
+  item-id: "minecraft:filled_map"
+  item-name: "&bTerritory"
+  item-lore: []
+  custom-model-data: 0
+
+members:
+    item-id: "minecraft:player_head"
+    item-name: "&bMembers"
+    item-lore: []
+    custom-model-data: 0
+
+destroy:
+    item-id: "minecraft:barrier"
+    item-name: "&cDestroy"
+    item-lore: []
+    custom-model-data: 0
+
+# MEMBER EDIT GUI
+give-ownership:
+  item-id: "minecraft:diamond"
+  item-name: "&bGive Ownership"
+  item-lore: []
+  custom-model-data: 0
+
+kick:
+  item-id: "minecraft:redstone_block"
+  item-name: "&cKick"
+  item-lore:
+    - "&7Click to kick this member."
+  custom-model-data: 0
+
+promote:
+  item-id: "minecraft:emerald"
+  item-name: "&aPromote"
+  item-lore:
+    - "&7Click to promote this user to officer."
+  custom-model-data: 0
+
+demote:
+  item-id: "minecraft:iron_ingot"
+  item-name: "&cDemote member"
+  item-lore:
+    - "&7Click to demote this user to member."
+  custom-model-data: 0
+
+# TERRITORY GUI
+move-north:
+  item-id: "minecraft:arrow"
+  item-name: "&bMove North"
+  item-lore: []
+  custom-model-data: 0
+
+move-east:
+  item-id: "minecraft:arrow"
+  item-name: "&bMove East"
+  item-lore: []
+  custom-model-data: 0
+
+move-south:
+  item-id: "minecraft:arrow"
+  item-name: "&bMove South"
+  item-lore: []
+  custom-model-data: 0
+
+move-west:
+  item-id: "minecraft:arrow"
+  item-name: "&bMove West"
+  item-lore: []
+  custom-model-data: 0
+
+# MEMBER LIST GUI
+add-member:
+  item-id: "minecraft:sunflower"
+  item-name: "&aAdd Member"
+  item-lore: []
+  custom-model-data: 0

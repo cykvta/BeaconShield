@@ -1,6 +1,7 @@
 package icu.cykuta.beaconshield.utils;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -88,9 +89,13 @@ public class PluginConfiguration extends YamlConfiguration {
      */
     @Override
     public org.bukkit.inventory.ItemStack getItemStack(@NotNull String path, ItemStack def) {
+        if (!isSet(path)) {
+            setItemStack(path, def);
+            return def;
+        }
+
         String itemId = getString(path + ".item-id", def.getType().name());
         String itemName = getString(path + ".item-name", def.getItemMeta() != null ? def.getItemMeta().getDisplayName() : "");
-        int amount = getInt(path + ".amount", def.getAmount());
         List<String> lore = getStringList(path + ".lore");
         int customModelData = getInt(path + ".custom-model-data", 0);
 
@@ -99,15 +104,15 @@ public class PluginConfiguration extends YamlConfiguration {
             material = Material.STONE;
         }
 
-        ItemStack item = new ItemStack(material, amount);
+        ItemStack item = new ItemStack(material);
         ItemMeta itemMeta = item.getItemMeta();
 
         if (itemMeta != null) {
             if (!itemName.isEmpty()) {
-                itemMeta.setDisplayName(itemName);
+                itemMeta.setDisplayName(Text.color(itemName));
             }
             if (!lore.isEmpty()) {
-                itemMeta.setLore(lore);
+                itemMeta.setLore(lore.stream().map(Text::color).toList());
             }
             if (customModelData != 0) {
                 itemMeta.setCustomModelData(customModelData);
@@ -116,6 +121,42 @@ public class PluginConfiguration extends YamlConfiguration {
         }
 
         return item;
+    }
+
+    /**
+     * Set the {@link ItemStack} to the path.
+     * @param path Path of the ItemStack to set.
+     * @param item The ItemStack to set.
+     */
+    public void setItemStack(String path, ItemStack item) {
+        set(path + ".item-id", item.getType().name());
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            set(path + ".item-name", meta.hasDisplayName() ? meta.getDisplayName() : "");
+            set(path + ".lore", meta.hasLore() ? meta.getLore() : null);
+            if (meta.hasCustomModelData()) {
+                set(path + ".custom-model-data", meta.getCustomModelData());
+            }
+        }
+        set(path + ".amount", item.getAmount());
+    }
+
+
+    /**
+     * Adapt the {@link YamlConfiguration} to {@link PluginConfiguration}.
+     * @param yamlConfig The YamlConfiguration to adapt.
+     * @return The adapted CustomConfig.
+     */
+    public static PluginConfiguration adapt(YamlConfiguration yamlConfig) {
+        PluginConfiguration customConfig = new PluginConfiguration();
+        try {
+            String serialized = yamlConfig.saveToString();
+            customConfig.loadFromString(serialized);
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+        return customConfig;
     }
 
 }

@@ -1,7 +1,5 @@
 package icu.cykuta.beaconshield.gui;
 
-import org.bukkit.Material;
-
 import java.util.List;
 
 public abstract class PaginationGUI extends GUI {
@@ -24,13 +22,13 @@ public abstract class PaginationGUI extends GUI {
         );
         // Pagination arrows
         if (this.offset > 0) {
-            this.addInventoryButton(39, "Previous", Material.ARROW, (player) -> this.setOffset(this.offset - renderSlots.size()));
+            this.addInventoryButton(39, "previous", (player) -> this.setOffset(this.offset - renderSlots.size()));
         } else {
             this.addDecorationSlot(39);
         }
 
         if (this.offset + renderSlots.size() < this.renderSlots.size()) {
-            this.addInventoryButton(41, "Next", Material.ARROW, (player) -> this.setOffset(this.offset + renderSlots.size()));
+            this.addInventoryButton(41, "next", (player) -> this.setOffset(this.offset + renderSlots.size()));
         } else {
             this.addDecorationSlot(41);
         }

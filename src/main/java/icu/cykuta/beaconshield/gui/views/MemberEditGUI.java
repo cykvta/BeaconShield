@@ -25,18 +25,16 @@ public class MemberEditGUI extends GUI {
         this.setDecorationSlots(1, 7);
         PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
         this.addInventoryButton(0, HeadManager.getHead(selectedPlayer), (guiClick) -> {});
-        this.addInventoryButton(2, lang.getString("button-give-ownership"), Material.DIAMOND, this::giveOwner);
-        this.addInventoryButton(4, lang.getString("button-kick"), Material.REDSTONE, this::kick);
-        this.addInventoryButton(8, lang.getString("button-back"), Material.ARROW, (guiClick) -> this.openGUI(guiClick.getClicker(), new MembersGUI()));
+        this.addInventoryButton(2, "give-ownership", this::giveOwner);
+        this.addInventoryButton(4, "kick", this::kick);
+        this.addInventoryButton(8, "back", (guiClick) -> this.openGUI(guiClick.getClicker(), new MembersGUI()));
 
         switch (this.getBeaconBlock().getPlayerRole(this.selectedPlayer)) {
             case MEMBER:
-                this.addInventoryButton(3, lang.getString("button-promote"), Material.GOLD_INGOT,
-                        (guiClick) -> this.setRole(guiClick.getClicker(), PlayerRole.OFFICER));
+                this.addInventoryButton(3, "promote", (guiClick) -> this.setRole(guiClick.getClicker(), PlayerRole.OFFICER));
                 break;
             case OFFICER, OWNER:
-                this.addInventoryButton(3, lang.getString("button-demote"), Material.IRON_INGOT,
-                        (guiClick) -> this.setRole(guiClick.getClicker(), PlayerRole.MEMBER));
+                this.addInventoryButton(3, "demote", (guiClick) -> this.setRole(guiClick.getClicker(), PlayerRole.MEMBER));
                 break;
         }
     }

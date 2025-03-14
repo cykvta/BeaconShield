@@ -28,7 +28,7 @@ public class InviteGUI extends PaginationGUI {
         PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
 
         // Back button
-        this.addInventoryButton(36, lang.getString("button-back"), Material.ARROW,
+        this.addInventoryButton(36, "back",
                 (guiClick) -> this.openGUI(guiClick.getClicker(), new MembersGUI()));
         this.addDecorationSlot(40);
 

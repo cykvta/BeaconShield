@@ -14,6 +14,8 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,16 +46,11 @@ public class TerritoryGUI extends GUI {
         PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
 
         // Arrow buttons
-        this.addInventoryButton(4,  lang.getString("button-move-up"), Material.ARROW,
-                (guiClick) -> this.moveMiddleChunk(0, -1));
-        this.addInventoryButton(20, lang.getString("button-move-left"), Material.ARROW,
-                (guiClick) -> this.moveMiddleChunk(-1, 0));
-        this.addInventoryButton(24, lang.getString("button-move-right"), Material.ARROW,
-                (guiClick) -> this.moveMiddleChunk(1, 0));
-        this.addInventoryButton(40, lang.getString("button-move-down"), Material.ARROW,
-                (guiClick) -> this.moveMiddleChunk(0, 1));
-        this.addInventoryButton(36, lang.getString("button-back"), Material.ARROW,
-                        (guiClick) -> this.openGUI(guiClick.getClicker(), new BeaconGUI()));
+        this.addInventoryButton(4, "move-north", (guiClick) -> this.moveMiddleChunk(0, -1));
+        this.addInventoryButton(20, "move-west", (guiClick) -> this.moveMiddleChunk(-1, 0));
+        this.addInventoryButton(24, "move-east", (guiClick) -> this.moveMiddleChunk(1, 0));
+        this.addInventoryButton(40, "move-south", (guiClick) -> this.moveMiddleChunk(0, 1));
+        this.addInventoryButton(36, "back", (guiClick) -> this.openGUI(guiClick.getClicker(), new BeaconGUI()));
 
         // Render the chunks
         this.renderChunks();
@@ -209,10 +206,18 @@ public class TerritoryGUI extends GUI {
                 String rightClickInfo = chunkType == ChunkType.AVAILABLE ?
                         Text.color(lang.getString("preview-chunk-info")) : null;
 
-                this.addInventoryButton(slot, name, material, action,
+                ItemStack item = new ItemStack(material);
+                ItemMeta meta = item.getItemMeta();
+                meta.setDisplayName(Text.color(name));
+                List<String> lore = Arrays.asList(
                         Text.color(Text.replace(lang.getString("chunk-price"), String.valueOf(chunkPrice))),
-                        "&7(" + chunk.getX() + ", " + chunk.getZ() + ")",
-                        rightClickInfo);
+                        Text.color("&7(" + chunk.getX() + ", " + chunk.getZ() + ")"),
+                        rightClickInfo
+                );
+                meta.setLore(lore);
+                item.setItemMeta(meta);
+
+                this.addInventoryButton(slot, item, action);
             }
         }
     }

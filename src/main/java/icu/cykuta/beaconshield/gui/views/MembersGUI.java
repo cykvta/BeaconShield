@@ -22,8 +22,8 @@ public class MembersGUI extends PaginationGUI {
         PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
 
         // Add buttons
-        this.addInventoryButton(36, lang.getString("button-back"), Material.ARROW, (guiClick) -> this.openGUI(guiClick.getClicker(), new BeaconGUI()));
-        this.addInventoryButton(40, lang.getString("button-add-member"), Material.SUNFLOWER, (guiClick) -> this.openGUI(guiClick.getClicker(), new InviteGUI()));
+        this.addInventoryButton(36, "back", (guiClick) -> this.openGUI(guiClick.getClicker(), new BeaconGUI()));
+        this.addInventoryButton(40, "add-member", (guiClick) -> this.openGUI(guiClick.getClicker(), new InviteGUI()));
 
         OfflinePlayer[] players = this.getBeaconBlock().getAllowedPlayers();
 

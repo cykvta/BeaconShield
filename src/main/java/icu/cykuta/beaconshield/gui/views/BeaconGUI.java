@@ -37,12 +37,9 @@ public class BeaconGUI extends GUI {
         );
 
         PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
-        this.addInventoryButton(10, lang.getString("button-territory"), Material.FILLED_MAP,
-                (guiClick) -> openGUI(guiClick.getClicker(), new TerritoryGUI()));
-        this.addInventoryButton(11, lang.getString("button-members"), Material.PLAYER_HEAD,
-                (guiClick) -> openGUI(guiClick.getClicker(), new MembersGUI()));
-        this.addInventoryButton(14, lang.getString("button-destruct"), Material.BARRIER,
-                (guiClick) -> openConfirmationGUI(guiClick.getClicker(), this::destroyBeaconShield));
+        this.addInventoryButton(10, "territory", (guiClick) -> openGUI(guiClick.getClicker(), new TerritoryGUI()));
+        this.addInventoryButton(11, "members", (guiClick) -> openGUI(guiClick.getClicker(), new MembersGUI()));
+        this.addInventoryButton(14, "destroy", (guiClick) -> openConfirmationGUI(guiClick.getClicker(), this::destroyBeaconShield));
 
         // Add storage and render information
         this.getStorage().addStorageSlot(FUEL_STORAGE_SLOT);
