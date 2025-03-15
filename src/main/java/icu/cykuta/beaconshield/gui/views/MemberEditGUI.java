@@ -5,7 +5,7 @@ import icu.cykuta.beaconshield.beacon.PlayerRole;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIClick;
 import icu.cykuta.beaconshield.utils.Chat;
-import icu.cykuta.beaconshield.utils.HeadManager;
+import icu.cykuta.beaconshield.utils.HeadHelper;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.OfflinePlayer;
@@ -22,7 +22,7 @@ public class MemberEditGUI extends GUI {
     @Override
     public void populateInventory() {
         this.setDecorationSlots(1, 7);
-        this.addInventoryButton(0, HeadManager.getHead(selectedPlayer), (guiClick) -> {});
+        this.addInventoryButton(0, HeadHelper.getHead(selectedPlayer), (guiClick) -> {});
         this.addInventoryButton(2, "give-ownership", this::giveOwner);
         this.addInventoryButton(4, "kick", this::kick);
         this.addInventoryButton(8, "back", (guiClick) -> this.openGUI(guiClick.getClicker(), new MembersGUI()));

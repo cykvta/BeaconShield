@@ -8,7 +8,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class HeadManager {
+public class HeadHelper {
 
     public static ItemStack getHead(OfflinePlayer player, String name, String... lore) {
         ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD);

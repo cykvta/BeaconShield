@@ -10,6 +10,11 @@ import java.util.stream.Collectors;
 
 public class Text {
 
+    /**
+     * Colorize a string with the '&' character or hex color codes.
+     * @param message The message to colorize.
+     * @return The colorized message.
+     */
     public static String color(String message) {
         Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
         Matcher matcher = pattern.matcher(message);
@@ -29,10 +34,21 @@ public class Text {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
+    /**
+     * Strip color codes from a string.
+     * @param message The message to strip color codes from.
+     * @return The message without color codes.
+     */
     public static String stripColor(String message) {
         return message.replaceAll("§[a-fA-F0-9]", "");
     }
 
+    /**
+     * Replace placeholders in a string with the provided replacements.
+     * @param text The text to replace placeholders in.
+     * @param replacements The replacements to use.
+     * @return The text with the placeholders replaced.
+     */
     public static String replace(String text, String... replacements) {
         if (text == null || replacements == null || replacements.length == 0) {
             return text;
@@ -53,6 +69,12 @@ public class Text {
         return result.toString();
     }
 
+    /**
+     * Replace placeholders in a list of strings with the provided replacements.
+     * @param text The list of strings to replace placeholders in.
+     * @param replacements The replacements to use.
+     * @return The list of strings with the placeholders replaced.
+     */
     public static List<String> replace(@Nullable List<String> text, String... replacements) {
         if (text == null) {
             return new java.util.ArrayList<>();

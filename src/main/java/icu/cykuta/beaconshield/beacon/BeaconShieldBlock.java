@@ -3,15 +3,11 @@ package icu.cykuta.beaconshield.beacon;
 import com.jeff_media.customblockdata.CustomBlockData;
 import com.jeff_media.morepersistentdatatypes.DataType;
 import icu.cykuta.beaconshield.BeaconShield;
-import icu.cykuta.beaconshield.config.FileHandler;
+import icu.cykuta.beaconshield.config.BeaconFile;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.data.DataKeys;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.data.BeaconDataManager;
-import icu.cykuta.beaconshield.data.UpgradeHandler;
-import icu.cykuta.beaconshield.gui.views.BeaconGUI;
-import icu.cykuta.beaconshield.upgrade.Upgrade;
-import icu.cykuta.beaconshield.utils.FileUtils;
 import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -92,7 +88,7 @@ public class BeaconShieldBlock implements Serializable {
         beaconDataManager.removeBeaconShieldBlock(this);
 
         // Delete the file
-        FileUtils.deleteBeaconFile(this);
+        BeaconFile.deleteBeaconFile(this);
 
         // Remove the inventory from the PDC
         this.pdc.remove(DataKeys.BEACONSHIELD_INVENTORY);
@@ -103,7 +99,7 @@ public class BeaconShieldBlock implements Serializable {
     }
 
     public void save() {
-        FileUtils.writeBeaconToFile(this);
+        BeaconFile.writeBeaconToFile(this);
     }
 
     public void addProtectedChunk(Chunk chunk) {

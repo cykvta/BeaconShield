@@ -2,8 +2,8 @@ package icu.cykuta.beaconshield.data;
 
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
+import icu.cykuta.beaconshield.config.BeaconFile;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
-import icu.cykuta.beaconshield.utils.FileUtils;
 import icu.cykuta.beaconshield.utils.GUIHelper;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -42,7 +42,7 @@ public class BeaconDataManager {
         }
 
         for (File dataFile : dataFiles) {
-            BeaconShieldBlock block = FileUtils.readBeaconFromFile(dataFile);
+            BeaconShieldBlock block = BeaconFile.readBeaconFromFile(dataFile);
 
             if (block != null) {
                 // Add the block to the list of beacon shield blocks

@@ -1,7 +1,6 @@
 package icu.cykuta.beaconshield.commands;
 
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
-import icu.cykuta.beaconshield.utils.FileUtils;
 import icu.cykuta.beaconshield.utils.Chat;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

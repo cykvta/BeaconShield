@@ -75,11 +75,11 @@ public class BeaconGUI extends GUI {
         ItemStack fuel = inventory.getItem(FUEL_STORAGE_SLOT);
 
         if (fuel == null || fuel.getType().isAir()) {
-            return Date.secondsToTime(currentFuel);
+            return Time.secondsToTime(currentFuel);
         }
 
         int queueFuel = FuelUtils.getBurnTime(fuel) * fuel.getAmount();
-        return Date.secondsToTime(currentFuel + queueFuel);
+        return Time.secondsToTime(currentFuel + queueFuel);
     }
 
     /**

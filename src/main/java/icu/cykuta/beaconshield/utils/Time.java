@@ -1,6 +1,11 @@
 package icu.cykuta.beaconshield.utils;
 
-public class Date {
+public class Time {
+    /**
+     * Convert seconds to a time string.
+     * @param seconds The seconds to convert.
+     * @return The time string.
+     */
     public static String secondsToTime(int seconds) {
         seconds = Math.max(seconds, 0);
         int days = seconds / 86400;

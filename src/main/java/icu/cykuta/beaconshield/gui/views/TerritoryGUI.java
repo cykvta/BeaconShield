@@ -9,6 +9,7 @@ import icu.cykuta.beaconshield.data.HookHandler;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIClick;
+import icu.cykuta.beaconshield.providers.hooks.WorldGuardHook;
 import icu.cykuta.beaconshield.utils.*;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -112,7 +113,7 @@ public class TerritoryGUI extends GUI {
      * Check if chunk is OCCUPIED.
      */
     private boolean isChunkOccupied(Chunk chunk) {
-        if (ProtectionUtils.isChunkInWorldGuardRegion(chunk)) {
+        if (WorldGuardHook.isChunkInWorldGuardRegion(chunk)) {
             return true;
         }
 

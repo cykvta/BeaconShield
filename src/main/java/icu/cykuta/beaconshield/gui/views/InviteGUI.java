@@ -5,7 +5,7 @@ import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.PlayerRole;
 import icu.cykuta.beaconshield.gui.PaginationGUI;
 import icu.cykuta.beaconshield.utils.Chat;
-import icu.cykuta.beaconshield.utils.HeadManager;
+import icu.cykuta.beaconshield.utils.HeadHelper;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -52,7 +52,7 @@ public class InviteGUI extends PaginationGUI {
                     continue;
                 }
 
-                ItemStack head = HeadManager.getHead(selectedPlayer);
+                ItemStack head = HeadHelper.getHead(selectedPlayer);
                 this.addInventoryButton(slot, head, (guiClick) -> this.addMember(guiClick.getClicker(), selectedPlayer));
             }
         }

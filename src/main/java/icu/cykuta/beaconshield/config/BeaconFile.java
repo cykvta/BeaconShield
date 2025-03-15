@@ -1,4 +1,4 @@
-package icu.cykuta.beaconshield.utils;
+package icu.cykuta.beaconshield.config;
 
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
@@ -6,7 +6,7 @@ import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import javax.annotation.Nullable;
 import java.io.*;
 
-public class FileUtils {
+public class BeaconFile {
 
     /**
      * Write the BeaconShieldBlock to file.

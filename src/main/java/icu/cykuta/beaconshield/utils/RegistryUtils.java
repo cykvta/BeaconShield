@@ -15,6 +15,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class RegistryUtils {
+    /**
+     * Get the CommandMap of the server
+     * @return CommandMap
+     */
     public static CommandMap getCommandMap() {
         try {
             return (CommandMap) Bukkit.getServer().getClass().getDeclaredMethod("getCommandMap")
@@ -24,16 +28,28 @@ public class RegistryUtils {
         }
     }
 
+    /**
+     * Register a command to the server
+     * @param command Command
+     */
     public static void registerCommand(Command command) {
         CommandMap commandMap = BeaconShield.getPlugin().getCommandMap();
         commandMap.register("beaconshield", command);
     }
 
+    /**
+     * Register an event listener to the server
+     * @param listener Listener
+     */
     private static void registerEvent(Listener listener) {
         PluginManager pm = BeaconShield.getPlugin().getServer().getPluginManager();
         pm.registerEvents(listener, BeaconShield.getPlugin());
     }
 
+    /**
+     * Register all upgrades
+     * @see Upgrade for more information
+     */
     public static void registerUpgrades() {
         List<Upgrade> upgrades = List.of(
                 new DisableFallDamageUpgrade(),
@@ -45,6 +61,9 @@ public class RegistryUtils {
         upgrades.forEach(UpgradeHandler::addUpgrade);
     }
 
+    /**
+     * Register all events
+     */
     public static void registerEvents() {
         List<Listener> listeners = List.of(
                 new BukkitEventListener(),

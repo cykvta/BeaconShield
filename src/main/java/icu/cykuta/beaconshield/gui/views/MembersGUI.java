@@ -3,7 +3,7 @@ package icu.cykuta.beaconshield.gui.views;
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.PlayerRole;
 import icu.cykuta.beaconshield.gui.PaginationGUI;
-import icu.cykuta.beaconshield.utils.HeadManager;
+import icu.cykuta.beaconshield.utils.HeadHelper;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
@@ -34,7 +34,7 @@ public class MembersGUI extends PaginationGUI {
                 OfflinePlayer selectedPlayer = players[this.offset + i];
                 PlayerRole role = this.getBeaconBlock().getPlayerRole(selectedPlayer);
                 String lore = lang.getString(role.getLangKey());
-                ItemStack head = HeadManager.getHead(selectedPlayer, selectedPlayer.getName(), lore);
+                ItemStack head = HeadHelper.getHead(selectedPlayer, selectedPlayer.getName(), lore);
                 this.addInventoryButton(slot, head, (guiClick) -> openGUI(guiClick.getClicker(), new MemberEditGUI(selectedPlayer)));
             }
         }
