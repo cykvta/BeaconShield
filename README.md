@@ -2,6 +2,8 @@
 
 BeaconShield is a Minecraft plugin that allows you to protect chunks using a custom beacon with unique functionalities. It provides additional features like upgrades and fuel management to enhance server control.
 
+[![](https://img.shields.io/badge/Spigot-BeaconShield-ED8106?logo=spigotmc)](https://www.spigotmc.org/resources/123248/)
+
 ## Features
 
 - Beacon-based area protection.

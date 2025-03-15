@@ -16,7 +16,7 @@ public class Chat {
     }
 
     /**
-     * Get a message from the plugin's language file.
+     * Get a formatted message from the language file.
      * @param messagePath The path to the message in the language file.
      * @return The message.
      */
@@ -33,8 +33,7 @@ public class Chat {
      */
     public static String getPrefix() {
         PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
-        String prefix = lang.getString("prefix");
-        return prefix == null ? "" : prefix;
+        return lang.getString("prefix");
     }
 
     /**
