@@ -24,6 +24,6 @@ public class ConfirmationGUI extends GUI {
         );
 
         this.addInventoryButton(11, "confirm", this.consumer);
-        this.addInventoryButton(15, "deny", (guiClick) -> this.openGUI(guiClick.getClicker(), this.previousGUI));
+        this.addInventoryButton(15, "deny", (guiClick) -> this.openGUI(guiClick.clicker(), this.previousGUI));
     }
 }

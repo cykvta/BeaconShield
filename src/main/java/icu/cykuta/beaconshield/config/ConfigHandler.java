@@ -1,14 +1,14 @@
 package icu.cykuta.beaconshield.config;
 
-public class FileHandler {
-    private final PluginConfig config;
-    private final PluginConfig lang;
-    private final PluginConfig gui;
+public class ConfigHandler {
+    private static final ConfigHandler instance = new ConfigHandler();
 
-    public FileHandler() {
-        this.config = new PluginConfig("config.yml");
-        this.lang = new PluginConfig("lang.yml");
-        this.gui = new PluginConfig("gui.yml");
+    private final ConfigFile config = new ConfigFile("config.yml");
+    private final ConfigFile lang = new ConfigFile("lang.yml");
+    private final ConfigFile gui = new ConfigFile("gui.yml");
+
+    public ConfigHandler() {
+        this.register();
     }
 
     public void register() {
@@ -37,5 +37,12 @@ public class FileHandler {
 
     public PluginConfiguration getGui() {
         return this.gui.getFileConfiguration();
+    }
+
+    public static ConfigHandler getInstance() {
+        if (instance == null) {
+            return new ConfigHandler();
+        }
+        return instance;
     }
 }

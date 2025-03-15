@@ -35,9 +35,9 @@ public class BeaconGUI extends GUI {
                 36, 37, 38, 39, 40, 41, 42, 43, 44
         );
 
-        this.addInventoryButton(10, "territory", (guiClick) -> openGUI(guiClick.getClicker(), new TerritoryGUI()));
-        this.addInventoryButton(11, "members", (guiClick) -> openGUI(guiClick.getClicker(), new MembersGUI()));
-        this.addInventoryButton(14, "destroy", (guiClick) -> openConfirmationGUI(guiClick.getClicker(), this::destroyBeaconShield));
+        this.addInventoryButton(10, "territory", (guiClick) -> openGUI(guiClick.clicker(), new TerritoryGUI()));
+        this.addInventoryButton(11, "members", (guiClick) -> openGUI(guiClick.clicker(), new MembersGUI()));
+        this.addInventoryButton(14, "destroy", (guiClick) -> openConfirmationGUI(guiClick.clicker(), this::destroyBeaconShield));
 
         // Add storage and render information
         this.getStorage().addStorageSlot(FUEL_STORAGE_SLOT);
@@ -86,7 +86,7 @@ public class BeaconGUI extends GUI {
      * Destroy the Beacon Shield and handle resource collection.
      */
     public void destroyBeaconShield(GUIClick guiClick) {
-        Player player = guiClick.getClicker();
+        Player player = guiClick.clicker();
         GUIHolder holder = (GUIHolder) this.inventory.getHolder();
         if (holder == null) return;
 

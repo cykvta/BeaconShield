@@ -1,6 +1,7 @@
 package icu.cykuta.beaconshield.utils;
 
 import icu.cykuta.beaconshield.BeaconShield;
+import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +22,7 @@ public class Chat {
      * @return The message.
      */
     public static String getMessage(String messagePath) {
-        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = ConfigHandler.getInstance().getLang();
         String message = lang.getString(messagePath);
 
         return format(message);
@@ -32,7 +33,7 @@ public class Chat {
      * @return The plugin's prefix.
      */
     public static String getPrefix() {
-        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = ConfigHandler.getInstance().getLang();
         return lang.getString("prefix");
     }
 

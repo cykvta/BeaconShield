@@ -1,12 +1,10 @@
 package icu.cykuta.beaconshield.gui.views;
 
-import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.PlayerRole;
 import icu.cykuta.beaconshield.gui.PaginationGUI;
 import icu.cykuta.beaconshield.utils.Chat;
 import icu.cykuta.beaconshield.utils.HeadHelper;
-import icu.cykuta.beaconshield.config.PluginConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -24,11 +22,9 @@ public class InviteGUI extends PaginationGUI {
      */
     @Override
     protected void render() {
-        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
-
         // Back button
         this.addInventoryButton(36, "back",
-                (guiClick) -> this.openGUI(guiClick.getClicker(), new MembersGUI()));
+                (guiClick) -> this.openGUI(guiClick.clicker(), new MembersGUI()));
         this.addDecorationSlot(40);
 
         Player[] rawOnlinePlayers = Bukkit.getOnlinePlayers().toArray(new Player[0]);
@@ -53,7 +49,7 @@ public class InviteGUI extends PaginationGUI {
                 }
 
                 ItemStack head = HeadHelper.getHead(selectedPlayer);
-                this.addInventoryButton(slot, head, (guiClick) -> this.addMember(guiClick.getClicker(), selectedPlayer));
+                this.addInventoryButton(slot, head, (guiClick) -> this.addMember(guiClick.clicker(), selectedPlayer));
             }
         }
     }

@@ -1,7 +1,7 @@
 package icu.cykuta.beaconshield.utils;
 
-import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
+import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.data.UpgradeHandler;
@@ -26,7 +26,7 @@ public class UpgradeHelper {
      * @return The item stack
      */
     public static ItemStack itemMaker(Material material, String namePath, String lorePath) {
-        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = ConfigHandler.getInstance().getLang();
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         assert meta != null;

@@ -2,7 +2,8 @@ package icu.cykuta.beaconshield.listeners;
 
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
-import icu.cykuta.beaconshield.data.BeaconDataManager;
+import icu.cykuta.beaconshield.config.ConfigHandler;
+import icu.cykuta.beaconshield.data.BeaconHandler;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.events.BeaconShieldPlaceEvent;
 import icu.cykuta.beaconshield.utils.Chat;
@@ -24,12 +25,12 @@ public class PlaceBeaconListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        BeaconDataManager beaconDataManager = BeaconShield.getPlugin().getBeaconDataManager();
-        PluginConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
+        BeaconHandler beaconHandler = BeaconHandler.getInstance();
+        PluginConfiguration config = ConfigHandler.getInstance().getConfig();
         int maxBeaconShieldBlocks = config.getInt("max-beacons-per-player");
 
         // Check has more than maxBeaconShieldBlocks
-        if(beaconDataManager.getBeaconShieldBlocksByOwner(event.getPlayer()).size() >= maxBeaconShieldBlocks) {
+        if(beaconHandler.getBeaconShieldBlocksByOwner(event.getPlayer()).size() >= maxBeaconShieldBlocks) {
             Chat.send(event.getPlayer(), "max-beacons-reached");
             event.setCancelled(true);
             return;
@@ -39,7 +40,7 @@ public class PlaceBeaconListener implements Listener {
         BeaconShieldBlock beaconShieldBlock = new BeaconShieldBlock(block, event.getPlayer());
 
         // Save the BeaconShieldBlock
-        beaconDataManager.addBeaconShieldBlock(beaconShieldBlock);
+        beaconHandler.addBeaconShieldBlock(beaconShieldBlock);
 
         // Start the BeaconShieldBlock
         beaconShieldBlock.place();

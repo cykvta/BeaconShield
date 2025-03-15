@@ -3,7 +3,8 @@ package icu.cykuta.beaconshield.task;
 import com.jeff_media.customblockdata.CustomBlockData;
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
-import icu.cykuta.beaconshield.data.BeaconDataManager;
+import icu.cykuta.beaconshield.config.ConfigHandler;
+import icu.cykuta.beaconshield.data.BeaconHandler;
 import icu.cykuta.beaconshield.gui.GUIHolder;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
 import icu.cykuta.beaconshield.utils.FuelUtils;
@@ -20,8 +21,8 @@ import java.util.Map;
 
 public class FuelConsume extends BukkitRunnable {
     private final BeaconShield plugin = BeaconShield.getPlugin();
-    private final PluginConfiguration config = plugin.getFileHandler().getConfig();
-    private final BeaconDataManager beaconDataManager = plugin.getBeaconDataManager();
+    private final PluginConfiguration config = ConfigHandler.getInstance().getConfig();
+    private final BeaconHandler beaconHandler = BeaconHandler.getInstance();
 
     /**
      * This shits made with ChatGPT and fix the errors by myself.
@@ -31,7 +32,7 @@ public class FuelConsume extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Map.Entry<BeaconShieldBlock, Inventory> entry : beaconDataManager.getBeaconShieldMap().entrySet()) {
+        for (Map.Entry<BeaconShieldBlock, Inventory> entry : beaconHandler.getBeaconShieldMap().entrySet()) {
             BeaconShieldBlock beacon = entry.getKey();
             Inventory inventory = entry.getValue();
 

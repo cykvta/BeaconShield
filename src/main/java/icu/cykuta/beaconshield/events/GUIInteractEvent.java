@@ -10,7 +10,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class GUIInteractEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS_LIST = new HandlerList();

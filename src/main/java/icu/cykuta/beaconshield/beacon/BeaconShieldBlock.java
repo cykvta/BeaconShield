@@ -4,10 +4,11 @@ import com.jeff_media.customblockdata.CustomBlockData;
 import com.jeff_media.morepersistentdatatypes.DataType;
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.config.BeaconFile;
+import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.data.DataKeys;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
-import icu.cykuta.beaconshield.data.BeaconDataManager;
+import icu.cykuta.beaconshield.data.BeaconHandler;
 import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -24,6 +25,7 @@ import java.io.ObjectInputStream;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static icu.cykuta.beaconshield.data.DataKeys.IS_BEACONSHIELD;
 
@@ -84,8 +86,8 @@ public class BeaconShieldBlock implements Serializable {
         }
 
         // Remove the beacon from the data manager
-        BeaconDataManager beaconDataManager = BeaconShield.getPlugin().getBeaconDataManager();
-        beaconDataManager.removeBeaconShieldBlock(this);
+        BeaconHandler beaconHandler = BeaconHandler.getInstance();
+        beaconHandler.removeBeaconShieldBlock(this);
 
         // Delete the file
         BeaconFile.deleteBeaconFile(this);
@@ -265,8 +267,8 @@ public class BeaconShieldBlock implements Serializable {
      * @return The BeaconShieldBlock.
      */
     public static BeaconShieldBlock getBeaconShieldBlock(Block block) {
-        BeaconDataManager beaconDataManager = BeaconShield.getPlugin().getBeaconDataManager();
-        return beaconDataManager.getBeaconShieldBlock(block);
+        BeaconHandler beaconHandler = BeaconHandler.getInstance();
+        return beaconHandler.getBeaconShieldBlock(block);
     }
 
     /**
@@ -274,12 +276,12 @@ public class BeaconShieldBlock implements Serializable {
      * @return The BeaconShield item.
      */
     public static @NotNull ItemStack createBeaconItem() {
-        PluginConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
+        PluginConfiguration config = ConfigHandler.getInstance().getConfig();
 
         ItemStack item = new ItemStack(Material.BEACON);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(Text.color(config.getString("beacon-name")));
-        meta.setLore(config.getStringList("beacon-lore"));
+        meta.setLore(config.getStringList("beacon-lore").stream().map(Text::color).collect(Collectors.toList()));
         meta.getPersistentDataContainer().set(IS_BEACONSHIELD, PersistentDataType.BOOLEAN, true);
         item.setItemMeta(meta);
         return item;

@@ -8,10 +8,11 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 
 public class HookHandler {
+    private static HookHandler instance;
     public Hook<Economy> economyHook;
     public Hook<WorldGuard> worldGuardHookHook;
 
-    public void registerHooks() {
+    private HookHandler() {
         this.economyHook = this.registerHook(new VaultHook());
         this.worldGuardHookHook = this.registerHook(new WorldGuardHook());
     }
@@ -20,7 +21,7 @@ public class HookHandler {
         try {
             hook.register();
             if (hook.isEnabled()) {
-                Bukkit.getLogger().info("[OnPressL] Hooked into " + hook.getName());
+                Bukkit.getLogger().info("[BeaconShield] Hooked into " + hook.getName());
             }
 
         } catch (DependencyNotEnabledException e) {
@@ -28,5 +29,12 @@ public class HookHandler {
         }
 
         return hook;
+    }
+
+    public static HookHandler getInstance() {
+        if (instance == null) {
+            instance = new HookHandler();
+        }
+        return instance;
     }
 }

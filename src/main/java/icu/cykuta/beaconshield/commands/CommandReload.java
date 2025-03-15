@@ -1,5 +1,6 @@
 package icu.cykuta.beaconshield.commands;
 
+import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.utils.Chat;
 import org.bukkit.command.CommandSender;
 
@@ -10,7 +11,7 @@ public class CommandReload extends BaseCommand {
 
     @Override
     protected boolean onCommand(CommandSender sender, String[] args) {
-        plugin.getFileHandler().reload();
+        ConfigHandler.getInstance().reload();
         Chat.send(sender, "reload-config");
         return true;
     }

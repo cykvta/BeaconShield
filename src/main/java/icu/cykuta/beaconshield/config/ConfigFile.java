@@ -7,13 +7,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 
-public class PluginConfig {
+public class ConfigFile {
     private PluginConfiguration fileConfiguration;
     private final BeaconShield plugin = BeaconShield.getPlugin();
     private File file;
     private final String fileName;
 
-    public PluginConfig(String fileName) {
+    public ConfigFile(String fileName) {
         this.fileName = fileName;
     }
 

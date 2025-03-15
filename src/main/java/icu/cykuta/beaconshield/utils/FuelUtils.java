@@ -1,6 +1,7 @@
 package icu.cykuta.beaconshield.utils;
 
 import icu.cykuta.beaconshield.BeaconShield;
+import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +16,7 @@ public class FuelUtils {
      * @return The burning time of the fuel
      */
     public static int getBurnTime(ItemStack fuel) {
-        PluginConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
+        PluginConfiguration config = ConfigHandler.getInstance().getConfig();
         List<Map<?, ?>> fuelList = config.getMapList("fuel-items");
 
         for (Map<?, ?> fuelEntry : fuelList) {

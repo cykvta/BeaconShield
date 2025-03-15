@@ -4,6 +4,7 @@ import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.PlayerRole;
 import icu.cykuta.beaconshield.beacon.ProtectedChunk;
+import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.data.HookHandler;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
@@ -50,7 +51,7 @@ public class TerritoryGUI extends GUI {
         this.addInventoryButton(20, "move-west", (guiClick) -> this.moveMiddleChunk(-1, 0));
         this.addInventoryButton(24, "move-east", (guiClick) -> this.moveMiddleChunk(1, 0));
         this.addInventoryButton(40, "move-south", (guiClick) -> this.moveMiddleChunk(0, 1));
-        this.addInventoryButton(36, "back", (guiClick) -> this.openGUI(guiClick.getClicker(), new BeaconGUI()));
+        this.addInventoryButton(36, "back", (guiClick) -> this.openGUI(guiClick.clicker(), new BeaconGUI()));
 
         // Render the chunks
         this.renderChunks();
@@ -213,18 +214,18 @@ public class TerritoryGUI extends GUI {
      */
     private Consumer<GUIClick> getGuiClickConsumer(ProtectedChunk chunk, ChunkType chunkType, double chunkPrice) {
         Consumer<GUIClick> availableAction = (guiClick) -> {
-            if (guiClick.getClickType() != ClickType.RIGHT) {
-                this.openConfirmationGUI(guiClick.getClicker(), (click) -> this.claimChunk(click.getClicker(), chunk, chunkPrice) );
+            if (guiClick.clickType() != ClickType.RIGHT) {
+                this.openConfirmationGUI(guiClick.clicker(), (click) -> this.claimChunk(click.clicker(), chunk, chunkPrice) );
             } else {
                 this.showChunkBorder(guiClick, chunk);
             }
         };
 
         return switch (chunkType) {
-            case CORE -> (guiClick) -> Chat.send(guiClick.getClicker(), "claim-core-chunk");
-            case CLAIMED -> (guiClick) -> Chat.send(guiClick.getClicker(), "claim-owned-chunk");
-            case OCCUPIED -> (guiClick) -> Chat.send(guiClick.getClicker(), "claim-unowned-chunk");
-            case UNREACHABLE -> (guiClick) -> Chat.send(guiClick.getClicker(), "claim-inaccessible-chunk");
+            case CORE -> (guiClick) -> Chat.send(guiClick.clicker(), "claim-core-chunk");
+            case CLAIMED -> (guiClick) -> Chat.send(guiClick.clicker(), "claim-owned-chunk");
+            case OCCUPIED -> (guiClick) -> Chat.send(guiClick.clicker(), "claim-unowned-chunk");
+            case UNREACHABLE -> (guiClick) -> Chat.send(guiClick.clicker(), "claim-inaccessible-chunk");
             case AVAILABLE -> availableAction;
         };
     }
@@ -235,9 +236,9 @@ public class TerritoryGUI extends GUI {
      * @param selectedChunk The chunk to show the border.
      */
     private void showChunkBorder(GUIClick guiClick, ProtectedChunk selectedChunk) {
-        Player player = guiClick.getClicker();
+        Player player = guiClick.clicker();
         List<Location> highestEdges = selectedChunk.getChunkEdges();
-        PluginConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
+        PluginConfiguration config = ConfigHandler.getInstance().getConfig();
 
         Material previewBlock = Material.matchMaterial(config.getString("preview-block", "minecraft:gold_block"));
         highestEdges.forEach(edge -> player.sendBlockChange(edge, previewBlock.createBlockData()));
@@ -263,13 +264,13 @@ public class TerritoryGUI extends GUI {
             return;
         }
 
-        PluginConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
+        PluginConfiguration config = ConfigHandler.getInstance().getConfig();
         if (config.getInt("max-chunks-per-beacon") <= this.getBeaconBlock().getProtectedChunks().size()) {
             Chat.send(player, "max-chunks-reached");
             return;
         }
 
-        HookHandler hookHandler = BeaconShield.getPlugin().getHookHandler();
+        HookHandler hookHandler = HookHandler.getInstance();
 
         if (hookHandler.economyHook.isEnabled()) {
             Economy economy = hookHandler.economyHook.getHook();
@@ -294,7 +295,7 @@ public class TerritoryGUI extends GUI {
      * @return The price of the chunk.
      */
     private double getChunkPrice(ProtectedChunk selectedChunk) {
-        PluginConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
+        PluginConfiguration config = ConfigHandler.getInstance().getConfig();
 
         ProtectedChunk coreChunk = this.getBeaconBlock().getCoreChunk();
         int distance = this.getManhattanDistance(coreChunk, selectedChunk);

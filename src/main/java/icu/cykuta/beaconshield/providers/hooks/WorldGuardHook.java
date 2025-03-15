@@ -6,7 +6,6 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
-import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.data.HookHandler;
 import icu.cykuta.beaconshield.providers.DependencyNotEnabledException;
 import icu.cykuta.beaconshield.providers.Hook;
@@ -31,7 +30,7 @@ public class WorldGuardHook extends Hook<WorldGuard> {
      * @return true if the chunk is in a WorldGuard region
      */
     public static boolean isChunkInWorldGuardRegion(Chunk chunk) {
-        HookHandler hookHandler = BeaconShield.getPlugin().getHookHandler();
+        HookHandler hookHandler = HookHandler.getInstance();
 
         if (!hookHandler.worldGuardHookHook.isEnabled()) {
             return false;

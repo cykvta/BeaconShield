@@ -2,6 +2,7 @@ package icu.cykuta.beaconshield.listeners;
 
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
+import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.events.PlayerProtectedChunkGatewayEvent;
 import icu.cykuta.beaconshield.utils.Chat;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
@@ -13,7 +14,7 @@ import org.bukkit.event.Listener;
 public class GatewayEventListener implements Listener {
     @EventHandler
     public void onPlayerProtectedChunkGatewayEvent(PlayerProtectedChunkGatewayEvent event) {
-        PluginConfiguration config = BeaconShield.getPlugin().getFileHandler().getConfig();
+        PluginConfiguration config = ConfigHandler.getInstance().getConfig();
         Player player = event.getPlayer();
         BeaconShieldBlock beacon = event.getBeacon();
 

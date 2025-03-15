@@ -1,6 +1,5 @@
 package icu.cykuta.beaconshield.data;
 
-import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import org.bukkit.Chunk;
 

@@ -5,7 +5,7 @@ import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.gui.GUIHolder;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
-import icu.cykuta.beaconshield.data.BeaconDataManager;
+import icu.cykuta.beaconshield.data.BeaconHandler;
 import icu.cykuta.beaconshield.events.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -64,7 +64,7 @@ public class BukkitEventListener implements Listener {
         Block block = event.getBlock();
 
         PersistentDataContainer dataContainer = new CustomBlockData(block, BeaconShield.getPlugin());
-        BeaconDataManager dataManager = BeaconShield.getPlugin().getBeaconDataManager();
+        BeaconHandler dataManager = BeaconHandler.getInstance();
 
         // Check if the block is in the memory
         if (!(dataManager.isBeaconShieldBlockInMemory(block))) {
@@ -92,7 +92,7 @@ public class BukkitEventListener implements Listener {
         Block block = event.getClickedBlock();
 
         PersistentDataContainer dataContainer = new CustomBlockData(block, BeaconShield.getPlugin());
-        BeaconDataManager dataManager = BeaconShield.getPlugin().getBeaconDataManager();
+        BeaconHandler dataManager = BeaconHandler.getInstance();
 
         // Check if the block is in the memory
         if (!(dataManager.isBeaconShieldBlockInMemory(block))) {

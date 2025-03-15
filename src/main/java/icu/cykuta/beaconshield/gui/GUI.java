@@ -1,13 +1,12 @@
 package icu.cykuta.beaconshield.gui;
 
-import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
-import icu.cykuta.beaconshield.data.BeaconDataManager;
+import icu.cykuta.beaconshield.config.ConfigHandler;
+import icu.cykuta.beaconshield.data.BeaconHandler;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
 import icu.cykuta.beaconshield.gui.views.ConfirmationGUI;
 import icu.cykuta.beaconshield.utils.GUIHelper;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -24,7 +23,7 @@ public abstract class GUI {
     private final Map<Integer, Consumer<GUIClick>> buttonActions = new HashMap<>();
     private final String inventoryName;
     private Storage storage;
-    protected final PluginConfiguration guiConfig = BeaconShield.getPlugin().getFileHandler().getGui();
+    protected final PluginConfiguration guiConfig = ConfigHandler.getInstance().getGui();
 
     public GUI(String inventoryName, int chestSize) {
         this.chestSize = chestSize;
@@ -134,8 +133,8 @@ public abstract class GUI {
         Inventory inventory;
 
         if (gui instanceof BeaconGUI) {
-            BeaconDataManager beaconDataManager = BeaconShield.getPlugin().getBeaconDataManager();
-            inventory = beaconDataManager.getInventory(this.getBeaconBlock());
+            BeaconHandler beaconHandler = BeaconHandler.getInstance();
+            inventory = beaconHandler.getInventory(this.getBeaconBlock());
         } else {
             inventory = GUIHelper.createInventory(gui, this.getBeaconBlock());
         }
@@ -145,7 +144,6 @@ public abstract class GUI {
 
     /**
      * Open a confirmation GUI.
-     * @return
      */
     public void openConfirmationGUI(Player player, Consumer<GUIClick> consumer) {
         this.openGUI(player, new ConfirmationGUI(this, consumer));

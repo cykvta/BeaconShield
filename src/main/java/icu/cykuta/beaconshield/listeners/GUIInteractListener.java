@@ -72,22 +72,20 @@ public class GUIInteractListener implements Listener {
         ItemStack existingItem = storedItems.get(slot);
 
         if (newItem == null) {
-            // Remove the item if the new item is null (player is taking the item)
-            storedItems.remove(slot);
+            storedItems.remove(slot); // Remove the item if the new item is null (player is taking the item)
+
         } else if (existingItem == null) {
-            // Place the new item if the slot is empty
-            storedItems.put(slot, newItem);
+            storedItems.put(slot, newItem); // Place the new item if the slot is empty
+
         } else if (existingItem.isSimilar(newItem)) {
-            // Sum the amounts if the items are the same type
-            int newAmount = existingItem.getAmount() + newItem.getAmount();
+            int newAmount = existingItem.getAmount() + newItem.getAmount(); // Sum the amounts if the items are the same type
             existingItem.setAmount(newAmount);
             storedItems.put(slot, existingItem);
+
         } else {
-            // Replace the item if it's a different type
-            storedItems.put(slot, newItem);
+            storedItems.put(slot, newItem); // Replace the item if it's a different type
         }
 
-        // Update the stored items in the PDC
-        beacon.setStoredItemsToPDC(storedItems);
+        beacon.setStoredItemsToPDC(storedItems); // Update the stored items in the PDC
     }
 }

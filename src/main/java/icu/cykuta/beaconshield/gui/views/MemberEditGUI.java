@@ -1,7 +1,7 @@
 package icu.cykuta.beaconshield.gui.views;
 
-import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.PlayerRole;
+import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIClick;
 import icu.cykuta.beaconshield.utils.Chat;
@@ -25,14 +25,14 @@ public class MemberEditGUI extends GUI {
         this.addInventoryButton(0, HeadHelper.getHead(selectedPlayer), (guiClick) -> {});
         this.addInventoryButton(2, "give-ownership", this::giveOwner);
         this.addInventoryButton(4, "kick", this::kick);
-        this.addInventoryButton(8, "back", (guiClick) -> this.openGUI(guiClick.getClicker(), new MembersGUI()));
+        this.addInventoryButton(8, "back", (guiClick) -> this.openGUI(guiClick.clicker(), new MembersGUI()));
 
         switch (this.getBeaconBlock().getPlayerRole(this.selectedPlayer)) {
             case MEMBER:
-                this.addInventoryButton(3, "promote", (guiClick) -> this.setRole(guiClick.getClicker(), PlayerRole.OFFICER));
+                this.addInventoryButton(3, "promote", (guiClick) -> this.setRole(guiClick.clicker(), PlayerRole.OFFICER));
                 break;
             case OFFICER, OWNER:
-                this.addInventoryButton(3, "demote", (guiClick) -> this.setRole(guiClick.getClicker(), PlayerRole.MEMBER));
+                this.addInventoryButton(3, "demote", (guiClick) -> this.setRole(guiClick.clicker(), PlayerRole.MEMBER));
                 break;
         }
     }
@@ -50,7 +50,7 @@ public class MemberEditGUI extends GUI {
 
         this.getBeaconBlock().setPlayerRole(this.selectedPlayer, role);
 
-        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = ConfigHandler.getInstance().getLang();
         Chat.send(player,
                 "member-role-updated",
                 this.selectedPlayer.getName(),
@@ -60,7 +60,7 @@ public class MemberEditGUI extends GUI {
     }
 
     private void giveOwner(GUIClick click) {
-        Player player = click.getClicker();
+        Player player = click.clicker();
 
         if (!this.getBeaconBlock().hasPermissionLevel(player, PlayerRole.OWNER)) {
             Chat.send(player, "no-permission-action");
@@ -80,13 +80,13 @@ public class MemberEditGUI extends GUI {
 
             // Set the new owner
             this.getBeaconBlock().setOwner(this.selectedPlayer.getUniqueId());
-            guiClick.getClicker().closeInventory();
-            Chat.send(guiClick.getClicker(), "owner-given", this.selectedPlayer.getName());
+            guiClick.clicker().closeInventory();
+            Chat.send(guiClick.clicker(), "owner-given", this.selectedPlayer.getName());
         });
     }
 
     private void kick(GUIClick guiClick) {
-        Player player = guiClick.getClicker();
+        Player player = guiClick.clicker();
 
         if (!this.getBeaconBlock().hasPermissionLevel(player, PlayerRole.OFFICER)) {
             Chat.send(player, "no-permission-action");
@@ -104,7 +104,7 @@ public class MemberEditGUI extends GUI {
         }
 
         this.openConfirmationGUI(player, (confirmationClick) -> {
-            Player confirmationPlayer = confirmationClick.getClicker();
+            Player confirmationPlayer = confirmationClick.clicker();
             Chat.send(confirmationPlayer, "member-removed", this.selectedPlayer.getName());
             this.getBeaconBlock().removeAllowedPlayer(this.selectedPlayer);
             this.openGUI(confirmationPlayer, new MembersGUI());

@@ -1,7 +1,7 @@
 package icu.cykuta.beaconshield.gui.views;
 
-import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.PlayerRole;
+import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.gui.PaginationGUI;
 import icu.cykuta.beaconshield.utils.HeadHelper;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
@@ -18,11 +18,11 @@ public class MembersGUI extends PaginationGUI {
      */
     @Override
     protected void render() {
-        PluginConfiguration lang = BeaconShield.getPlugin().getFileHandler().getLang();
+        PluginConfiguration lang = ConfigHandler.getInstance().getLang();
 
         // Add buttons
-        this.addInventoryButton(36, "back", (guiClick) -> this.openGUI(guiClick.getClicker(), new BeaconGUI()));
-        this.addInventoryButton(40, "add-member", (guiClick) -> this.openGUI(guiClick.getClicker(), new InviteGUI()));
+        this.addInventoryButton(36, "back", (guiClick) -> this.openGUI(guiClick.clicker(), new BeaconGUI()));
+        this.addInventoryButton(40, "add-member", (guiClick) -> this.openGUI(guiClick.clicker(), new InviteGUI()));
 
         OfflinePlayer[] players = this.getBeaconBlock().getAllowedPlayers();
 
@@ -35,7 +35,7 @@ public class MembersGUI extends PaginationGUI {
                 PlayerRole role = this.getBeaconBlock().getPlayerRole(selectedPlayer);
                 String lore = lang.getString(role.getLangKey());
                 ItemStack head = HeadHelper.getHead(selectedPlayer, selectedPlayer.getName(), lore);
-                this.addInventoryButton(slot, head, (guiClick) -> openGUI(guiClick.getClicker(), new MemberEditGUI(selectedPlayer)));
+                this.addInventoryButton(slot, head, (guiClick) -> openGUI(guiClick.clicker(), new MemberEditGUI(selectedPlayer)));
             }
         }
     }

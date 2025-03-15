@@ -2,11 +2,9 @@ package icu.cykuta.beaconshield.listeners;
 
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.PlayerRole;
-import icu.cykuta.beaconshield.data.BeaconDataManager;
+import icu.cykuta.beaconshield.data.BeaconHandler;
 import icu.cykuta.beaconshield.events.BeaconShieldInteractEvent;
-import icu.cykuta.beaconshield.gui.views.BeaconGUI;
 import icu.cykuta.beaconshield.utils.Chat;
-import icu.cykuta.beaconshield.utils.GUIHelper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
@@ -24,8 +22,8 @@ public class InteractBeaconListener implements Listener {
             return;
         }
 
-        BeaconDataManager beaconDataManager = BeaconShield.getPlugin().getBeaconDataManager();
-        Inventory inv = beaconDataManager.getInventory(event.getBeaconShieldBlock());
+        BeaconHandler beaconHandler = BeaconHandler.getInstance();
+        Inventory inv = beaconHandler.getInventory(event.getBeaconShieldBlock());
 
         event.getPlayer().openInventory(inv);
     }
