@@ -9,6 +9,7 @@ import icu.cykuta.beaconshield.gui.GUIHolder;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
 import icu.cykuta.beaconshield.utils.FuelUtils;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
@@ -58,7 +59,11 @@ public class FuelConsumeTask extends BukkitRunnable {
     private void consumeFuel(BeaconShieldBlock beacon, Inventory inventory) {
         beacon.consumeFuel();
         runEffect(beacon.getBlock());
-        updateGUI(inventory);
+
+        // Update the GUI to reflect the fuel consumption if it exists
+        if (inventory != null) {
+            updateGUI(inventory);
+        }
 
         // If fuel is depleted after consumption, try to refuel
         if (beacon.getFuelLevel() <= 0) {
@@ -72,7 +77,6 @@ public class FuelConsumeTask extends BukkitRunnable {
      * @param inventory The inventory of the beacon
      */
     private void refuelFromInventory(BeaconShieldBlock beacon, Inventory inventory) {
-        PersistentDataContainer pdc = new CustomBlockData(beacon.getBlock(), plugin);
         Map<Integer, ItemStack> storedItems = beacon.getStoredItemsFromPDC();
         ItemStack fuelItem = storedItems.get(BeaconGUI.FUEL_STORAGE_SLOT);
 
@@ -84,18 +88,20 @@ public class FuelConsumeTask extends BukkitRunnable {
 
         int burnTime = FuelUtils.getBurnTime(fuelItem);
         if (burnTime > 0) {
-            reduceFuel(beacon, pdc, fuelItem);
-            updateFuelInGUI(inventory, fuelItem);
+            reduceFuel(beacon, fuelItem);
+
+            if (inventory != null) {
+                updateFuelInGUI(inventory, fuelItem);
+            }
         }
     }
 
     /**
      * Reduces fuel from the beacon's PersistentDataContainer.
      * @param beacon The beacon to handle
-     * @param pdc The PersistentDataContainer of the beacon
      * @param fuelItem The fuel item to reduce
      */
-    private void reduceFuel(BeaconShieldBlock beacon, PersistentDataContainer pdc, ItemStack fuelItem) {
+    private void reduceFuel(BeaconShieldBlock beacon, ItemStack fuelItem) {
         int burnTime = FuelUtils.getBurnTime(fuelItem);
         beacon.setFuelLevel(burnTime);
 
@@ -118,14 +124,23 @@ public class FuelConsumeTask extends BukkitRunnable {
      * @param beacon The beacon to handle
      */
     private void handleNoInventory(BeaconShieldBlock beacon) {
-        PersistentDataContainer pdc = new CustomBlockData(beacon.getBlock(), plugin);
+        if (beacon.getFuelLevel() > 0) {
+            consumeFuel(beacon, null);
+            return;
+        }
+
         Map<Integer, ItemStack> storedItems = beacon.getStoredItemsFromPDC();
         ItemStack fuelItem = storedItems.get(BeaconGUI.FUEL_STORAGE_SLOT);
 
-        if (fuelItem == null || fuelItem.getAmount() == 0) {
-            beacon.setFuelLevel(-1); // No fuel available
-        } else {
-            reduceFuel(beacon, pdc, fuelItem);
+        if (fuelItem == null || fuelItem.getAmount() == 0 || FuelUtils.getBurnTime(fuelItem) <= 0) {
+            beacon.setFuelLevel(-1);
+            return;
+        }
+
+        int burnTime = FuelUtils.getBurnTime(fuelItem);
+        if (burnTime > 0) {
+            beacon.setFuelLevel(burnTime);
+            reduceFuel(beacon, fuelItem);
             runEffect(beacon.getBlock());
         }
     }
