@@ -1,4 +1,4 @@
-package icu.cykuta.beaconshield.task;
+package icu.cykuta.beaconshield.beacon.fuel;
 
 import com.jeff_media.customblockdata.CustomBlockData;
 import icu.cykuta.beaconshield.BeaconShield;
@@ -19,7 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Map;
 
-public class FuelConsume extends BukkitRunnable {
+public class FuelConsumeTask extends BukkitRunnable {
     private final BeaconShield plugin = BeaconShield.getPlugin();
     private final PluginConfiguration config = ConfigHandler.getInstance().getConfig();
     private final BeaconHandler beaconHandler = BeaconHandler.getInstance();

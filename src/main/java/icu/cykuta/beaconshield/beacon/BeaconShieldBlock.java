@@ -3,6 +3,8 @@ package icu.cykuta.beaconshield.beacon;
 import com.jeff_media.customblockdata.CustomBlockData;
 import com.jeff_media.morepersistentdatatypes.DataType;
 import icu.cykuta.beaconshield.BeaconShield;
+import icu.cykuta.beaconshield.beacon.protection.PlayerRole;
+import icu.cykuta.beaconshield.beacon.protection.ProtectedChunk;
 import icu.cykuta.beaconshield.config.BeaconFile;
 import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.config.PluginConfiguration;

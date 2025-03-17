@@ -3,10 +3,10 @@ package icu.cykuta.beaconshield.utils;
 public class MathUtils {
     /**
      * Calculate the value of the formula
-     *
-     * I don't write this code, I just found it on the Internet https://stackoverflow.com/a/26227947
+     * <p>
+     * I don't write this code source: <a href="https://stackoverflow.com/a/26227947">StackOverflow</a>
      * @param str formula
-     * @return
+     * @return result
      */
     public static double eval(final String str) {
         return new Object() {

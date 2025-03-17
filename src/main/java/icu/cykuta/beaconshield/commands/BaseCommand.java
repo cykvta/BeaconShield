@@ -69,7 +69,7 @@ public abstract class BaseCommand extends Command {
             BaseCommand subcommand = subcommands.get(subcommandName);
 
             if (subcommand != null) {
-                return subcommand.onCommand(sender, shiftArgs(args));
+                return subcommand.execute(sender, commandLabel, shiftArgs(args));
             }
         }
 

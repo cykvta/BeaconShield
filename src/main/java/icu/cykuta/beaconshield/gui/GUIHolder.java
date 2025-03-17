@@ -1,7 +1,6 @@
 package icu.cykuta.beaconshield.gui;
 
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;

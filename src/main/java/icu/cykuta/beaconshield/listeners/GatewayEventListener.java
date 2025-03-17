@@ -1,6 +1,5 @@
 package icu.cykuta.beaconshield.listeners;
 
-import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.events.PlayerProtectedChunkGatewayEvent;

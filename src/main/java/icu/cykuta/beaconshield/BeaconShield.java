@@ -1,16 +1,13 @@
 package icu.cykuta.beaconshield;
 
-import icu.cykuta.beaconshield.commands.CommandBeaconshield;
 import icu.cykuta.beaconshield.data.BeaconHandler;
-import icu.cykuta.beaconshield.task.FuelConsume;
+import icu.cykuta.beaconshield.beacon.fuel.FuelConsumeTask;
 import icu.cykuta.beaconshield.utils.RegistryUtils;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BeaconShield extends JavaPlugin {
     private static BeaconShield instance;
-    private CommandMap commandMap;
     private BeaconHandler beaconHandler;
 
     @Override
@@ -21,16 +18,9 @@ public final class BeaconShield extends JavaPlugin {
         // Metrics
         new Metrics(this, 25023);
 
-        // Get command map
-        this.commandMap = RegistryUtils.getCommandMap();
-
-        // Register upgrades
+        // Register upgrades, commands and events
         RegistryUtils.registerUpgrades();
-
-        // Register commands
-        RegistryUtils.registerCommand(new CommandBeaconshield());
-
-        // Register events
+        RegistryUtils.registerCommands();
         RegistryUtils.registerEvents();
 
         // Read data files
@@ -42,7 +32,7 @@ public final class BeaconShield extends JavaPlugin {
         }, 0, 60 * 20);
 
         // Fuel consume task
-        new FuelConsume().runTaskTimerAsynchronously(this, 20, 20);
+        new FuelConsumeTask().runTaskTimerAsynchronously(this, 20, 20);
     }
 
     @Override
@@ -52,9 +42,5 @@ public final class BeaconShield extends JavaPlugin {
 
     public static BeaconShield getPlugin() {
         return instance;
-    }
-
-    public CommandMap getCommandMap() {
-        return this.commandMap;
     }
 }

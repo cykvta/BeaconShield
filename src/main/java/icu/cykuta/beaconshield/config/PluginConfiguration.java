@@ -1,6 +1,7 @@
 package icu.cykuta.beaconshield.config;
 
 import icu.cykuta.beaconshield.utils.Text;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -8,7 +9,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
 
 public class PluginConfiguration extends YamlConfiguration {
 
@@ -166,21 +171,22 @@ public class PluginConfiguration extends YamlConfiguration {
         set(path + ".amount", item.getAmount());
     }
 
-
     /**
-     * Adapt the {@link YamlConfiguration} to {@link PluginConfiguration}.
-     * @param yamlConfig The YamlConfiguration to adapt.
-     * @return The adapted CustomConfig.
+     * Load the configuration from the file.
+     * @param file The file to load the configuration from.
+     * @return The configuration loaded from the file.
      */
-    public static PluginConfiguration adapt(YamlConfiguration yamlConfig) {
-        PluginConfiguration customConfig = new PluginConfiguration();
+    public static @NotNull PluginConfiguration loadConfiguration(@NotNull File file) {
+        PluginConfiguration config = new PluginConfiguration();
+
         try {
-            String serialized = yamlConfig.saveToString();
-            customConfig.loadFromString(serialized);
-        } catch (InvalidConfigurationException e) {
-            e.printStackTrace();
+            config.load(file);
+        } catch (FileNotFoundException ignored) { }
+        catch (IOException | InvalidConfigurationException ex) {
+            Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file, ex);
         }
-        return customConfig;
+
+        return config;
     }
 
 }

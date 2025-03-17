@@ -2,8 +2,8 @@ package icu.cykuta.beaconshield.gui.views;
 
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
-import icu.cykuta.beaconshield.beacon.PlayerRole;
-import icu.cykuta.beaconshield.beacon.ProtectedChunk;
+import icu.cykuta.beaconshield.beacon.protection.PlayerRole;
+import icu.cykuta.beaconshield.beacon.protection.ProtectedChunk;
 import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.data.HookHandler;

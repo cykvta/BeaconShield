@@ -1,6 +1,7 @@
 package icu.cykuta.beaconshield.utils;
 
 import icu.cykuta.beaconshield.BeaconShield;
+import icu.cykuta.beaconshield.commands.CommandBeaconshield;
 import icu.cykuta.beaconshield.data.UpgradeHandler;
 import icu.cykuta.beaconshield.listeners.*;
 import icu.cykuta.beaconshield.listeners.bukkit.BukkitEventListener;
@@ -32,8 +33,8 @@ public class RegistryUtils {
      * Register a command to the server
      * @param command Command
      */
-    public static void registerCommand(Command command) {
-        CommandMap commandMap = BeaconShield.getPlugin().getCommandMap();
+    private static void registerCommand(Command command) {
+        CommandMap commandMap = RegistryUtils.getCommandMap();
         commandMap.register("beaconshield", command);
     }
 
@@ -47,18 +48,26 @@ public class RegistryUtils {
     }
 
     /**
+     * Register an upgrade
+     * @param upgrade Upgrade
+     */
+    public static void addUpgrade(Upgrade<?> upgrade) {
+        Bukkit.getPluginManager().registerEvents(upgrade, BeaconShield.getPlugin());
+        UpgradeHandler.put(upgrade, upgrade.getItemStack());
+    }
+
+    /**
      * Register all upgrades
-     * @see Upgrade for more information
      */
     public static void registerUpgrades() {
-        List<Upgrade> upgrades = List.of(
+        List<Upgrade<?>> upgrades = List.of(
                 new DisableFallDamageUpgrade(),
                 new DisablePvPUpgrade(),
                 new DisableMobSpawningUpgrade(),
                 new DisableDrowningUpgrade()
         );
 
-        upgrades.forEach(UpgradeHandler::addUpgrade);
+        upgrades.forEach(RegistryUtils::addUpgrade);
     }
 
     /**
@@ -76,5 +85,16 @@ public class RegistryUtils {
         );
 
         listeners.forEach(RegistryUtils::registerEvent);
+    }
+
+    /**
+     * Register all commands
+     */
+    public static void registerCommands() {
+        List<Command> commands = List.of(
+                new CommandBeaconshield()
+        );
+
+        commands.forEach(RegistryUtils::registerCommand);
     }
 }

@@ -1,4 +1,4 @@
-package icu.cykuta.beaconshield.beacon;
+package icu.cykuta.beaconshield.beacon.protection;
 
 public enum PlayerRole {
     OWNER("role-owner", 3),

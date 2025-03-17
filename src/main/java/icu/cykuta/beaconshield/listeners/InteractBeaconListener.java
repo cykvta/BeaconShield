@@ -1,7 +1,6 @@
 package icu.cykuta.beaconshield.listeners;
 
-import icu.cykuta.beaconshield.BeaconShield;
-import icu.cykuta.beaconshield.beacon.PlayerRole;
+import icu.cykuta.beaconshield.beacon.protection.PlayerRole;
 import icu.cykuta.beaconshield.data.BeaconHandler;
 import icu.cykuta.beaconshield.events.BeaconShieldInteractEvent;
 import icu.cykuta.beaconshield.utils.Chat;

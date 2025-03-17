@@ -27,7 +27,7 @@ public class ConfigFile {
             plugin.saveResource(fileName, false);
         }
 
-        this.fileConfiguration = PluginConfiguration.adapt(YamlConfiguration.loadConfiguration(this.file));
+        this.fileConfiguration = PluginConfiguration.loadConfiguration(this.file);
     }
 
     /**

@@ -1,4 +1,4 @@
-package icu.cykuta.beaconshield.beacon;
+package icu.cykuta.beaconshield.beacon.protection;
 
 import icu.cykuta.beaconshield.BeaconShield;
 import org.bukkit.Chunk;

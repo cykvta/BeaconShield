@@ -1,7 +1,7 @@
 package icu.cykuta.beaconshield.gui.views;
 
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
-import icu.cykuta.beaconshield.beacon.PlayerRole;
+import icu.cykuta.beaconshield.beacon.protection.PlayerRole;
 import icu.cykuta.beaconshield.gui.PaginationGUI;
 import icu.cykuta.beaconshield.utils.Chat;
 import icu.cykuta.beaconshield.utils.HeadHelper;
