@@ -131,7 +131,8 @@ move-west:
 chunk-core:
   item: "minecraft:beacon"
   name: "&bCore"
-  lore: []
+  lore:
+    - "&7Left-click to preview the entire territory."
   custom-model-data: 0
 
 chunk-claimed:

@@ -22,7 +22,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class TerritoryGUI extends GUI {
@@ -223,12 +225,30 @@ public class TerritoryGUI extends GUI {
         };
 
         return switch (chunkType) {
-            case CORE -> (guiClick) -> Chat.send(guiClick.clicker(), "claim-core-chunk");
+            case CORE -> this::showFullBorder;
             case CLAIMED -> (guiClick) -> Chat.send(guiClick.clicker(), "claim-owned-chunk");
             case OCCUPIED -> (guiClick) -> Chat.send(guiClick.clicker(), "claim-unowned-chunk");
             case UNREACHABLE -> (guiClick) -> Chat.send(guiClick.clicker(), "claim-inaccessible-chunk");
             case AVAILABLE -> availableAction;
         };
+    }
+
+    /**
+     * Show the border of entire territory.
+     * @param guiClick The GUI click.
+     */
+    private void showFullBorder(GUIClick guiClick) {
+        Player player = guiClick.clicker();
+        PluginConfiguration config = ConfigHandler.getInstance().getConfig();
+        Material previewBlock = Material.matchMaterial(config.getString("preview-block", "minecraft:gold_block"));
+
+        List<ProtectedChunk> chunks = this.getBeaconBlock().getProtectedChunks();
+        for (ProtectedChunk chunk : chunks) {
+            chunk.preview(previewBlock, player);
+        }
+
+        player.closeInventory();
+        Chat.send(player, "preview-entire-territory");
     }
 
     /**
@@ -238,20 +258,13 @@ public class TerritoryGUI extends GUI {
      */
     private void showChunkBorder(GUIClick guiClick, ProtectedChunk selectedChunk) {
         Player player = guiClick.clicker();
-        List<Location> highestEdges = selectedChunk.getChunkEdges();
         PluginConfiguration config = ConfigHandler.getInstance().getConfig();
-
         Material previewBlock = Material.matchMaterial(config.getString("preview-block", "minecraft:gold_block"));
-        highestEdges.forEach(edge -> player.sendBlockChange(edge, previewBlock.createBlockData()));
+        selectedChunk.preview(previewBlock, player);
         player.closeInventory();
         Chat.send(player, "preview-chunk",
                 String.valueOf(selectedChunk.getX()),
                 String.valueOf(selectedChunk.getZ()));
-
-        // after 5 seconds, remove the border
-        BeaconShield.getPlugin().getServer().getScheduler().runTaskLater(BeaconShield.getPlugin(), () -> {
-            highestEdges.forEach(edge -> player.sendBlockChange(edge, edge.getBlock().getBlockData()));
-        }, 5 * 20);
     }
 
     /**

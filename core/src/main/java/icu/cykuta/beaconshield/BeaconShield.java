@@ -11,6 +11,12 @@ public final class BeaconShield extends JavaPlugin {
     private static BeaconShield instance;
     private static BeaconShieldAPI api;
 
+    /**
+     * TODO:
+     *  - Recipes for upgrades and beacons
+     *  - Squaremap bug (the protection area still exists between worlds)
+     */
+
     @Override
     public void onEnable() {
         instance = this;

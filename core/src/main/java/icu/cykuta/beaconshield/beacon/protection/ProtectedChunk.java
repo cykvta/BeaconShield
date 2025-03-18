@@ -1,11 +1,9 @@
 package icu.cykuta.beaconshield.beacon.protection;
 
 import icu.cykuta.beaconshield.BeaconShield;
-import org.bukkit.Chunk;
-import org.bukkit.HeightMap;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -97,6 +95,38 @@ public class ProtectedChunk implements Serializable {
         int height = world.getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING_NO_LEAVES);
         Block block = world.getBlockAt(x, height, z);
         edges.add(block.getLocation());
+    }
+
+    /**
+     * Check if a location is within the bounds of a chunk.
+     * @param location The location to check.
+     * @return True if the location is within the chunk, false otherwise.
+     */
+    public boolean isLocationInChunk(Location location) {
+        int chunkX = this.getX();
+        int chunkZ = this.getZ();
+
+        // Calculate the bounds of the chunk
+        int minX = chunkX << 4; // chunkX * 16
+        int maxX = minX + 15;
+        int minZ = chunkZ << 4; // chunkZ * 16
+        int maxZ = minZ + 15;
+
+        // Check if the location is within the chunk bounds
+        int locX = location.getBlockX();
+        int locZ = location.getBlockZ();
+
+        return locX >= minX && locX <= maxX && locZ >= minZ && locZ <= maxZ;
+    }
+
+    public void preview(Material material, Player player) {
+        List<Location> highestEdges = getChunkEdges();
+        highestEdges.forEach(edge -> player.sendBlockChange(edge, material.createBlockData()));
+
+        // Revert the changes after 5 seconds
+        BeaconShield.getPlugin().getServer().getScheduler().runTaskLater(BeaconShield.getPlugin(), () -> {
+            highestEdges.forEach(edge -> player.sendBlockChange(edge, edge.getBlock().getBlockData()));
+        }, 5 * 20);
     }
 
 }

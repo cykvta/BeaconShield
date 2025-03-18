@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>BeaconShield-squaremap</artifactId>
-    <version>1.0</version>
+    <version>${project.version}</version>
     <packaging>jar</packaging>
 
     <name>BeaconShield-squaremap</name>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>icu.cykuta</groupId>
             <artifactId>BeaconShield-core</artifactId>
-            <version>1.8-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

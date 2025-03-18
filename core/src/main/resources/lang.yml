@@ -46,6 +46,7 @@ role-member: "&eMember"
 protection-time: "&eProtection Duration: &b{0}"
 preview-chunk-info: "&7Right-click to preview the chunk."
 preview-chunk: "&aPreviewing chunk {0}, {1}."
+preview-entire-territory: "&aPreviewing entire territory."
 chunk-price: "&ePrice: &b{0}"
 
 # Upgrade Names and Descriptions

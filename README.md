@@ -2,6 +2,7 @@
 
 BeaconShield is a Minecraft plugin that allows you to protect chunks using a custom beacon with unique functionalities. It provides additional features like upgrades and fuel management to enhance server control.
 
+[![](https://jitpack.io/v/cykvta/BeaconShield.svg)](https://jitpack.io/#cykvta/BeaconShield)
 [![](https://img.shields.io/badge/Spigot-BeaconShield-ED8106?logo=spigotmc)](https://www.spigotmc.org/resources/123248/)
 
 ## Features
@@ -51,3 +52,33 @@ If the beacon runs out of fuel, the protection will be disabled. Fuel items and 
 
 Modify the `config.yml` file located in `plugins/BeaconShield/` to customize the plugin settings, including economy integration and language options. Use `/bsd reload` to apply changes without restarting the server.
 
+## API
+To use this ~~plugin as a dependency in your own project.
+Add the JitPack repository to your build file.
+```xml
+	<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+```
+Add the dependency.
+```xml
+	<dependency>
+	    <groupId>com.github.cykvta</groupId>
+	    <artifactId>BeaconShield</artifactId>
+	    <version>{version}</version>
+	</dependency>
+```
+
+Get the plugin instance.
+```java
+BeaconShieldAPI api = BeaconShield.getAPI(); // Get the plugin instance
+```~~
+
+Public events:
+ - `BeaconShieldDestroyedEvent`: Called when a beacon is destroyed.
+ - `BeaconShieldPlacedEvent`: Called when a beacon is placed.
+ - `ProtectionChunkAdderEvent`: Called when a player adds a chunk to the protection list.
+ - `ProtectionChunkRemovedEvent`: Called when a player removes a chunk from the protection list.
