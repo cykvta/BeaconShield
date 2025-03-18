@@ -1,0 +1,7 @@
+name: BeaconShield-dynmap
+version: '${project.version}'
+main: icu.cykuta.beaconshielddynmap.BeaconShield_dynmap
+api-version: '1.20'
+depend:
+  - BeaconShield
+  - dynmap
