@@ -1,0 +1,7 @@
+name: BeaconShield-squaremap
+version: '${project.version}'
+main: icu.cykuta.beaconshieldsquaremap.BeaconShield_squaremap
+api-version: '1.20'
+depend:
+  - BeaconShield
+  - squaremap

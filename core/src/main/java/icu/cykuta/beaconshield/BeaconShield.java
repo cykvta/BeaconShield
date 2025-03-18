@@ -7,13 +7,14 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BeaconShield extends JavaPlugin {
-    private static BeaconShield instance;
     private BeaconHandler beaconHandler;
+    private static BeaconShield instance;
+    private static BeaconShieldAPI api;
 
     @Override
     public void onEnable() {
-        // Save instance
         instance = this;
+        api = new BeaconShieldAPI();
 
         // Metrics
         new Metrics(this, 25023);
@@ -42,5 +43,9 @@ public final class BeaconShield extends JavaPlugin {
 
     public static BeaconShield getPlugin() {
         return instance;
+    }
+
+    public static BeaconShieldAPI getAPI() {
+        return api;
     }
 }

@@ -11,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,13 @@ public class BeaconHandler {
      */
     public Map<BeaconShieldBlock, Inventory> getBeaconShieldMap() {
         return this.beaconShieldBlocks;
+    }
+
+    /**
+     * Get list of all registered beacons.
+     */
+    public List<BeaconShieldBlock> getBeacons() {
+        return new ArrayList<>(this.beaconShieldBlocks.keySet());
     }
 
     /**
