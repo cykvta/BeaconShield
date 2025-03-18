@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>BeaconShield-squaremap</artifactId>
-    <version>${project.version}</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>BeaconShield-squaremap</name>
@@ -41,11 +41,6 @@
     </build>
 
     <dependencies>
-        <dependency>
-            <groupId>icu.cykuta</groupId>
-            <artifactId>BeaconShield</artifactId>
-            <version>1.7-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>xyz.jpenilla</groupId>
             <artifactId>squaremap-api</artifactId>
