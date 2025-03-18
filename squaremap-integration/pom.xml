@@ -13,7 +13,7 @@
     <parent>
         <groupId>icu.cykuta</groupId>
         <artifactId>BeaconShield</artifactId>
-        <version>1.7-SNAPSHOT</version>
+        <version>1.8-SNAPSHOT</version>
     </parent>
 
     <build>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>icu.cykuta</groupId>
             <artifactId>BeaconShield-core</artifactId>
-            <version>1.7-SNAPSHOT</version>
+            <version>1.8-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

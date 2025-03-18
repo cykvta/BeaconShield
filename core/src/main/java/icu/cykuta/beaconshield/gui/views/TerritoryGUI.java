@@ -275,9 +275,12 @@ public class TerritoryGUI extends GUI {
 
         if (hookHandler.economyHook.isEnabled()) {
             Economy economy = hookHandler.economyHook.getHook();
-            EconomyResponse response = economy.withdrawPlayer(player, price);
-            if (!response.transactionSuccess()) {
+
+            if (economy.has(player, price)) {
+                economy.withdrawPlayer(player, price);
+            } else {
                 Chat.send(player, "insufficient-funds");
+                player.closeInventory();
                 return;
             }
         }
