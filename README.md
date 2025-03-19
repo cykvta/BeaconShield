@@ -80,5 +80,5 @@ BeaconShieldAPI api = BeaconShield.getAPI(); // Get the plugin instance
 Public events:
  - `BeaconShieldDestroyedEvent`: Called when a beacon is destroyed.
  - `BeaconShieldPlacedEvent`: Called when a beacon is placed.
- - `ProtectionChunkAdderEvent`: Called when a player adds a chunk to the protection list.
+ - `ProtectionChunkAddedEvent`: Called when a player adds a chunk to the protection list.
  - `ProtectionChunkRemovedEvent`: Called when a player removes a chunk from the protection list.
