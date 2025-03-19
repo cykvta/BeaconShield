@@ -6,7 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityAirChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 public class DisableDrowningUpgrade implements Upgrade<EntityAirChangeEvent> {
 
@@ -17,9 +21,12 @@ public class DisableDrowningUpgrade implements Upgrade<EntityAirChangeEvent> {
 
     @Override
     public @NotNull ItemStack getItemStack() {
-        return UpgradeHelper.itemMaker(Material.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE,
-                "disable-drowning-name",
-                "disable-drowning-desc");
+        return UpgradeHelper.itemMaker(this);
+    }
+
+    @Override
+    public @Nullable ShapedRecipe getRecipe() {
+        return UpgradeHelper.createRecipe(this);
     }
 
     @Override

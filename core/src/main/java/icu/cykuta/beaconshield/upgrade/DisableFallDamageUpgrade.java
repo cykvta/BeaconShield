@@ -6,7 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 public class DisableFallDamageUpgrade implements Upgrade<EntityDamageEvent> {
@@ -18,9 +20,12 @@ public class DisableFallDamageUpgrade implements Upgrade<EntityDamageEvent> {
 
     @Override
     public @NotNull ItemStack getItemStack() {
-        return UpgradeHelper.itemMaker(Material.WILD_ARMOR_TRIM_SMITHING_TEMPLATE,
-                "disable-fall-damage-name",
-                "disable-fall-damage-desc");
+        return UpgradeHelper.itemMaker(this);
+    }
+
+    @Override
+    public @Nullable ShapedRecipe getRecipe() {
+        return UpgradeHelper.createRecipe(this);
     }
 
     @Override

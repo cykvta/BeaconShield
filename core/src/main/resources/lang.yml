@@ -48,13 +48,3 @@ preview-chunk-info: "&7Right-click to preview the chunk."
 preview-chunk: "&aPreviewing chunk {0}, {1}."
 preview-entire-territory: "&aPreviewing entire territory."
 chunk-price: "&ePrice: &b{0}"
-
-# Upgrade Names and Descriptions
-disable-fall-damage-name: "&eFall Damage Immunity Upgrade"
-disable-fall-damage-desc: "&7Prevents fall damage within the protected territory."
-disable-pvp-name: "&ePvP Protection Upgrade"
-disable-pvp-desc: "&7Disables PvP within the protected territory."
-disable-mob-spawning-name: "&eMob Spawning Protection Upgrade"
-disable-mob-spawning-desc: "&7Prevents mobs from spawning within the protected territory."
-disable-drowning-name: "&eDrowning Immunity Upgrade"
-disable-drowning-desc: "&7Prevents drowning within the protected territory."

@@ -1,6 +1,7 @@
 package icu.cykuta.beaconshield.utils;
 
 import icu.cykuta.beaconshield.BeaconShield;
+import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.commands.CommandBeaconshield;
 import icu.cykuta.beaconshield.data.UpgradeHandler;
 import icu.cykuta.beaconshield.listeners.*;
@@ -10,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.PluginManager;
 
 import java.lang.reflect.InvocationTargetException;
@@ -54,6 +56,7 @@ public class RegistryUtils {
     public static void addUpgrade(Upgrade<?> upgrade) {
         Bukkit.getPluginManager().registerEvents(upgrade, BeaconShield.getPlugin());
         UpgradeHandler.put(upgrade, upgrade.getItemStack());
+        Bukkit.addRecipe(upgrade.getRecipe());
     }
 
     /**
@@ -96,5 +99,13 @@ public class RegistryUtils {
         );
 
         commands.forEach(RegistryUtils::registerCommand);
+    }
+
+    /**
+     * Other registry methods
+     */
+    public static void others() {
+        ShapedRecipe recipe = BeaconShieldBlock.createRecipe();
+        Bukkit.addRecipe(recipe);
     }
 }

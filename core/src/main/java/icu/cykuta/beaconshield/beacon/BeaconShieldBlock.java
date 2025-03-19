@@ -13,8 +13,10 @@ import icu.cykuta.beaconshield.data.BeaconHandler;
 import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -415,5 +417,44 @@ public class BeaconShieldBlock implements Serializable {
         meta.getPersistentDataContainer().set(IS_BEACONSHIELD, PersistentDataType.BOOLEAN, true);
         item.setItemMeta(meta);
         return item;
+    }
+
+    public static @Nullable ShapedRecipe createRecipe() {
+        PluginConfiguration config = ConfigHandler.getInstance().getConfig();
+        if (!config.getBoolean("beacon-recipe.enabled", true)) {
+            return null;
+        }
+
+        NamespacedKey key = new NamespacedKey(BeaconShield.getPlugin(), "beacon_recipe");
+        ShapedRecipe recipe = new ShapedRecipe(key, createBeaconItem());
+
+        List<String> shape = config.getStringList("beacon-recipe.shape");
+        if (shape.isEmpty()) {
+            throw new IllegalArgumentException("Beacon recipe shape is empty!");
+        }
+
+        ConfigurationSection ingredientsSection = config.getConfigurationSection("beacon-recipe.ingredients");
+        if (ingredientsSection == null) {
+            throw new IllegalArgumentException("Beacon recipe ingredients are missing or not properly formatted!");
+        }
+
+        Map<String, Object> ingredients = ingredientsSection.getValues(false);
+        if (ingredients.isEmpty()) {
+            throw new IllegalArgumentException("Beacon recipe ingredients are empty!");
+        }
+
+        recipe.shape(shape.toArray(new String[0]));
+
+        for (Map.Entry<String, Object> entry : ingredients.entrySet()) {
+            String keyChar = entry.getKey();
+            String materialString = entry.getValue().toString();
+            Material material = Material.matchMaterial(materialString);
+            if (material == null) {
+                throw new IllegalArgumentException("Invalid material in beacon recipe: " + materialString);
+            }
+            recipe.setIngredient(keyChar.charAt(0), material);
+        }
+
+        return recipe;
     }
 }

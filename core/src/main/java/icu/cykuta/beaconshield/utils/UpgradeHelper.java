@@ -1,5 +1,6 @@
 package icu.cykuta.beaconshield.utils;
 
+import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
@@ -7,33 +8,45 @@ import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.data.UpgradeHandler;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
 import icu.cykuta.beaconshield.upgrade.Upgrade;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class UpgradeHelper {
 
     /**
      * Create an item stack prepared to be an {@Upgrade} item.
-     * @param material Material of the item
-     * @param namePath Path of the name in the lang file
-     * @param lorePath Path of the lore in the lang file
+     * @param upgrade Upgrade to get the name and lore paths
      * @return The item stack
      */
-    public static ItemStack itemMaker(Material material, String namePath, String lorePath) {
-        PluginConfiguration lang = ConfigHandler.getInstance().getLang();
+    public static ItemStack itemMaker(Upgrade upgrade) {
+        PluginConfiguration upgradeCfg = ConfigHandler.getInstance().getUpgrade();
+        Material material = upgradeCfg.getMaterial(upgrade.getName() + ".item");
+        String name = Text.color(upgradeCfg.getString(upgrade.getName() + ".name"));
+        List<String> lore = Text.color(upgradeCfg.getStringList(upgrade.getName() + ".description"));
+        int customModelData = upgradeCfg.getInt(upgrade.getName() + ".custom_model_data");
+
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
 
         // Set display name and lore
-        meta.setDisplayName(Text.color(lang.getString(namePath)));
-        meta.setLore(Collections.singletonList(Text.color(lang.getString(lorePath))));
+        meta.setDisplayName(name);
+        meta.setLore(lore);
+
+        // Set custom model data
+        if (customModelData != 0) {
+            meta.setCustomModelData(customModelData);
+        }
 
         meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -81,5 +94,48 @@ public class UpgradeHelper {
         }
 
         return false;
+    }
+
+    /**
+     * Create a recipe for an upgrade.
+     */
+    public static ShapedRecipe createRecipe(Upgrade upgrade) {
+        PluginConfiguration upgradeCfg = ConfigHandler.getInstance().getUpgrade();
+
+        if (!upgradeCfg.getBoolean(upgrade.getName() + ".recipe.enabled", false)) {
+            return null;
+        }
+
+        NamespacedKey key = new NamespacedKey(BeaconShield.getPlugin(), upgrade.getName());
+        ShapedRecipe recipe = new ShapedRecipe(key, upgrade.getItemStack());
+
+        List<String> shape = upgradeCfg.getStringList(upgrade.getName() + ".recipe.shape");
+        if (shape.isEmpty()) {
+            throw new IllegalArgumentException("Recipe shape for " + upgrade.getName() + " is empty!");
+        }
+
+        ConfigurationSection ingredientsSection = upgradeCfg.getConfigurationSection(upgrade.getName() + ".recipe.ingredients");
+        if (ingredientsSection == null) {
+            throw new IllegalArgumentException("Recipe ingredients for " + upgrade.getName() + " are missing or not properly formatted!");
+        }
+
+        Map<String, Object> ingredients = ingredientsSection.getValues(false);
+        if (ingredients.isEmpty()) {
+            throw new IllegalArgumentException("Recipe ingredients for " + upgrade.getName() + " are empty!");
+        }
+
+        recipe.shape(shape.toArray(new String[0]));
+
+        for (Map.Entry<String, Object> entry : ingredients.entrySet()) {
+            String keyChar = entry.getKey();
+            String materialString = entry.getValue().toString();
+            Material material = Material.matchMaterial(materialString);
+            if (material == null) {
+                throw new IllegalArgumentException("Invalid material " + materialString + " for recipe ingredient " + keyChar + " in " + upgrade.getName() + "!");
+            }
+            recipe.setIngredient(keyChar.charAt(0), material);
+        }
+
+        return recipe;
     }
 }

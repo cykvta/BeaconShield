@@ -7,7 +7,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class DisablePvPUpgrade implements Upgrade<EntityDamageByEntityEvent> {
 
@@ -18,9 +20,12 @@ public class DisablePvPUpgrade implements Upgrade<EntityDamageByEntityEvent> {
 
     @Override
     public @NotNull ItemStack getItemStack() {
-        return UpgradeHelper.itemMaker(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE,
-                "disable-pvp-name",
-                "disable-pvp-desc");
+        return UpgradeHelper.itemMaker(this);
+    }
+
+    @Override
+    public @Nullable ShapedRecipe getRecipe() {
+        return UpgradeHelper.createRecipe(this);
     }
 
     @Override

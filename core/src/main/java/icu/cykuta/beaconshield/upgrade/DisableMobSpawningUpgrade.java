@@ -6,7 +6,9 @@ import org.bukkit.entity.Monster;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class DisableMobSpawningUpgrade implements Upgrade<EntitySpawnEvent> {
 
@@ -17,9 +19,12 @@ public class DisableMobSpawningUpgrade implements Upgrade<EntitySpawnEvent> {
 
     @Override
     public @NotNull ItemStack getItemStack() {
-        return UpgradeHelper.itemMaker(Material.WARD_ARMOR_TRIM_SMITHING_TEMPLATE,
-                "disable-mob-spawning-name",
-                "disable-mob-spawning-desc");
+        return UpgradeHelper.itemMaker(this);
+    }
+
+    @Override
+    public @Nullable ShapedRecipe getRecipe() {
+        return UpgradeHelper.createRecipe(this);
     }
 
     @Override

@@ -35,6 +35,13 @@ public class Text {
     }
 
     /**
+     * Colorize a list of strings with the '&' character or hex color codes.
+     */
+    public static List<String> color(List<String> messages) {
+        return messages.stream().map(Text::color).collect(Collectors.toList());
+    }
+
+    /**
      * Strip color codes from a string.
      * @param message The message to strip color codes from.
      * @return The message without color codes.

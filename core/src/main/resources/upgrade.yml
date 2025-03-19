@@ -1,0 +1,79 @@
+#----------------------------------#
+#       BeaconShield Upgrades      #
+#----------------------------------#
+
+# This file defines custom upgrades that players can obtain in the game.
+
+# Variables:
+# - name: The name of the upgrade.
+# - description: A brief explanation of what the upgrade does.
+# - item: The Minecraft item used to represent the upgrade.
+# - custom_model_data: The custom model data value for the item. This is used to apply custom textures to the item.
+# - recipe
+#   - enabled: Whether the recipe is enabled or not.
+#   - shape: Defines the crafting pattern in a 3x3 grid.
+#   - key: Maps specific letters in the shape to corresponding Minecraft items (case-sensitive).
+
+disable_drowning:
+  name: "&aDisable Drowning"
+  description:
+    - "&7Prevent players from drowning."
+  item: "minecraft:tide_armor_trim_smithing_template"
+  custom_model_data: 0
+  recipe:
+    enabled: true
+    shape:
+      - " A "
+      - "ABA"
+      - " A "
+    ingredients:
+      A: "minecraft:diamond"
+      B: "minecraft:heart_of_the_sea"
+
+disable_fall_damage:
+  name: "&aDisable Fall Damage"
+  description:
+    - "&7Prevent players from taking fall damage."
+  item: "minecraft:wild_armor_trim_smithing_template"
+  custom_model_data: 0
+  recipe:
+    enabled: true
+    shape:
+      - " A "
+      - "ABA"
+      - " A "
+    ingredients:
+      A: "minecraft:diamond"
+      B: "minecraft:diamond_boots"
+
+disable_mob_spawning:
+  name: "&aDisable Mob Spawning"
+  description:
+    - "&7Prevent mobs from spawning."
+  item: "minecraft:ward_armor_trim_smithing_template"
+  custom_model_data: 0
+  recipe:
+    enabled: true
+    shape:
+      - " A "
+      - "ABA"
+      - " A "
+    ingredients:
+      A: "minecraft:diamond"
+      B: "minecraft:ender_eye"
+
+disable_pvp:
+  name: "&aDisable PVP"
+  description:
+    - "&7Prevent players from attacking each other."
+  item: "minecraft:silence_armor_trim_smithing_template"
+  custom_model_data: 0
+  recipe:
+    enabled: true
+    shape:
+      - " A "
+      - "ABA"
+      - " A "
+    ingredients:
+      A: "minecraft:diamond"
+      B: "minecraft:shield"

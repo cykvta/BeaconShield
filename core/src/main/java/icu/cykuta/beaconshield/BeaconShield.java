@@ -29,6 +29,7 @@ public final class BeaconShield extends JavaPlugin {
         RegistryUtils.registerUpgrades();
         RegistryUtils.registerCommands();
         RegistryUtils.registerEvents();
+        RegistryUtils.others();
 
         // Read data files
         this.beaconHandler = BeaconHandler.getInstance();

@@ -31,6 +31,17 @@ beacon-lore:
   - "&7Place this beacon to protect"
   - "&7a chunk of land."
 
+# The beacon recipe used to craft the beacon item.
+beacon-recipe:
+  enabled: true
+  shape:
+    - "GGG"
+    - "GIG"
+    - "GGG"
+  ingredients:
+    G: "minecraft:glass"
+    I: "minecraft:iron_block"
+
 # Greeting and farewell messages shown when a player enters or leaves a beacon-protected area.
 # Set the message to "" to disable it.
 greeting:

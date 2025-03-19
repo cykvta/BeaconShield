@@ -189,4 +189,11 @@ public class PluginConfiguration extends YamlConfiguration {
         return config;
     }
 
+    /**
+     * Get {@link Material} from the path, if the path not exist, set as BARRIER.
+     */
+    public Material getMaterial(@NotNull String path) {
+        return Material.matchMaterial(getString(path, "BARRIER"));
+    }
+
 }
