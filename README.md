@@ -53,7 +53,7 @@ If the beacon runs out of fuel, the protection will be disabled. Fuel items and 
 Modify the `config.yml` file located in `plugins/BeaconShield/` to customize the plugin settings, including economy integration and language options. Use `/bsd reload` to apply changes without restarting the server.
 
 ## API
-To use this ~ as a dependency in your own project.
+To use this plugin as a dependency in your own project. <br>
 Add the JitPack repository to your build file.
 ```xml
 	<repositories>
