@@ -107,6 +107,7 @@ public class BeaconGUI extends GUI {
 
         // Drop the stored items and clear the storage
         for (ItemStack itemStack : this.getBeaconBlock().getPdcManager().getStoredItems().values()) {
+            if (itemStack == null || itemStack.getType().isAir()) continue;
             beacon.getBlock().getWorld().dropItem(beacon.getBlock().getLocation(), itemStack);
         }
 
