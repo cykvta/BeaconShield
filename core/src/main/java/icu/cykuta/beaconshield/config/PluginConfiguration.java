@@ -1,5 +1,6 @@
 package icu.cykuta.beaconshield.config;
 
+import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -9,11 +10,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PluginConfiguration extends YamlConfiguration {
 
@@ -184,6 +186,18 @@ public class PluginConfiguration extends YamlConfiguration {
         } catch (FileNotFoundException ignored) { }
         catch (IOException | InvalidConfigurationException ex) {
             Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file, ex);
+        }
+
+        return config;
+    }
+
+    public static @NotNull PluginConfiguration loadConfiguration(@NotNull InputStream is) {
+        PluginConfiguration config = new PluginConfiguration();
+
+        try (Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {
+            config.load(reader);
+        } catch (IOException | InvalidConfigurationException ex) {
+            Bukkit.getLogger().log(Level.SEVERE, "Cannot load configuration from stream", ex);
         }
 
         return config;

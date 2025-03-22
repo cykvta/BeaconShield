@@ -7,7 +7,7 @@
 #
 # If you have any questions or need assistance, feel free to contact me:
 # Discord: @cykvta
-# GitHub: https://github.com/cykvta
+# GitHub: https://github.com/cykvta/BeaconShield
 
 #----------------------------------#
 #          Beacon Settings         #
@@ -91,3 +91,8 @@ fuel-items:
   - item: "minecraft:coal_block"
     burn-time: 540
     custom-model-data: 0
+
+# Below this comment, you'll find the new or regenerated configuration.
+# It doesn't have any comments, so if you're not sure what something does, you can check the explanations here:
+# https://github.com/cykvta/BeaconShield/blob/master/core/src/main/resources/config.yml.
+# I recommend letting the plugin generate a new config.yml after major updates and then migrating your old settings to the new one.

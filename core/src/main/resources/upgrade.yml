@@ -29,7 +29,6 @@ disable_drowning:
     ingredients:
       A: "minecraft:diamond"
       B: "minecraft:heart_of_the_sea"
-
 disable_fall_damage:
   name: "&aDisable Fall Damage"
   description:
@@ -45,7 +44,6 @@ disable_fall_damage:
     ingredients:
       A: "minecraft:diamond"
       B: "minecraft:diamond_boots"
-
 disable_mob_spawning:
   name: "&aDisable Mob Spawning"
   description:
@@ -61,7 +59,6 @@ disable_mob_spawning:
     ingredients:
       A: "minecraft:diamond"
       B: "minecraft:ender_eye"
-
 disable_pvp:
   name: "&aDisable PVP"
   description:

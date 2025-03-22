@@ -24,6 +24,7 @@ public class CommandBeaconshield extends BaseCommand {
         this.addSubcommand(new CommandReload());
         this.addSubcommand(new CommandGive());
         this.addSubcommand(new CommandUpgrade());
+        this.addSubcommand(new CommandList());
     }
 
     @Override
@@ -36,6 +37,7 @@ public class CommandBeaconshield extends BaseCommand {
         Chat.sendRaw(sender, "  /bsd reload &7- &fReload the config");
         Chat.sendRaw(sender, "  /bsd give <player> &7- &fGive a BeaconShield to a player");
         Chat.sendRaw(sender, "  /bsd upgrade <upgrade> &7- &fGive an upgrade item to a player");
+        Chat.sendRaw(sender, "  /bsd list <page> &7- &fList all beacons");
         Chat.sendRaw(sender, "---------------------------------");
         return true;
     }

@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ConfigFile {
     private PluginConfiguration fileConfiguration;
@@ -28,6 +29,37 @@ public class ConfigFile {
         }
 
         this.fileConfiguration = PluginConfiguration.loadConfiguration(this.file);
+        this.matchConfig(this.fileConfiguration, fileName);
+    }
+
+    /**
+     * Add new default values to the config file while preserving comments.
+     * @param config The config file.
+     * @param fileName The file to match in the resources.
+     */
+    public void matchConfig(PluginConfiguration config, String fileName) {
+        try {
+            InputStream is = BeaconShield.getPlugin().getResource(fileName);
+            if (is != null) {
+                PluginConfiguration defConfig = PluginConfiguration.loadConfiguration(is);
+
+                for (String key : defConfig.getConfigurationSection("").getKeys(true)) {
+                    if (!config.contains(key)) {
+                        config.set(key, defConfig.get(key));
+                    }
+                }
+
+                for (String key : config.getConfigurationSection("").getKeys(true)) {
+                    if (!defConfig.contains(key)) {
+                        config.set(key, null);
+                    }
+                }
+
+                config.save(this.file);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

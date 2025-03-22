@@ -27,13 +27,10 @@ public class MemberEditGUI extends GUI {
         this.addInventoryButton(4, "kick", this::kick);
         this.addInventoryButton(8, "back", (guiClick) -> this.openGUI(guiClick.clicker(), new MembersGUI()));
 
-        switch (this.getBeaconBlock().getPlayerRole(this.selectedPlayer)) {
-            case MEMBER:
-                this.addInventoryButton(3, "promote", (guiClick) -> this.setRole(guiClick.clicker(), PlayerRole.OFFICER));
-                break;
-            case OFFICER, OWNER:
-                this.addInventoryButton(3, "demote", (guiClick) -> this.setRole(guiClick.clicker(), PlayerRole.MEMBER));
-                break;
+        if (this.getBeaconBlock().hasPermissionLevel(this.selectedPlayer, PlayerRole.OFFICER)) {
+            this.addInventoryButton(3, "demote", (guiClick) -> this.setRole(guiClick.clicker(), PlayerRole.MEMBER));
+        } else {
+            this.addInventoryButton(3, "promote", (guiClick) -> this.setRole(guiClick.clicker(), PlayerRole.OFFICER));
         }
     }
 
