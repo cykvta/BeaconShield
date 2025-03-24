@@ -161,7 +161,9 @@ public class FuelConsumeTask extends BukkitRunnable {
      * @param inventory The inventory of the beacon
      */
     private void updateGUI(Inventory inventory) {
-        if (inventory.getHolder() instanceof GUIHolder holder && holder.getGUI() instanceof BeaconGUI gui) {
+        if (inventory != null &&
+                inventory.getHolder() instanceof GUIHolder holder &&
+                holder.getGUI() instanceof BeaconGUI gui) {
             gui.renderInfoSlot();
         }
     }
