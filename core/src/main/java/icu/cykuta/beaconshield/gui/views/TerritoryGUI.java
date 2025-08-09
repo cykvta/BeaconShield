@@ -321,8 +321,8 @@ public class TerritoryGUI extends GUI {
         ProtectedChunk coreChunk = this.getBeaconBlock().getCoreChunk();
         int distance = this.getManhattanDistance(coreChunk, selectedChunk);
         double basePrice = config.getDouble("base-price");
-        boolean useFormula = config.getBoolean("use-formula");
-        String formula = config.getString("formula");
+        boolean useFormula = config.getBoolean("economy-use-formula");
+        String formula = config.getString("economy-formula");
         double price = basePrice;
 
         if (useFormula && formula != null) {

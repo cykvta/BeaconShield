@@ -10,6 +10,7 @@ import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.data.DataKeys;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.data.BeaconHandler;
+import icu.cykuta.beaconshield.utils.MathUtils;
 import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -387,6 +388,58 @@ public class BeaconShieldBlock implements Serializable {
         public void removeStoredItems() {
             this.pdc.remove(DataKeys.BEACONSHIELD_INVENTORY);
         }
+    }
+
+    /**
+     * Get the burning time of the fuel.
+     * @param fuel The fuel to get the burning time
+     * @return The burning time of the fuel
+     */
+    public int getBurnTime(ItemStack fuel) {
+        PluginConfiguration config = ConfigHandler.getInstance().getConfig();
+        List<Map<?, ?>> fuelList = config.getMapList("fuel-items");
+
+        for (Map<?, ?> fuelEntry : fuelList) {
+            String itemName = (String) fuelEntry.get("item");
+            int burnTime = (int) fuelEntry.get("burn-time");
+            int customModelData = (int) fuelEntry.get("custom-model-data"); // 0 if not present
+            boolean useFormula = config.getBoolean("fuel-use-formula");
+            String formula = config.getString("fuel-formula");
+
+            if (useFormula) {
+                burnTime = (int) MathUtils.eval(formula
+                        .replace("%burn_time%", String.valueOf(burnTime))
+                        .replace("%chunks_owned%", String.valueOf(this.protectedChunks.size()))
+                );
+            }
+
+            // Add the namespace if it doesn't have one
+            if (!itemName.startsWith("minecraft:")) {
+                itemName = "minecraft:" + itemName;
+            }
+
+            // Compare the custom model data
+            if (customModelData != 0) { // 0 if not present
+                // fuel not have custom model data, continue
+                // fuel have custom model data, but not equal to the custom model data in the config, continue
+                if (fuel.getItemMeta() == null || fuel.getItemMeta().getCustomModelData() != customModelData) {
+                    continue;
+                }
+            }
+
+            // Get the material
+            Material material = Material.matchMaterial(itemName);
+            if (material == null) {
+                continue;
+            }
+
+            // Check if the fuel is the same as the material
+            if (fuel.getType() == material) {
+                return burnTime;
+            }
+        }
+
+        return 0;
     }
 
     // STATIC METHODS

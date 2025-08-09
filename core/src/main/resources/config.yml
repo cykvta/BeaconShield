@@ -63,7 +63,7 @@ farewell:
 base-price: 100
 
 # If enabled, the formula will be used to calculate the chunk's price.
-use-formula: true
+economy-use-formula: true
 
 # The formula for calculating the chunk's price.
 # %distance% -> Represents the distance between the beacon chunk and the claimed chunk, calculated using the Manhattan distance.
@@ -71,7 +71,7 @@ use-formula: true
 # %chunks_owned% -> Represents the number of chunks that the territory has.
 #
 # WARNING: Ensure the formula is not too complex, as it may cause performance issues.
-formula: "%base_price% * %distance%"
+economy-formula: "%base_price% * %distance%"
 
 #----------------------------------#
 #           Fuel Settings          #
@@ -79,6 +79,14 @@ formula: "%base_price% * %distance%"
 
 # Enables or disables particle effects when fuel is burning.
 fuel-particles: true
+
+# If enabled, the formula will be used to calculate burn time
+fuel-use-formula: false
+
+# The formula for calculating burn time
+# %burn_time% -> Represents the current item burn time
+# %chunks_owned% -> Represents the number of chunks that the territory has.
+fuel-formula: "%burn_time% / %chunks_owned%"
 
 # List of fuel items that can be used to keep the beacon active.
 # - item: The item ID.

@@ -83,7 +83,7 @@ public class BeaconGUI extends GUI {
             return Time.secondsToTime(currentFuel);
         }
 
-        int queueFuel = FuelUtils.getBurnTime(fuel) * fuel.getAmount();
+        int queueFuel = this.getBeaconBlock().getBurnTime(fuel) * fuel.getAmount();
         return Time.secondsToTime(currentFuel + queueFuel);
     }
 
