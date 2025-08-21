@@ -1,6 +1,7 @@
 package icu.cykuta.beaconshield.listeners;
 
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
+import icu.cykuta.beaconshield.beacon.protection.RolePermission;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.utils.Chat;
 import org.bukkit.Bukkit;
@@ -34,7 +35,7 @@ public class ProtectionInteractListener implements Listener {
         assert beacon != null;
 
         // If the player is allowed to interact with the territory.
-        if (beacon.isAllowedPlayer(event.getPlayer())) {
+        if (beacon.isAllowedPlayer(RolePermission.USE, event.getPlayer())) {
             return;
         }
 
@@ -101,7 +102,7 @@ public class ProtectionInteractListener implements Listener {
         assert beacon != null;
 
         // If the player is allowed to interact with the territory.
-        if (beacon.isAllowedPlayer(event.getPlayer())) {
+        if (beacon.isAllowedPlayer(RolePermission.BUILD, event.getPlayer())) {
             return;
         }
 
@@ -125,7 +126,7 @@ public class ProtectionInteractListener implements Listener {
         assert beacon != null;
 
         // If the player is allowed to interact with the territory.
-        if (beacon.isAllowedPlayer(event.getPlayer())) {
+        if (beacon.isAllowedPlayer(RolePermission.BREAK, event.getPlayer())) {
             return;
         }
 
@@ -140,7 +141,6 @@ public class ProtectionInteractListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteractWithEntity(PlayerInteractEntityEvent event) {
-        Bukkit.getLogger().info("PlayerInteractEntityEvent");
         // If the entity is a player.
         if (event.getRightClicked() instanceof Player) {
             return;
@@ -157,7 +157,7 @@ public class ProtectionInteractListener implements Listener {
         assert beacon != null;
 
         // If the player is allowed to interact with the territory.
-        if (beacon.isAllowedPlayer(event.getPlayer())) {
+        if (beacon.isAllowedPlayer(RolePermission.ENTITY, event.getPlayer())) {
             return;
         }
 
@@ -168,6 +168,5 @@ public class ProtectionInteractListener implements Listener {
 
         event.setCancelled(true);
         Chat.send(event.getPlayer(), "no-permission-to-interact");
-
     }
 }

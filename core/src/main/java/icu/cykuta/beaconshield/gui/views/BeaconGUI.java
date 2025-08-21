@@ -34,15 +34,16 @@ public class BeaconGUI extends GUI {
     public void populateInventory() {
         this.setDecorationSlots(
                 0,  1,  2,  3,  4,  5,  6,  7,  8,
-                9,          12, 13,     15,     17,
+                9,              13,     15,     17,
                 18, 19, 20, 21, 22, 23, 24,     26,
                 27,                     33,     35,
                 36, 37, 38, 39, 40, 41, 42, 43, 44
         );
 
-        this.addInventoryButton(10, "territory", (guiClick) -> openGUI(guiClick.clicker(), new TerritoryGUI()));
-        this.addInventoryButton(11, "members", (guiClick) -> openGUI(guiClick.clicker(), new MembersGUI()));
-        this.addInventoryButton(14, "destroy", (guiClick) -> openConfirmationGUI(guiClick.clicker(), this::destroyBeaconShield));
+        this.addInventoryButton(10, "beacon-gui.territory", (guiClick) -> openGUI(guiClick.clicker(), new TerritoryGUI()));
+        this.addInventoryButton(11, "beacon-gui.members", (guiClick) -> openGUI(guiClick.clicker(), new MembersGUI()));
+        this.addInventoryButton(12, "beacon-gui.group-management", (guiClick) -> openGUI(guiClick.clicker(), new GroupManagementGUI()));
+        this.addInventoryButton(14, "beacon-gui.destroy", (guiClick) -> openConfirmationGUI(guiClick.clicker(), this::destroyBeaconShield));
 
         // Add storage and render information
         this.getStorage().addStorageSlot(FUEL_STORAGE_SLOT);
@@ -58,8 +59,8 @@ public class BeaconGUI extends GUI {
      */
     public void renderInfoSlot() {
         ItemStack item = this.getBeaconBlock().canProtect() ?
-                this.guiConfig.getItemStack("info-protected") :
-                this.guiConfig.getItemStack("info-unprotected");
+                this.guiConfig.getItemStack("beacon-gui.info-protected") :
+                this.guiConfig.getItemStack("beacon-gui.info-unprotected");
 
         ItemMeta meta = item.getItemMeta();
         List<String> lore = Text.replace(meta.getLore(), this.getFuelExpireTime());

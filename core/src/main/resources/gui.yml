@@ -5,168 +5,215 @@
 # This file contains all the GUI configuration for the BeaconShield plugin.
 
 # GLOBAL ITEMS
-decoration:
-  item: "minecraft:black_stained_glass_pane"
-  name: " "
-  lore: []
-  custom-model-data: 0
+global:
+  decoration:
+    item: "minecraft:black_stained_glass_pane"
+    name: " "
+    lore: []
+    custom-model-data: 0
 
-back:
-  item: "minecraft:arrow"
-  name: "&bBack"
-  lore: []
-  custom-model-data: 0
+  back:
+    item: "minecraft:arrow"
+    name: "&bBack"
+    lore: []
+    custom-model-data: 0
 
-next:
-  item: "minecraft:arrow"
-  name: "&bNext"
-  lore: []
-  custom-model-data: 0
+  next:
+    item: "minecraft:arrow"
+    name: "&bNext"
+    lore: []
+    custom-model-data: 0
 
-previous:
-  item: "minecraft:arrow"
-  name: "&bPrevious"
-  lore: []
-  custom-model-data: 0
+  previous:
+    item: "minecraft:arrow"
+    name: "&bPrevious"
+    lore: []
+    custom-model-data: 0
 
 # CONFIRMATION GUI
-confirm:
-  item: "minecraft:green_wool"
-  name: "&aConfirm"
-  lore: []
-  custom-model-data: 0
+confirmation:
+  confirm:
+    item: "minecraft:green_wool"
+    name: "&aConfirm"
+    lore: []
+    custom-model-data: 0
 
-deny:
-  item: "minecraft:red_wool"
-  name: "&cDeny"
-  lore: []
-  custom-model-data: 0
+  deny:
+    item: "minecraft:red_wool"
+    name: "&cDeny"
+    lore: []
+    custom-model-data: 0
 
 # BEACON GUI
-territory:
-  item: "minecraft:filled_map"
-  name: "&bTerritory"
-  lore: []
-  custom-model-data: 0
+beacon-gui:
+  territory:
+    item: "minecraft:filled_map"
+    name: "&bTerritory"
+    lore: []
+    custom-model-data: 0
 
-members:
-  item: "minecraft:player_head"
-  name: "&bMembers"
-  lore: []
-  custom-model-data: 0
+  members:
+    item: "minecraft:player_head"
+    name: "&bMembers"
+    lore: []
+    custom-model-data: 0
 
-destroy:
-  item: "minecraft:barrier"
-  name: "&cDestroy"
-  lore: []
-  custom-model-data: 0
+  group-management:
+    item: "minecraft:comparator"
+    name: "&bGroup Management"
+    lore: []
+    custom-model-data: 0
 
-info-protected:
-  item: "minecraft:green_stained_glass_pane"
-  name: "&aProtected"
-  lore:
-    - "&eProtection Time: &b{0}" # {0} = Protection time
-  custom-model-data: 0
+  destroy:
+    item: "minecraft:barrier"
+    name: "&cDestroy"
+    lore: []
+    custom-model-data: 0
 
-info-unprotected:
-  item: "minecraft:red_stained_glass_pane"
-  name: "&cUnprotected"
-  lore: []
-  custom-model-data: 0
+  info-protected:
+    item: "minecraft:green_stained_glass_pane"
+    name: "&aProtected"
+    lore:
+      - "&eProtection Time: &b{0}" # {0} = Protection time
+    custom-model-data: 0
+
+  info-unprotected:
+    item: "minecraft:red_stained_glass_pane"
+    name: "&cUnprotected"
+    lore: []
+    custom-model-data: 0
 
 # MEMBER EDIT GUI
-give-ownership:
-  item: "minecraft:diamond"
-  name: "&bGive Ownership"
-  lore: []
-  custom-model-data: 0
+member-gui:
+  give-ownership:
+    item: "minecraft:diamond"
+    name: "&bGive Ownership"
+    lore: []
+    custom-model-data: 0
 
-kick:
-  item: "minecraft:redstone_block"
-  name: "&cKick"
-  lore:
-    - "&7Click to remove this member."
-  custom-model-data: 0
+  kick:
+    item: "minecraft:redstone_block"
+    name: "&cKick"
+    lore:
+      - "&7Click to remove this member."
+    custom-model-data: 0
 
-promote:
-  item: "minecraft:emerald"
-  name: "&aPromote"
-  lore:
-    - "&7Click to promote this user to an officer."
-  custom-model-data: 0
+  promote:
+    item: "minecraft:emerald"
+    name: "&aPromote"
+    lore:
+      - "&7Click to promote this user to an officer."
+    custom-model-data: 0
 
-demote:
-  item: "minecraft:iron_ingot"
-  name: "&cDemote Member"
-  lore:
-    - "&7Click to demote this user to a member."
-  custom-model-data: 0
+  demote:
+    item: "minecraft:iron_ingot"
+    name: "&cDemote Member"
+    lore:
+      - "&7Click to demote this user to a member."
+    custom-model-data: 0
+
+  add-member:
+    item: "minecraft:sunflower"
+    name: "&aAdd Member"
+    lore: []
+    custom-model-data: 0
 
 # TERRITORY GUI
 # Variables: {0} = price, {1} = x, {2} = z
-move-north:
-  item: "minecraft:arrow"
-  name: "&bMove North"
-  lore: []
-  custom-model-data: 0
+territory-gui:
+  move-north:
+    item: "minecraft:arrow"
+    name: "&bMove North"
+    lore: []
+    custom-model-data: 0
 
-move-east:
-  item: "minecraft:arrow"
-  name: "&bMove East"
-  lore: []
-  custom-model-data: 0
+  move-east:
+    item: "minecraft:arrow"
+    name: "&bMove East"
+    lore: []
+    custom-model-data: 0
 
-move-south:
-  item: "minecraft:arrow"
-  name: "&bMove South"
-  lore: []
-  custom-model-data: 0
+  move-south:
+    item: "minecraft:arrow"
+    name: "&bMove South"
+    lore: []
+    custom-model-data: 0
 
-move-west:
-  item: "minecraft:arrow"
-  name: "&bMove West"
-  lore: []
-  custom-model-data: 0
+  move-west:
+    item: "minecraft:arrow"
+    name: "&bMove West"
+    lore: []
+    custom-model-data: 0
 
-chunk-core:
-  item: "minecraft:beacon"
-  name: "&bCore"
-  lore:
-    - "&7Left-click to preview the entire territory."
-  custom-model-data: 0
+  chunk-core:
+    item: "minecraft:beacon"
+    name: "&bCore"
+    lore:
+      - "&7Left-click to preview the entire territory."
+    custom-model-data: 0
 
-chunk-claimed:
-  item: "minecraft:diamond_block"
-  name: "&bClaimed"
-  lore: []
-  custom-model-data: 0
+  chunk-claimed:
+    item: "minecraft:diamond_block"
+    name: "&bClaimed"
+    lore: []
+    custom-model-data: 0
 
-chunk-occupied:
-  item: "minecraft:redstone_block"
-  name: "&bOccupied"
-  lore: []
-  custom-model-data: 0
+  chunk-occupied:
+    item: "minecraft:redstone_block"
+    name: "&bOccupied"
+    lore: []
+    custom-model-data: 0
 
-chunk-available:
-  item: "minecraft:grass_block"
-  name: "&bAvailable"
-  lore:
-    - "&7Left-click to claim this chunk."
-    - "&7Right-click to preview the chunk."
-    - "&ePrice: &b{0}"
-    - "&7({1}, {2})"
-  custom-model-data: 0
+  chunk-available:
+    item: "minecraft:grass_block"
+    name: "&bAvailable"
+    lore:
+      - "&7Left-click to claim this chunk."
+      - "&7Right-click to preview the chunk."
+      - "&ePrice: &b{0}"
+      - "&7({1}, {2})"
+    custom-model-data: 0
 
-chunk-unreachable:
-  item: "minecraft:barrier"
-  name: "&cUnreachable"
-  lore:
-    - "&7You must claim an adjacent chunk first."
-  custom-model-data: 0
+  chunk-unreachable:
+    item: "minecraft:barrier"
+    name: "&cUnreachable"
+    lore:
+      - "&7You must claim an adjacent chunk first."
+    custom-model-data: 0
 
-# MEMBER LIST GUI
-add-member:
-  item: "minecraft:sunflower"
-  name: "&aAdd Member"
-  lore: []
-  custom-model-data: 0
+# GROUP MANAGEMENT GUI
+group-management-gui:
+  permission-build:
+    item: "minecraft:bricks"
+    name: "&aBuild"
+    lore:
+      - "&7Allows building in the territory."
+    custom-model-data: 0
+
+  permission-break:
+    item: "minecraft:gravel"
+    name: "&aBreak"
+    lore:
+      - "&7Allows breaking blocks in the territory."
+    custom-model-data: 0
+
+  permission-use:
+    item: "minecraft:chest"
+    name: "&aUse"
+    lore:
+      - "&7Allows using containers in the territory."
+    custom-model-data: 0
+
+  permission-entity:
+    item: "minecraft:bone"
+    name: "&aEntity Interaction"
+    lore:
+      - "&7Allows interacting with entities in the territory."
+    custom-model-data: 0
+
+  permission-beacon:
+    item: "minecraft:beacon"
+    name: "&aBeacon Interaction"
+    lore:
+      - "&7Allows interacting with the beacon shield."
+    custom-model-data: 0

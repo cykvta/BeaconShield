@@ -23,14 +23,14 @@ public class MemberEditGUI extends GUI {
     public void populateInventory() {
         this.setDecorationSlots(1, 7);
         this.addInventoryButton(0, HeadHelper.getHead(selectedPlayer), (guiClick) -> {});
-        this.addInventoryButton(2, "give-ownership", this::giveOwner);
-        this.addInventoryButton(4, "kick", this::kick);
-        this.addInventoryButton(8, "back", (guiClick) -> this.openGUI(guiClick.clicker(), new MembersGUI()));
+        this.addInventoryButton(2, "member-gui.give-ownership", this::giveOwner);
+        this.addInventoryButton(4, "member-gui.kick", this::kick);
+        this.addInventoryButton(8, "global.back", (guiClick) -> this.openGUI(guiClick.clicker(), new MembersGUI()));
 
         if (this.getBeaconBlock().hasPermissionLevel(this.selectedPlayer, PlayerRole.OFFICER)) {
-            this.addInventoryButton(3, "demote", (guiClick) -> this.setRole(guiClick.clicker(), PlayerRole.MEMBER));
+            this.addInventoryButton(3, "member-gui.demote", (guiClick) -> this.setRole(guiClick.clicker(), PlayerRole.MEMBER));
         } else {
-            this.addInventoryButton(3, "promote", (guiClick) -> this.setRole(guiClick.clicker(), PlayerRole.OFFICER));
+            this.addInventoryButton(3, "member-gui.promote", (guiClick) -> this.setRole(guiClick.clicker(), PlayerRole.OFFICER));
         }
     }
 

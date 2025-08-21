@@ -23,7 +23,7 @@ public class ConfirmationGUI extends GUI {
                 18, 19, 20, 21, 22, 23, 24, 25, 26
         );
 
-        this.addInventoryButton(11, "confirm", this.consumer);
-        this.addInventoryButton(15, "deny", (guiClick) -> this.openGUI(guiClick.clicker(), this.previousGUI));
+        this.addInventoryButton(11, "confirmation.confirm", this.consumer);
+        this.addInventoryButton(15, "confirmation.deny", (guiClick) -> this.openGUI(guiClick.clicker(), this.previousGUI));
     }
 }

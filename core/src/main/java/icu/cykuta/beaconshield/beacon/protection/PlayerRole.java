@@ -20,4 +20,11 @@ public enum PlayerRole {
     public int getPermissionLevel() {
         return permissionLevel;
     }
+
+    /** Devuelve el siguiente rol (circular) */
+    public PlayerRole getNext() {
+        PlayerRole[] roles = PlayerRole.values();
+        int index = (this.ordinal() - 1 + roles.length) % roles.length;
+        return roles[index];
+    }
 }

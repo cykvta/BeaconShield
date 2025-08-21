@@ -18,17 +18,17 @@ public abstract class PaginationGUI extends GUI {
                 9,                              17,
                 18,                             26,
                 27,                             35,
-                37, 38,                 42, 43, 44
+                37, 38,      40,        42, 43, 44
         );
         // Pagination arrows
         if (this.offset > 0) {
-            this.addInventoryButton(39, "previous", (player) -> this.setOffset(this.offset - renderSlots.size()));
+            this.addInventoryButton(39, "global.previous", (player) -> this.setOffset(this.offset - renderSlots.size()));
         } else {
             this.addDecorationSlot(39);
         }
 
         if (this.offset + renderSlots.size() < this.renderSlots.size()) {
-            this.addInventoryButton(41, "next", (player) -> this.setOffset(this.offset + renderSlots.size()));
+            this.addInventoryButton(41, "global.next", (player) -> this.setOffset(this.offset + renderSlots.size()));
         } else {
             this.addDecorationSlot(41);
         }

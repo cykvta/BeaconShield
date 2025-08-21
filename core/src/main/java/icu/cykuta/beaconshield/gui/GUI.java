@@ -56,7 +56,7 @@ public abstract class GUI {
                 continue;
             }
 
-            ItemStack decorationItemStack = this.guiConfig.getItemStack("decoration");
+            ItemStack decorationItemStack = this.guiConfig.getItemStack("global.decoration");
             this.inventory.setItem(i, decorationItemStack);
         }
     }

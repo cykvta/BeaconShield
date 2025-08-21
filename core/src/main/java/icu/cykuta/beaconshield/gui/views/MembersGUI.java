@@ -23,8 +23,8 @@ public class MembersGUI extends PaginationGUI {
         PluginConfiguration lang = ConfigHandler.getInstance().getLang();
 
         // Add buttons
-        this.addInventoryButton(36, "back", (guiClick) -> this.openGUI(guiClick.clicker(), new BeaconGUI()));
-        this.addInventoryButton(40, "add-member", (guiClick) -> this.openGUI(guiClick.clicker(), new InviteGUI()));
+        this.addInventoryButton(36, "global.back", (guiClick) -> this.openGUI(guiClick.clicker(), new BeaconGUI()));
+        this.addInventoryButton(40, "member-gui.add-member", (guiClick) -> this.openGUI(guiClick.clicker(), new InviteGUI()));
 
         List<OfflinePlayer> players = this.getBeaconBlock().getAllowedPlayers();
 

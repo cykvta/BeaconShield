@@ -1,6 +1,7 @@
 package icu.cykuta.beaconshield.listeners;
 
 import icu.cykuta.beaconshield.beacon.protection.PlayerRole;
+import icu.cykuta.beaconshield.beacon.protection.RolePermission;
 import icu.cykuta.beaconshield.data.BeaconHandler;
 import icu.cykuta.beaconshield.events.internal.InternalBeaconShieldInteractEvent;
 import icu.cykuta.beaconshield.utils.Chat;
@@ -15,8 +16,8 @@ public class InteractBeaconListener implements Listener {
      */
     @EventHandler
     public void onPlayerInteractBlock(InternalBeaconShieldInteractEvent event) {
-        // Check if player has permission to interact with the beacon shield block
-        if (!event.getBeaconShieldBlock().hasPermissionLevel(event.getPlayer(), PlayerRole.OFFICER)) {
+        // If the player is allowed to interact with the territory.
+        if (!event.getBeaconShieldBlock().isAllowedPlayer(RolePermission.BEACON_USE, event.getPlayer())) {
             Chat.send(event.getPlayer(), "no-permission-to-interact");
             return;
         }

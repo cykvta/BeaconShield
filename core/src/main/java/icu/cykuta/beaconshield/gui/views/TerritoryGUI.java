@@ -50,11 +50,11 @@ public class TerritoryGUI extends GUI {
         );
 
         // Arrow buttons
-        this.addInventoryButton(4, "move-north", (guiClick) -> this.moveMiddleChunk(0, -1));
-        this.addInventoryButton(20, "move-west", (guiClick) -> this.moveMiddleChunk(-1, 0));
-        this.addInventoryButton(24, "move-east", (guiClick) -> this.moveMiddleChunk(1, 0));
-        this.addInventoryButton(40, "move-south", (guiClick) -> this.moveMiddleChunk(0, 1));
-        this.addInventoryButton(36, "back", (guiClick) -> this.openGUI(guiClick.clicker(), new BeaconGUI()));
+        this.addInventoryButton(4, "territory-gui.move-north", (guiClick) -> this.moveMiddleChunk(0, -1));
+        this.addInventoryButton(20, "territory-gui.move-west", (guiClick) -> this.moveMiddleChunk(-1, 0));
+        this.addInventoryButton(24, "territory-gui.move-east", (guiClick) -> this.moveMiddleChunk(1, 0));
+        this.addInventoryButton(40, "territory-gui.move-south", (guiClick) -> this.moveMiddleChunk(0, 1));
+        this.addInventoryButton(36, "global.back", (guiClick) -> this.openGUI(guiClick.clicker(), new BeaconGUI()));
 
         // Render the chunks
         this.renderChunks();
@@ -188,11 +188,11 @@ public class TerritoryGUI extends GUI {
                 int slot = slots.get(i * 3 + j);
 
                 ItemStack itemstack = switch (chunkType) {
-                    case CORE -> this.guiConfig.getItemStack("chunk-core");
-                    case CLAIMED -> this.guiConfig.getItemStack("chunk-claimed");
-                    case OCCUPIED -> this.guiConfig.getItemStack("chunk-occupied");
-                    case AVAILABLE -> this.guiConfig.getItemStack("chunk-available");
-                    case UNREACHABLE -> this.guiConfig.getItemStack("chunk-unreachable");
+                    case CORE -> this.guiConfig.getItemStack("territory-gui.chunk-core");
+                    case CLAIMED -> this.guiConfig.getItemStack("territory-gui.chunk-claimed");
+                    case OCCUPIED -> this.guiConfig.getItemStack("territory-gui.chunk-occupied");
+                    case AVAILABLE -> this.guiConfig.getItemStack("territory-gui.chunk-available");
+                    case UNREACHABLE -> this.guiConfig.getItemStack("territory-gui.chunk-unreachable");
                 };
 
                 double chunkPrice = this.getChunkPrice(chunk);
@@ -273,7 +273,7 @@ public class TerritoryGUI extends GUI {
      * @param selectedChunk The chunk to claim.
      */
     private void claimChunk(Player player, ProtectedChunk selectedChunk, double price) {
-        if (!this.getBeaconBlock().hasPermissionLevel(player, PlayerRole.OFFICER)) {
+        if (!this.getBeaconBlock().hasPermissionLevel(player, PlayerRole.OWNER)) {
             Chat.send(player, "no-permission-action");
             return;
         }

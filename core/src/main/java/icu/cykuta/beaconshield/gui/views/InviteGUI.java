@@ -23,7 +23,7 @@ public class InviteGUI extends PaginationGUI {
     @Override
     protected void render() {
         // Back button
-        this.addInventoryButton(36, "back",
+        this.addInventoryButton(36, "global.back",
                 (guiClick) -> this.openGUI(guiClick.clicker(), new MembersGUI()));
         this.addDecorationSlot(40);
 
@@ -41,7 +41,7 @@ public class InviteGUI extends PaginationGUI {
                 Player selectedPlayer = onlinePlayers.get(this.offset + i);
 
                 // Skip if player is already a member
-                if (this.getBeaconBlock().isAllowedPlayer(selectedPlayer)) {
+                if (this.getBeaconBlock().hasMember(selectedPlayer)) {
                     // remove the player from the list
                     onlinePlayers.remove(selectedPlayer);
                     i--;

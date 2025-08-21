@@ -5,6 +5,7 @@ import com.jeff_media.morepersistentdatatypes.DataType;
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.protection.PlayerRole;
 import icu.cykuta.beaconshield.beacon.protection.ProtectedChunk;
+import icu.cykuta.beaconshield.beacon.protection.RolePermission;
 import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.data.DataKeys;
@@ -45,6 +46,7 @@ public class BeaconShieldBlock implements Serializable {
     private final Map<UUID, PlayerRole> allowedPlayers;
     private int fuelLevel;
     private transient BeaconPDCManager pdcManager;
+    private final Map<RolePermission, PlayerRole> rolePermissions = new HashMap<>();
 
     /**
      * Constructor to create a new BeaconShieldBlock.
@@ -64,6 +66,19 @@ public class BeaconShieldBlock implements Serializable {
         this.fuelLevel = -1;
         this.addAllowedPlayer(owner, PlayerRole.OWNER);
         this.pdcManager = new BeaconPDCManager(block);
+        this.setDefaultPermissions();
+    }
+
+    /**
+     * Set default permissions for the BeaconShieldBlock.
+     * This method sets the default permissions for building, breaking, and using the BeaconShieldBlock
+     */
+    public void setDefaultPermissions() {
+        this.rolePermissions.put(RolePermission.BUILD, PlayerRole.MEMBER);
+        this.rolePermissions.put(RolePermission.BREAK, PlayerRole.MEMBER);
+        this.rolePermissions.put(RolePermission.USE, PlayerRole.MEMBER);
+        this.rolePermissions.put(RolePermission.ENTITY, PlayerRole.MEMBER);
+        this.rolePermissions.put(RolePermission.BEACON_USE, PlayerRole.OFFICER);
     }
 
     /**
@@ -202,12 +217,36 @@ public class BeaconShieldBlock implements Serializable {
     }
 
     /**
-     * Check if a player is in the list of allowed players.
+     * Check if a player is allowed to perform a specific action based on their role and the required permission.
      *
      * @param player The player.
      * @return true if the player is allowed, false otherwise.
      */
-    public boolean isAllowedPlayer(@NotNull OfflinePlayer player) {
+    public boolean isAllowedPlayer(@NotNull RolePermission permission, @NotNull OfflinePlayer player) {
+        if (!hasMember(player)) {
+            return false;
+        }
+
+        PlayerRole role = allowedPlayers.get(player.getUniqueId());
+        if (role == null) {
+            return false;
+        }
+
+        PlayerRole requiredRole = getMinimumRoleForPermission(permission);
+        if (requiredRole == null) {
+            return false;
+        }
+
+        return role.getPermissionLevel() >= requiredRole.getPermissionLevel();
+    }
+
+    /**
+     * Check if a player is in the list of allowed players.
+     *
+     * @param player The player to check.
+     * @return true if the player is a member, false otherwise.
+     */
+    public boolean hasMember(@NotNull OfflinePlayer player) {
         return this.allowedPlayers.containsKey(player.getUniqueId());
     }
 
@@ -440,6 +479,25 @@ public class BeaconShieldBlock implements Serializable {
         }
 
         return 0;
+    }
+
+    /**
+     * Get the role permissions for this BeaconShieldBlock.
+     *
+     * @return A map of role permissions.
+     */
+    public PlayerRole getMinimumRoleForPermission(RolePermission permission) {
+        return rolePermissions.getOrDefault(permission, PlayerRole.MEMBER);
+    }
+
+    /**
+     * Set the role permissions for this BeaconShieldBlock.
+     *
+     * @param role The role permission to set.
+     * @param permission The role permission to associate with the role.
+     */
+    public void setRolePermissions(RolePermission permission, PlayerRole role) {
+        this.rolePermissions.put(permission, role);
     }
 
     // STATIC METHODS
