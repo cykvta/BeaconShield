@@ -1,10 +1,10 @@
 package icu.cykuta.beaconshield.listeners;
 
+import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.protection.RolePermission;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.utils.Chat;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ProtectionInteractListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -50,13 +51,27 @@ public class ProtectionInteractListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPistonExtend(BlockPistonExtendEvent event) {
+        // Protection check for source chunk
+        BeaconShieldBlock sourceProtection = ProtectionHandler.getBeacon(event.getBlock().getChunk());
+
+        // For each block being pushed
         for (Block block : event.getBlocks()) {
-            if (ProtectionHandler.isChunkProtected(block.getChunk())) {
+            Block finalBlock = block.getRelative(event.getDirection());
+            BeaconShieldBlock targetProtection = ProtectionHandler.getBeacon(finalBlock.getChunk());
+
+            // If either source or target chunk is not protected or protection cannot protect
+            if (targetProtection == null || !targetProtection.canProtect()) {
+                continue;
+            }
+
+            if (!Objects.equals(sourceProtection, targetProtection)) {
                 event.setCancelled(true);
                 return;
             }
         }
     }
+
+
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCobblestoneGenerator(BlockFromToEvent event) {
