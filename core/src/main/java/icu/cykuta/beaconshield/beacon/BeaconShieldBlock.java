@@ -223,6 +223,10 @@ public class BeaconShieldBlock implements Serializable {
      * @return true if the player is allowed, false otherwise.
      */
     public boolean isAllowedPlayer(@NotNull RolePermission permission, @NotNull OfflinePlayer player) {
+        if (player.isOp() || Objects.requireNonNull(player.getPlayer()).hasPermission("beaconshield.bypass")) {
+            return true;
+        }
+
         if (!hasMember(player)) {
             return false;
         }
