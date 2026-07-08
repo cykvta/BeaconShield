@@ -1,0 +1,78 @@
+name: Release
+
+# Publishes a GitHub release named after the <project.version> property of
+# the root pom.xml. Runs on every push to master that touches pom.xml, but
+# only creates the release the first time a version is seen, so bumping the
+# version is what actually publishes.
+on:
+  push:
+    branches: [master]
+    paths:
+      - pom.xml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read project version
+        id: version
+        run: |
+          version=$(sed -n 's:.*<project.version>\(.*\)</project.version>.*:\1:p' pom.xml)
+          if [ -z "$version" ]; then
+            echo "Could not read <project.version> from pom.xml" >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Check if the release already exists
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release ${{ steps.version.outputs.version }} already exists, skipping."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up JDK 17
+        if: steps.check.outputs.exists == 'false'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Build
+        if: steps.check.outputs.exists == 'false'
+        run: mvn -B clean package
+
+      - name: Create release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${{ steps.version.outputs.version }}"
+
+          # SNAPSHOT versions are published as pre-releases
+          prerelease=""
+          case "$version" in
+            *SNAPSHOT*) prerelease="--prerelease" ;;
+          esac
+
+          # Module jars, excluding the unshaded original-* left by the shade plugin
+          jars=$(find . -path '*/target/*.jar' ! -name 'original-*' ! -name '*-sources.jar' ! -name '*-javadoc.jar')
+
+          gh release create "$version" \
+            --title "$version" \
+            --generate-notes \
+            $prerelease \
+            $jars
