@@ -3,12 +3,14 @@ package icu.cykuta.beaconshield.data;
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.config.BeaconFile;
+import icu.cykuta.beaconshield.gui.GUIHolder;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
-import icu.cykuta.beaconshield.utils.GUIHelper;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,28 +19,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Registry of all beacon shields loaded in memory, along with their
+ * cached main GUI (created lazily on first open).
+ */
 public class BeaconHandler {
     private static BeaconHandler instance;
-    private final Map<BeaconShieldBlock, Inventory> beaconShieldBlocks;
 
-    public BeaconHandler() {
-        this.beaconShieldBlocks = new HashMap<>();
+    private final Map<BeaconShieldBlock, BeaconGUI> beacons = new HashMap<>();
+
+    private BeaconHandler() {
         this.loadDataFiles();
     }
 
     /**
-     * Grab all data files from the data folder and read them.
+     * Read every beacon data file from the data folder.
      */
-    public void loadDataFiles() {
-        File pluginDataFolder = BeaconShield.getPlugin().getDataFolder();
-        File dataFolder = new File(pluginDataFolder, "data");
+    private void loadDataFiles() {
+        File dataFolder = new File(BeaconShield.getPlugin().getDataFolder(), "data");
 
-        if (!dataFolder.exists()) {
-            dataFolder.mkdirs();
+        if (!dataFolder.exists() && !dataFolder.mkdirs()) {
+            return;
         }
 
         File[] dataFiles = dataFolder.listFiles();
-
         if (dataFiles == null) {
             return;
         }
@@ -47,128 +51,108 @@ public class BeaconHandler {
             BeaconShieldBlock beacon = BeaconFile.readBeaconFromFile(dataFile);
 
             if (beacon != null) {
-                // Add the block to the list of beacon shield blocks
-                this.beaconShieldBlocks.put(beacon, null);
+                this.beacons.put(beacon, null);
                 ProtectionHandler.registerAllChunksForBeacon(beacon);
             }
         }
     }
 
     /**
-     * Get the map of beacon shield blocks.
-     * @return The map of beacon shield blocks.
-     */
-    public Map<BeaconShieldBlock, Inventory> getBeaconShieldMap() {
-        return this.beaconShieldBlocks;
-    }
-
-    /**
-     * Get list of all registered beacons.
+     * Get a list of all registered beacons.
      */
     public List<BeaconShieldBlock> getBeacons() {
-        return new ArrayList<>(this.beaconShieldBlocks.keySet());
+        return new ArrayList<>(this.beacons.keySet());
     }
 
-    /**
-     * Add a beacon shield block to the list of beacon shield blocks.
-     * @param block The beacon shield block to add.
-     */
-    public void addBeaconShieldBlock(BeaconShieldBlock block) {
-        this.beaconShieldBlocks.put(block, null);
+    public void addBeaconShieldBlock(BeaconShieldBlock beacon) {
+        this.beacons.put(beacon, null);
     }
 
-    /**
-     * Remove a beacon shield block from the list of beacon shield blocks.
-     * @param beacon The beacon shield block to remove.
-     */
     public void removeBeaconShieldBlock(BeaconShieldBlock beacon) {
-        this.beaconShieldBlocks.remove(beacon);
+        this.beacons.remove(beacon);
+    }
+
+    public boolean isRegistered(BeaconShieldBlock beacon) {
+        return this.beacons.containsKey(beacon);
     }
 
     /**
-     * Save all data in memory to disk.
+     * Save all beacons in memory to disk.
      */
     public void saveDataInMemoryToDisk() {
-        this.beaconShieldBlocks.forEach((beacon, inventory) -> {
-            BeaconFile.writeBeaconToFile(beacon);
-        });
+        this.beacons.keySet().forEach(BeaconFile::writeBeaconToFile);
     }
 
     /**
-     * Check if a block is a beacon shield block in memory.
-     * @param block The block to check.
-     * @return True if the block is a beacon shield block in memory, false otherwise.
+     * Get the beacon shield registered at the position of the given block.
+     *
+     * @return The beacon, or null if the block is not a beacon shield.
      */
-    public boolean isBeaconShieldBlockInMemory(Block block) {
-        for (BeaconShieldBlock beaconShieldBlock : this.beaconShieldBlocks.keySet()) {
-            if (beaconShieldBlock.getBlock().equals(block)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Get a beacon shield block from memory.
-     * @param block The block to get.
-     * @return The beacon shield block if it exists, null otherwise.
-     */
+    @Nullable
     public BeaconShieldBlock getBeaconShieldBlock(Block block) {
-        for (BeaconShieldBlock beaconShieldBlock : this.beaconShieldBlocks.keySet()) {
-            if (beaconShieldBlock.getBlock().equals(block)) {
-                return beaconShieldBlock;
+        for (BeaconShieldBlock beacon : this.beacons.keySet()) {
+            if (beacon.isAt(block)) {
+                return beacon;
             }
         }
-
         return null;
     }
 
     /**
-     * Get the inventory for a beacon shield block.
-     * @param beacon The beacon shield block to get the inventory for.
-     * @return The inventory for the beacon shield block.
+     * Get the cached main GUI of a beacon, creating it if needed.
+     * Unregistered (destroyed) beacons get a transient GUI that is
+     * never cached, so they cannot be resurrected in the registry.
      */
     @NotNull
-    public Inventory getInventory(BeaconShieldBlock beacon) {
-        Inventory inventory = this.beaconShieldBlocks.get(beacon);
-
-        if (inventory == null) {
-            inventory = GUIHelper.createInventory(new BeaconGUI(), beacon);
-            this.setInventory(beacon, inventory);
+    public BeaconGUI getBeaconGUI(BeaconShieldBlock beacon) {
+        BeaconGUI gui = this.beacons.get(beacon);
+        if (gui != null) {
+            return gui;
         }
 
-        return inventory;
+        gui = new BeaconGUI(beacon);
+        if (this.beacons.containsKey(beacon)) {
+            this.beacons.put(beacon, gui);
+        }
+        return gui;
     }
 
     /**
-     * Set the inventory for a beacon shield block.
-     * @param beacon The beacon shield block.
-     * @param inventory The inventory.
+     * Get the main GUI of a beacon only if its inventory was already built.
      */
-    public void setInventory(BeaconShieldBlock beacon, Inventory inventory) {
-        this.beaconShieldBlocks.put(beacon, inventory);
+    @Nullable
+    public BeaconGUI getLoadedBeaconGUI(BeaconShieldBlock beacon) {
+        BeaconGUI gui = this.beacons.get(beacon);
+        return (gui != null && gui.isBuilt()) ? gui : null;
     }
 
     /**
-     * Get all beacon shield blocks owned by a player.
-     * @param player The player to get the beacon shield blocks for.
-     * @return A list of beacon shield blocks owned by the player.
+     * Close every open BeaconShield menu and drop the cached GUIs so
+     * they are rebuilt with fresh config values on the next open.
+     */
+    public void invalidateGUIs() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.getOpenInventory().getTopInventory().getHolder() instanceof GUIHolder) {
+                player.closeInventory();
+            }
+        }
+
+        this.beacons.replaceAll((beacon, gui) -> null);
+    }
+
+    /**
+     * Get all beacon shields owned by a player.
      */
     public List<BeaconShieldBlock> getBeaconShieldBlocksByOwner(OfflinePlayer player) {
-        return this.beaconShieldBlocks.keySet().stream().filter(
-                beaconShieldBlock -> beaconShieldBlock.getOwner().equals(player)).collect(Collectors.toList());
+        return this.beacons.keySet().stream()
+                .filter(beacon -> beacon.getOwner().getUniqueId().equals(player.getUniqueId()))
+                .collect(Collectors.toList());
     }
 
-    /**
-     * Get the instance of the BeaconHandler.
-     * @return The instance of the BeaconHandler.
-     */
     public static BeaconHandler getInstance() {
         if (instance == null) {
             instance = new BeaconHandler();
         }
-
         return instance;
     }
 }

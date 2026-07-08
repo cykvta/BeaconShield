@@ -21,7 +21,9 @@ public enum PlayerRole {
         return permissionLevel;
     }
 
-    /** Devuelve el siguiente rol (circular) */
+    /**
+     * Get the next role in the cycle MEMBER -> OFFICER -> OWNER -> MEMBER.
+     */
     public PlayerRole getNext() {
         PlayerRole[] roles = PlayerRole.values();
         int index = (this.ordinal() - 1 + roles.length) % roles.length;

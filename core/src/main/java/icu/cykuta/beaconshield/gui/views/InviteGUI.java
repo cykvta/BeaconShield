@@ -7,62 +7,45 @@ import icu.cykuta.beaconshield.utils.Chat;
 import icu.cykuta.beaconshield.utils.HeadHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class InviteGUI extends PaginationGUI {
-    public InviteGUI() {
-        super("inventory-title-invite-member");
+/**
+ * Paginated list of online players that are not members yet.
+ * Clicking a head invites the player as a member.
+ */
+public class InviteGUI extends PaginationGUI<Player> {
+
+    public InviteGUI(BeaconShieldBlock beacon) {
+        super(beacon, "inventory-title-invite-member");
     }
 
-    /**
-     * Render server player list as heads
-     */
     @Override
-    protected void render() {
-        // Back button
-        this.addInventoryButton(36, "global.back",
-                (guiClick) -> this.openGUI(guiClick.clicker(), new MembersGUI()));
-        this.addDecorationSlot(40);
-
-        Player[] rawOnlinePlayers = Bukkit.getOnlinePlayers().toArray(new Player[0]);
-
-        // Copy the array
-        ArrayList<Player> onlinePlayers = new ArrayList<>();
-        Collections.addAll(onlinePlayers, rawOnlinePlayers);
-
-        for (int i = 0; i < renderSlots.size(); i++) {
-            int slot = renderSlots.get(i);
-
-            if (this.offset + i < onlinePlayers.size()) {
-                // Create head item
-                Player selectedPlayer = onlinePlayers.get(this.offset + i);
-
-                // Skip if player is already a member
-                if (this.getBeaconBlock().hasMember(selectedPlayer)) {
-                    // remove the player from the list
-                    onlinePlayers.remove(selectedPlayer);
-                    i--;
-                    continue;
-                }
-
-                ItemStack head = HeadHelper.getHead(selectedPlayer);
-                this.addInventoryButton(slot, head, (guiClick) -> this.addMember(guiClick.clicker(), selectedPlayer));
-            }
-        }
+    protected void addControls() {
+        this.addButton(36, "global.back", click -> new MembersGUI(this.beacon).open(click.clicker()));
     }
 
-    private void addMember(Player player, Player selectedPlayer) {
-        if (!this.getBeaconBlock().hasPermissionLevel(player, PlayerRole.OWNER)) {
+    @Override
+    protected List<Player> getItems() {
+        return Bukkit.getOnlinePlayers().stream()
+                .filter(player -> !this.beacon.hasMember(player))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    protected void renderItem(int slot, Player candidate) {
+        this.addButton(slot, HeadHelper.getHead(candidate), click -> this.addMember(click.clicker(), candidate));
+    }
+
+    private void addMember(Player player, Player candidate) {
+        if (!this.beacon.hasPermissionLevel(player, PlayerRole.OWNER)) {
             Chat.send(player, "no-permission-action");
             return;
         }
 
-        BeaconShieldBlock bsd = this.getBeaconBlock();
-        bsd.addAllowedPlayer(selectedPlayer, PlayerRole.MEMBER);
-        Chat.send(player, "member-added", selectedPlayer.getName());
-        this.openGUI(player, new MembersGUI());
+        this.beacon.addAllowedPlayer(candidate, PlayerRole.MEMBER);
+        Chat.send(player, "member-added", candidate.getName());
+        new MembersGUI(this.beacon).open(player);
     }
 }

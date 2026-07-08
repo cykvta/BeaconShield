@@ -10,28 +10,32 @@ import java.util.stream.Collectors;
 
 public class Text {
 
+    private static final Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
+
     /**
      * Colorize a string with the '&' character or hex color codes.
      * @param message The message to colorize.
      * @return The colorized message.
      */
     public static String color(String message) {
-        Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
-        Matcher matcher = pattern.matcher(message);
-        while (matcher.find()) {
-            String hexCode = message.substring(matcher.start(), matcher.end());
-            String replaceSharp = hexCode.replace('#', 'x');
-
-            char[] ch = replaceSharp.toCharArray();
-            StringBuilder builder = new StringBuilder("");
-            for (char c : ch) {
-                builder.append("&" + c);
-            }
-
-            message = message.replace(hexCode, builder.toString());
-            matcher = pattern.matcher(message);
+        if (message == null) {
+            return "";
         }
-        return ChatColor.translateAlternateColorCodes('&', message);
+
+        Matcher matcher = HEX_PATTERN.matcher(message);
+        StringBuilder result = new StringBuilder();
+
+        while (matcher.find()) {
+            // Translate "#aabbcc" into "&x&a&a&b&b&c&c"
+            StringBuilder replacement = new StringBuilder("&x");
+            for (char c : matcher.group().substring(1).toCharArray()) {
+                replacement.append('&').append(c);
+            }
+            matcher.appendReplacement(result, Matcher.quoteReplacement(replacement.toString()));
+        }
+        matcher.appendTail(result);
+
+        return ChatColor.translateAlternateColorCodes('&', result.toString());
     }
 
     /**

@@ -10,28 +10,34 @@ import java.util.stream.Collectors;
 
 public class HeadHelper {
 
+    /**
+     * Create a player head item with a custom name and optional lore.
+     */
     public static ItemStack getHead(OfflinePlayer player, String name, String... lore) {
         ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta meta = getHeadMeta(player, itemStack, Text.color("&f" + name));
+        SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
 
-        // Try to set lore, if lore is null, catch the exception
-        try { meta.setLore(Arrays.stream(lore).map(Text::color).collect(Collectors.toList()));
-        } catch (NullPointerException ignored) { }
+        if (meta != null) {
+            meta.setOwningPlayer(player);
+            meta.setDisplayName(Text.color("&f" + name));
 
-        itemStack.setItemMeta(meta);
+            if (lore != null && lore.length > 0) {
+                meta.setLore(Arrays.stream(lore)
+                        .filter(line -> line != null)
+                        .map(Text::color)
+                        .collect(Collectors.toList()));
+            }
+
+            itemStack.setItemMeta(meta);
+        }
+
         return itemStack;
     }
 
+    /**
+     * Create a player head item named after the player.
+     */
     public static ItemStack getHead(OfflinePlayer player) {
         return getHead(player, player.getName());
-    }
-
-    public static SkullMeta getHeadMeta(OfflinePlayer player, ItemStack itemStack, String name) {
-        SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
-
-        assert skullMeta != null;
-        skullMeta.setOwningPlayer(player);
-        skullMeta.setDisplayName(name);
-        return skullMeta;
     }
 }

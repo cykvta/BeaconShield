@@ -10,6 +10,7 @@ import icu.cykuta.beaconshield.data.HookHandler;
 import icu.cykuta.beaconshield.providers.DependencyNotEnabledException;
 import icu.cykuta.beaconshield.providers.Hook;
 import org.bukkit.Chunk;
+import org.bukkit.World;
 
 public class WorldGuardHook extends Hook<WorldGuard> {
 
@@ -30,26 +31,37 @@ public class WorldGuardHook extends Hook<WorldGuard> {
      * @return true if the chunk is in a WorldGuard region
      */
     public static boolean isChunkInWorldGuardRegion(Chunk chunk) {
+        return isChunkInWorldGuardRegion(chunk.getWorld(), chunk.getX(), chunk.getZ());
+    }
+
+    /**
+     * Verify if a chunk is in a WorldGuard region, without loading the chunk.
+     * @param world the world of the chunk
+     * @param x the chunk x coordinate
+     * @param z the chunk z coordinate
+     * @return true if the chunk is in a WorldGuard region
+     */
+    public static boolean isChunkInWorldGuardRegion(World world, int x, int z) {
         HookHandler hookHandler = HookHandler.getInstance();
 
-        if (!hookHandler.worldGuardHookHook.isEnabled()) {
+        if (!hookHandler.worldGuardHook.isEnabled()) {
             return false;
         }
 
-        WorldGuard wgPlugin = hookHandler.worldGuardHookHook.getHook();
+        WorldGuard wgPlugin = hookHandler.worldGuardHook.getHook();
         RegionContainer container = wgPlugin.getPlatform().getRegionContainer();
-        RegionManager regionManager = container.get(BukkitAdapter.adapt(chunk.getWorld()));
+        RegionManager regionManager = container.get(BukkitAdapter.adapt(world));
 
         if (regionManager == null) {
             return false;
         }
 
-        int chunkX = chunk.getX() << 4;
-        int chunkZ = chunk.getZ() << 4;
+        int chunkX = x << 4;
+        int chunkZ = z << 4;
 
         // Define world height limits
-        int minY = chunk.getWorld().getMinHeight();
-        int maxY = chunk.getWorld().getMaxHeight();
+        int minY = world.getMinHeight();
+        int maxY = world.getMaxHeight();
 
         // Verify if any region intersects with the chunk
         for (ProtectedRegion region : regionManager.getRegions().values()) {

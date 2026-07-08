@@ -2,4 +2,30 @@ name: BeaconShield
 version: '${project.version}'
 main: icu.cykuta.beaconshield.BeaconShield
 api-version: '1.20'
-soft-depend: [Vault, WorldGuard, WorldEdit]
+soft-depend: [Vault, WorldGuard, WorldEdit, PlaceholderAPI]
+
+permissions:
+  beaconshield.command:
+    description: Use the /beaconshield base command
+    default: true
+  beaconshield.invite:
+    description: Invite players to your territory with /bsd invite
+    default: true
+  beaconshield.kick:
+    description: Kick players from your territory with /bsd kick
+    default: true
+  beaconshield.reload:
+    description: Reload the plugin configuration
+    default: op
+  beaconshield.give:
+    description: Give beacon shield items to players
+    default: op
+  beaconshield.upgrade:
+    description: Give upgrade items to players
+    default: op
+  beaconshield.list:
+    description: List all beacons on the server
+    default: op
+  beaconshield.bypass:
+    description: Bypass all territory protection checks
+    default: op

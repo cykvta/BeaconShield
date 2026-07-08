@@ -1,21 +1,23 @@
 package icu.cykuta.beaconshield.gui;
 
-import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * InventoryHolder used to identify BeaconShield GUIs and get back
+ * to the {@link GUI} instance from a Bukkit inventory event.
+ */
 public class GUIHolder implements InventoryHolder {
-    private final BeaconShieldBlock beaconBlock;
     private final GUI gui;
+    private Inventory inventory;
 
-    public GUIHolder(BeaconShieldBlock beaconBlock, GUI gui) {
-        this.beaconBlock = beaconBlock;
+    GUIHolder(GUI gui) {
         this.gui = gui;
     }
 
-    public BeaconShieldBlock getBeaconBlock() {
-        return this.beaconBlock;
+    void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 
     public GUI getGUI() {
@@ -25,6 +27,6 @@ public class GUIHolder implements InventoryHolder {
     @NotNull
     @Override
     public Inventory getInventory() {
-        return null;
+        return this.inventory;
     }
 }

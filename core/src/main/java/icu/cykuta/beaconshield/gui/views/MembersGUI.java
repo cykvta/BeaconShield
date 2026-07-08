@@ -1,44 +1,42 @@
 package icu.cykuta.beaconshield.gui.views;
 
+import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.protection.PlayerRole;
 import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.gui.PaginationGUI;
 import icu.cykuta.beaconshield.utils.HeadHelper;
-import icu.cykuta.beaconshield.config.PluginConfiguration;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class MembersGUI extends PaginationGUI {
-    public MembersGUI() {
-        super("inventory-title-members");
+/**
+ * Paginated list of the beacon members. Clicking a head opens the
+ * member edit menu.
+ */
+public class MembersGUI extends PaginationGUI<OfflinePlayer> {
+
+    public MembersGUI(BeaconShieldBlock beacon) {
+        super(beacon, "inventory-title-members");
     }
 
-    /**
-     * Render member list as heads
-     */
     @Override
-    protected void render() {
-        PluginConfiguration lang = ConfigHandler.getInstance().getLang();
+    protected void addControls() {
+        this.addButton(36, "global.back", click -> this.openMainGUI(click.clicker()));
+        this.addButton(40, "member-gui.add-member", click -> new InviteGUI(this.beacon).open(click.clicker()));
+    }
 
-        // Add buttons
-        this.addInventoryButton(36, "global.back", (guiClick) -> this.openGUI(guiClick.clicker(), new BeaconGUI()));
-        this.addInventoryButton(40, "member-gui.add-member", (guiClick) -> this.openGUI(guiClick.clicker(), new InviteGUI()));
+    @Override
+    protected List<OfflinePlayer> getItems() {
+        return this.beacon.getAllowedPlayers();
+    }
 
-        List<OfflinePlayer> players = this.getBeaconBlock().getAllowedPlayers();
+    @Override
+    protected void renderItem(int slot, OfflinePlayer member) {
+        PlayerRole role = this.beacon.getPlayerRole(member);
+        String roleName = role != null ? ConfigHandler.getInstance().getLang().getString(role.getLangKey()) : "";
 
-        for (int i = 0; i < renderSlots.size(); i++) {
-            int slot = renderSlots.get(i);
-
-            if (this.offset + i < players.size()) {
-                // Create head item
-                OfflinePlayer selectedPlayer = players.get(this.offset + i);
-                PlayerRole role = this.getBeaconBlock().getPlayerRole(selectedPlayer);
-                String lore = lang.getString(role.getLangKey());
-                ItemStack head = HeadHelper.getHead(selectedPlayer, selectedPlayer.getName(), lore);
-                this.addInventoryButton(slot, head, (guiClick) -> openGUI(guiClick.clicker(), new MemberEditGUI(selectedPlayer)));
-            }
-        }
+        ItemStack head = HeadHelper.getHead(member, member.getName(), roleName);
+        this.addButton(slot, head, click -> new MemberEditGUI(this.beacon, member).open(click.clicker()));
     }
 }

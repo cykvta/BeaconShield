@@ -38,6 +38,28 @@ public class UpgradeHandler {
     }
 
     /**
+     * Rebuild the item of every registered upgrade from the config.
+     * Used on reload so upgrade.yml changes take effect.
+     */
+    public static void refreshItems() {
+        upgrades.replaceAll((upgrade, item) -> upgrade.getItemStack());
+    }
+
+    /**
+     * Check if an item is the item of a registered upgrade.
+     * @param item The item to check
+     * @return true if the item is an upgrade item
+     */
+    public static boolean isUpgradeItem(ItemStack item) {
+        for (ItemStack upgradeItem : upgrades.values()) {
+            if (upgradeItem != null && upgradeItem.isSimilar(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Get an upgrade by its name.
      * @param name The name of the upgrade
      * @return The upgrade

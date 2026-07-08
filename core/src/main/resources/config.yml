@@ -10,18 +10,39 @@
 # GitHub: https://github.com/cykvta/BeaconShield
 
 #----------------------------------#
+#          Plugin Settings         #
+#----------------------------------#
+
+# Send anonymous usage statistics to bStats (https://bstats.org).
+# Changing this requires a server restart.
+metrics-enabled: true
+
+#----------------------------------#
 #          Beacon Settings         #
 #----------------------------------#
 
 # The maximum number of beacons a player can place.
+# Can be overridden per player/group with the permission "beaconshield.max-beacons.<number>"
+# (the highest number granted wins over this value).
 max-beacons-per-player: 1
 
 # The maximum number of chunks a single beacon can protect.
 # This includes the chunk where the beacon is placed.
+# Can be overridden per player/group with the permission "beaconshield.max-chunks.<number>"
+# (the highest number granted wins over this value).
 max-chunks-per-beacon: 9
 
 # The block used to display chunk borders in preview mode.
 preview-block: "minecraft:gold_block"
+
+# The particle used for the corner beams shown in preview mode.
+# Full list: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
+preview-particle: "END_ROD"
+
+# Number of beam particles per block of height (Y).
+# 1 = one particle every block, 0.5 = one every 2 blocks, 2 = two per block.
+# Higher values look denser but send more particles to the client.
+preview-particles-per-block: 0.5
 
 # The display name of the beacon item.
 beacon-name: "&bBeacon"
@@ -55,6 +76,23 @@ farewell:
   subtitle: "&7You have left the beacon area of &b{0}"
 
 #----------------------------------#
+#        Protection Settings       #
+#----------------------------------#
+# These options only apply inside protected (and fueled) territory.
+
+# Blocks inside the territory are not destroyed by explosions
+# (creepers, TNT, withers, beds, respawn anchors, ...).
+protection-explosions: true
+
+# Fire cannot be lit inside the territory (members with build permission
+# can still use flint and steel) and blocks inside it never burn away.
+protection-fire: true
+
+# Blocks inside the territory cannot be griefed by mobs
+# (endermen stealing blocks, ravagers, silverfish).
+protection-mob-grief: true
+
+#----------------------------------#
 #          Economy Settings        #
 #----------------------------------#
 # The economy system is optional and requires Vault to be installed.
@@ -77,8 +115,17 @@ economy-formula: "%base_price% * %distance%"
 #           Fuel Settings          #
 #----------------------------------#
 
+# Enables or disables the whole fuel system.
+# When disabled, beacons never consume fuel, the fuel slot is removed
+# from the menu and the protection lasts forever.
+fuel-enabled: true
+
 # Enables or disables particle effects when fuel is burning.
 fuel-particles: true
+
+# The particle shown while the beacon is active.
+# Full list: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
+fuel-particle: "FLAME"
 
 # If enabled, the formula will be used to calculate burn time
 fuel-use-formula: false
@@ -99,8 +146,3 @@ fuel-items:
   - item: "minecraft:coal_block"
     burn-time: 540
     custom-model-data: 0
-
-# Below this comment, you'll find the new or regenerated configuration.
-# It doesn't have any comments, so if you're not sure what something does, you can check the explanations here:
-# https://github.com/cykvta/BeaconShield/blob/master/core/src/main/resources/config.yml.
-# I recommend letting the plugin generate a new config.yml after major updates and then migrating your old settings to the new one.

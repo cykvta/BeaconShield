@@ -1,110 +1,111 @@
 package icu.cykuta.beaconshield.gui.views;
 
+import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.protection.PlayerRole;
 import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIClick;
 import icu.cykuta.beaconshield.utils.Chat;
 import icu.cykuta.beaconshield.utils.HeadHelper;
-import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+/**
+ * Menu to manage a single member: promote/demote, kick or transfer
+ * the beacon ownership.
+ */
 public class MemberEditGUI extends GUI {
-    private final OfflinePlayer selectedPlayer;
+    private final OfflinePlayer member;
 
-    public MemberEditGUI(OfflinePlayer selectedPlayer) {
-        super("inventory-title-edit-member", 9);
-        this.selectedPlayer = selectedPlayer;
+    public MemberEditGUI(BeaconShieldBlock beacon, OfflinePlayer member) {
+        super(beacon, "inventory-title-edit-member", 9);
+        this.member = member;
     }
 
     @Override
-    public void populateInventory() {
-        this.setDecorationSlots(1, 7);
-        this.addInventoryButton(0, HeadHelper.getHead(selectedPlayer), (guiClick) -> {});
-        this.addInventoryButton(2, "member-gui.give-ownership", this::giveOwner);
-        this.addInventoryButton(4, "member-gui.kick", this::kick);
-        this.addInventoryButton(8, "global.back", (guiClick) -> this.openGUI(guiClick.clicker(), new MembersGUI()));
+    protected void populate() {
+        this.addDecoration(1, 7);
+        this.addButton(0, HeadHelper.getHead(this.member), click -> { });
+        this.addButton(2, "member-gui.give-ownership", this::giveOwnership);
+        this.addButton(4, "member-gui.kick", this::kick);
+        this.addButton(8, "global.back", click -> new MembersGUI(this.beacon).open(click.clicker()));
 
-        if (this.getBeaconBlock().hasPermissionLevel(this.selectedPlayer, PlayerRole.OFFICER)) {
-            this.addInventoryButton(3, "member-gui.demote", (guiClick) -> this.setRole(guiClick.clicker(), PlayerRole.MEMBER));
+        if (this.beacon.hasRole(this.member, PlayerRole.OFFICER)) {
+            this.addButton(3, "member-gui.demote", click -> this.setRole(click.clicker(), PlayerRole.MEMBER));
         } else {
-            this.addInventoryButton(3, "member-gui.promote", (guiClick) -> this.setRole(guiClick.clicker(), PlayerRole.OFFICER));
+            this.addButton(3, "member-gui.promote", click -> this.setRole(click.clicker(), PlayerRole.OFFICER));
         }
     }
 
     private void setRole(Player player, PlayerRole role) {
-        if (!this.getBeaconBlock().hasPermissionLevel(player, PlayerRole.OWNER)) {
+        if (!this.beacon.hasPermissionLevel(player, PlayerRole.OWNER)) {
             Chat.send(player, "no-permission-action");
             return;
         }
 
-        if (this.getBeaconBlock().hasPermissionLevel(this.selectedPlayer, PlayerRole.OWNER, true)) {
+        if (this.beacon.hasRole(this.member, PlayerRole.OWNER)) {
             Chat.send(player, "cannot-demote-owner");
             return;
         }
 
-        this.getBeaconBlock().setPlayerRole(this.selectedPlayer, role);
+        this.beacon.setPlayerRole(this.member, role);
 
-        PluginConfiguration lang = ConfigHandler.getInstance().getLang();
-        Chat.send(player,
-                "member-role-updated",
-                this.selectedPlayer.getName(),
-                Text.color(lang.getString(role.getLangKey())));
+        String roleName = ConfigHandler.getInstance().getLang().getString(role.getLangKey());
+        Chat.send(player, "member-role-updated", this.member.getName(), Text.color(roleName));
 
-        this.openGUI(player, new MembersGUI());
+        new MembersGUI(this.beacon).open(player);
     }
 
-    private void giveOwner(GUIClick click) {
+    private void giveOwnership(GUIClick click) {
         Player player = click.clicker();
 
-        if (!this.getBeaconBlock().hasPermissionLevel(player, PlayerRole.OWNER)) {
+        if (!this.beacon.hasPermissionLevel(player, PlayerRole.OWNER)) {
             Chat.send(player, "no-permission-action");
             return;
         }
 
-        if (this.getBeaconBlock().hasPermissionLevel(this.selectedPlayer, PlayerRole.OWNER)) {
-            Chat.send(player, "already-owner", this.selectedPlayer.getName());
+        if (this.beacon.hasRole(this.member, PlayerRole.OWNER)) {
+            Chat.send(player, "already-owner", this.member.getName());
             return;
         }
 
+        this.openConfirmation(player, confirm -> {
+            // Demote the old owner and transfer the ownership
+            OfflinePlayer oldOwner = this.beacon.getOwner();
+            this.beacon.setPlayerRole(oldOwner, PlayerRole.MEMBER);
+            this.beacon.setOwner(this.member);
 
-        this.openConfirmationGUI(player, (guiClick) -> {
-            // Set the old owner to member
-            OfflinePlayer oldOwner = this.getBeaconBlock().getOwner();
-            this.getBeaconBlock().setPlayerRole(oldOwner, PlayerRole.MEMBER);
-
-            // Set the new owner
-            this.getBeaconBlock().setOwner(this.selectedPlayer);
-            guiClick.clicker().closeInventory();
-            Chat.send(guiClick.clicker(), "owner-given", this.selectedPlayer.getName());
+            confirm.clicker().closeInventory();
+            Chat.send(confirm.clicker(), "owner-given", this.member.getName());
         });
     }
 
-    private void kick(GUIClick guiClick) {
-        Player player = guiClick.clicker();
+    private void kick(GUIClick click) {
+        Player player = click.clicker();
 
-        if (!this.getBeaconBlock().hasPermissionLevel(player, PlayerRole.OFFICER)) {
+        if (!this.beacon.hasPermissionLevel(player, PlayerRole.OFFICER)) {
             Chat.send(player, "no-permission-action");
             return;
         }
 
-        if (this.getBeaconBlock().hasPermissionLevel(this.selectedPlayer, PlayerRole.OFFICER)) {
-            Chat.send(player, "cannot-kick-officer");
-            return;
-        }
-
-        if (this.getBeaconBlock().hasPermissionLevel(this.selectedPlayer, PlayerRole.OWNER, true)) {
+        if (this.beacon.hasRole(this.member, PlayerRole.OWNER)) {
             Chat.send(player, "cannot-kick-owner");
             return;
         }
 
-        this.openConfirmationGUI(player, (confirmationClick) -> {
-            Player confirmationPlayer = confirmationClick.clicker();
-            Chat.send(confirmationPlayer, "member-removed", this.selectedPlayer.getName());
-            this.getBeaconBlock().removeAllowedPlayer(this.selectedPlayer);
-            this.openGUI(confirmationPlayer, new MembersGUI());
+        // Officers can only kick plain members; kicking another officer
+        // requires owner permission (or admin bypass).
+        if (this.beacon.hasRole(this.member, PlayerRole.OFFICER)
+                && !this.beacon.hasPermissionLevel(player, PlayerRole.OWNER)) {
+            Chat.send(player, "cannot-kick-officer");
+            return;
+        }
+
+        this.openConfirmation(player, confirm -> {
+            this.beacon.removeAllowedPlayer(this.member);
+            Chat.send(confirm.clicker(), "member-removed", this.member.getName());
+            new MembersGUI(this.beacon).open(confirm.clicker());
         });
     }
 }

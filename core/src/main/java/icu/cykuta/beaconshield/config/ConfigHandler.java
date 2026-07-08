@@ -50,9 +50,6 @@ public class ConfigHandler {
     }
 
     public static ConfigHandler getInstance() {
-        if (instance == null) {
-            return new ConfigHandler();
-        }
         return instance;
     }
 }

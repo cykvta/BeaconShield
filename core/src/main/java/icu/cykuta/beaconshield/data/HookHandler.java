@@ -1,4 +1,5 @@
 package icu.cykuta.beaconshield.data;
+
 import com.sk89q.worldguard.WorldGuard;
 import icu.cykuta.beaconshield.providers.DependencyNotEnabledException;
 import icu.cykuta.beaconshield.providers.Hook;
@@ -9,21 +10,21 @@ import org.bukkit.Bukkit;
 
 public class HookHandler {
     private static HookHandler instance;
-    public Hook<Economy> economyHook;
-    public Hook<WorldGuard> worldGuardHookHook;
+
+    public final Hook<Economy> economyHook;
+    public final Hook<WorldGuard> worldGuardHook;
 
     private HookHandler() {
-        this.economyHook = this.registerHook(new VaultHook());
-        this.worldGuardHookHook = this.registerHook(new WorldGuardHook());
+        this.economyHook = registerHook(new VaultHook());
+        this.worldGuardHook = registerHook(new WorldGuardHook());
     }
 
-    private Hook registerHook(Hook hook) {
+    private static <T extends Hook<?>> T registerHook(T hook) {
         try {
             hook.register();
             if (hook.isEnabled()) {
                 Bukkit.getLogger().info("[BeaconShield] Hooked into " + hook.getName());
             }
-
         } catch (DependencyNotEnabledException e) {
             e.printStackTrace();
         }

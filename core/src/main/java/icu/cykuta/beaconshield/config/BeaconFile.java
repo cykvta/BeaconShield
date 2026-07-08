@@ -15,11 +15,12 @@ public class BeaconFile {
     public static void writeBeaconToFile(BeaconShieldBlock beacon) {
         File pluginFolder = BeaconShield.getPlugin().getDataFolder();
         File dataFolder = new File(pluginFolder, "data");
+        File beaconFile = new File(dataFolder, beacon.getId() + ".beacon");
 
-        try (FileOutputStream fos = new FileOutputStream(new File(dataFolder, beacon.getId() + ".beacon"))) {
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
+        // Closing the ObjectOutputStream flushes its internal buffer;
+        // closing only the FileOutputStream can truncate the file.
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(beaconFile))) {
             oos.writeObject(beacon);
-
         } catch (Exception e) {
             e.printStackTrace();
         }

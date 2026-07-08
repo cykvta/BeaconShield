@@ -38,6 +38,9 @@ import static icu.cykuta.beaconshield.data.DataKeys.IS_BEACONSHIELD;
 public class BeaconShieldBlock implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+
+    private static final String BYPASS_PERMISSION = "beaconshield.bypass";
+
     private final String id;
     private final int x, y, z;
     private final String world;
@@ -49,7 +52,7 @@ public class BeaconShieldBlock implements Serializable {
     private final Map<RolePermission, PlayerRole> rolePermissions = new HashMap<>();
 
     /**
-     * Constructor to create a new BeaconShieldBlock.
+     * Create a new BeaconShieldBlock.
      *
      * @param block The block representing the BeaconShield.
      * @param owner The player who owns the BeaconShield.
@@ -70,8 +73,7 @@ public class BeaconShieldBlock implements Serializable {
     }
 
     /**
-     * Set default permissions for the BeaconShieldBlock.
-     * This method sets the default permissions for building, breaking, and using the BeaconShieldBlock
+     * Set the default minimum role for every territory permission.
      */
     public void setDefaultPermissions() {
         this.rolePermissions.put(RolePermission.BUILD, PlayerRole.MEMBER);
@@ -89,47 +91,37 @@ public class BeaconShieldBlock implements Serializable {
     }
 
     /**
-     * Add a protected chunk to the list of protected chunks.
-     *
-     * @param chunk The chunk to protect.
+     * Add a protected chunk to this beacon.
      */
     public void addProtectedChunk(Chunk chunk) {
         addProtectedChunk(new ProtectedChunk(chunk));
     }
 
     /**
-     * Add a protected chunk to the list of protected chunks.
-     *
-     * @param protectedChunk The protected chunk.
+     * Add a protected chunk to this beacon.
      */
     public void addProtectedChunk(ProtectedChunk protectedChunk) {
         this.protectedChunks.add(protectedChunk);
-        ProtectionHandler.addChunk(protectedChunk.toChunk(), this);
+        ProtectionHandler.addChunk(protectedChunk, this);
     }
 
     /**
-     * Remove a protected chunk from the list of protected chunks.
-     *
-     * @param chunk The chunk to remove.
+     * Remove a protected chunk from this beacon.
      */
     public void removeProtectedChunk(Chunk chunk) {
         removeProtectedChunk(new ProtectedChunk(chunk));
     }
 
     /**
-     * Remove a protected chunk from the list of protected chunks.
-     *
-     * @param protectedChunk The protected chunk.
+     * Remove a protected chunk from this beacon.
      */
     public void removeProtectedChunk(ProtectedChunk protectedChunk) {
         this.protectedChunks.remove(protectedChunk);
-        ProtectionHandler.removeChunk(protectedChunk.toChunk());
+        ProtectionHandler.removeChunk(protectedChunk);
     }
 
     /**
      * Get all protected chunks.
-     *
-     * @return The list of protected chunks.
      */
     public List<ProtectedChunk> getProtectedChunks() {
         return Collections.unmodifiableList(protectedChunks);
@@ -137,35 +129,36 @@ public class BeaconShieldBlock implements Serializable {
 
     /**
      * Set the fuel level.
-     *
-     * @param fuelLevel The fuel level.
      */
     public void setFuelLevel(int fuelLevel) {
         this.fuelLevel = fuelLevel;
     }
 
     /**
-     * Check if the beacon can protect, based on the fuel level.
-     *
-     * @return true if the beacon can protect, false otherwise.
+     * Check if the beacon can protect. When the fuel system is disabled
+     * the protection is permanent; otherwise it depends on the fuel level.
      */
     public boolean canProtect() {
-        return fuelLevel != -1;
+        return !isFuelSystemEnabled() || fuelLevel != -1;
+    }
+
+    /**
+     * Check if the fuel system is enabled in the config.
+     */
+    public static boolean isFuelSystemEnabled() {
+        return ConfigHandler.getInstance().getConfig().getBoolean("fuel-enabled", true);
     }
 
     /**
      * Get the fuel level.
-     *
-     * @return The fuel level.
      */
     public int getFuelLevel() {
         return fuelLevel;
     }
 
     /**
-     * Set the owner of the beacon.
-     *
-     * @param player The owner player.
+     * Set the owner of the beacon, demoting nobody: the previous owner
+     * entry is removed.
      */
     public void setOwner(@NotNull OfflinePlayer player) {
         setOwner(player.getUniqueId());
@@ -173,24 +166,21 @@ public class BeaconShieldBlock implements Serializable {
 
     /**
      * Set the owner of the beacon.
-     *
-     * @param uuid The UUID of the owner player.
      */
     public void setOwner(UUID uuid) {
-        allowedPlayers.entrySet().removeIf(entry -> entry.getValue().equals(PlayerRole.OWNER));
-        addAllowedPlayer(Bukkit.getOfflinePlayer(uuid), PlayerRole.OWNER);
+        allowedPlayers.entrySet().removeIf(entry -> entry.getValue() == PlayerRole.OWNER);
+        allowedPlayers.put(uuid, PlayerRole.OWNER);
     }
 
     /**
      * Get the owner of the beacon.
      *
-     * @return The owner of the beacon.
      * @throws NoSuchElementException If no owner is found.
      */
     public OfflinePlayer getOwner() throws NoSuchElementException {
         return Bukkit.getOfflinePlayer(
                 allowedPlayers.entrySet().stream()
-                        .filter(entry -> entry.getValue().equals(PlayerRole.OWNER))
+                        .filter(entry -> entry.getValue() == PlayerRole.OWNER)
                         .findFirst()
                         .orElseThrow(() -> new NoSuchElementException("No owner found"))
                         .getKey()
@@ -199,9 +189,6 @@ public class BeaconShieldBlock implements Serializable {
 
     /**
      * Add a player to the list of allowed players.
-     *
-     * @param player The player.
-     * @param role The role of the player.
      */
     public void addAllowedPlayer(@NotNull OfflinePlayer player, PlayerRole role) {
         this.allowedPlayers.put(player.getUniqueId(), role);
@@ -209,26 +196,19 @@ public class BeaconShieldBlock implements Serializable {
 
     /**
      * Remove a player from the list of allowed players.
-     *
-     * @param player The player.
      */
     public void removeAllowedPlayer(@NotNull OfflinePlayer player) {
         this.allowedPlayers.remove(player.getUniqueId());
     }
 
     /**
-     * Check if a player is allowed to perform a specific action based on their role and the required permission.
-     *
-     * @param player The player.
-     * @return true if the player is allowed, false otherwise.
+     * Check if a player can perform an action in the territory, based on
+     * their role and the minimum role required for the permission.
+     * Operators and players with the bypass permission are always allowed.
      */
     public boolean isAllowedPlayer(@NotNull RolePermission permission, @NotNull OfflinePlayer player) {
-        if (player.isOp() || Objects.requireNonNull(player.getPlayer()).hasPermission("beaconshield.bypass")) {
+        if (hasBypass(player)) {
             return true;
-        }
-
-        if (!hasMember(player)) {
-            return false;
         }
 
         PlayerRole role = allowedPlayers.get(player.getUniqueId());
@@ -237,18 +217,11 @@ public class BeaconShieldBlock implements Serializable {
         }
 
         PlayerRole requiredRole = getMinimumRoleForPermission(permission);
-        if (requiredRole == null) {
-            return false;
-        }
-
         return role.getPermissionLevel() >= requiredRole.getPermissionLevel();
     }
 
     /**
-     * Check if a player is in the list of allowed players.
-     *
-     * @param player The player to check.
-     * @return true if the player is a member, false otherwise.
+     * Check if a player is a member of this beacon.
      */
     public boolean hasMember(@NotNull OfflinePlayer player) {
         return this.allowedPlayers.containsKey(player.getUniqueId());
@@ -256,8 +229,6 @@ public class BeaconShieldBlock implements Serializable {
 
     /**
      * Get all allowed players.
-     *
-     * @return A list of allowed players.
      */
     public List<OfflinePlayer> getAllowedPlayers() {
         return allowedPlayers.keySet().stream()
@@ -267,17 +238,23 @@ public class BeaconShieldBlock implements Serializable {
 
     /**
      * Get the block associated with this BeaconShield.
-     *
-     * @return The block.
      */
     public Block getBlock() {
         return this.getWorld().getBlockAt(x, y, z);
     }
 
     /**
+     * Check if this beacon shield is at the position of the given block.
+     */
+    public boolean isAt(@NotNull Block block) {
+        return block.getX() == x
+                && block.getY() == y
+                && block.getZ() == z
+                && block.getWorld().getName().equals(world);
+    }
+
+    /**
      * Get the world where the BeaconShield is located.
-     *
-     * @return The world.
      */
     public World getWorld() {
         return Bukkit.getWorld(world);
@@ -285,8 +262,6 @@ public class BeaconShieldBlock implements Serializable {
 
     /**
      * Get the unique ID of the BeaconShield.
-     *
-     * @return The ID.
      */
     public String getId() {
         return id;
@@ -294,8 +269,6 @@ public class BeaconShieldBlock implements Serializable {
 
     /**
      * Get the core chunk protected by the BeaconShield.
-     *
-     * @return The core chunk.
      */
     public ProtectedChunk getCoreChunk() {
         return coreChunk;
@@ -303,28 +276,34 @@ public class BeaconShieldBlock implements Serializable {
 
     /**
      * Check if a chunk is the core chunk.
-     *
-     * @param chunk The chunk to check.
-     * @return true if it is the core chunk, false otherwise.
      */
     public boolean isCoreChunk(Chunk chunk) {
-        return coreChunk.toChunk().equals(chunk);
+        return isCoreChunk(new ProtectedChunk(chunk));
     }
 
     /**
-     * Check if a chunk is protected by the BeaconShield.
-     *
-     * @param chunk The chunk to check.
-     * @return true if it is protected, false otherwise.
+     * Check if a chunk is the core chunk.
+     */
+    public boolean isCoreChunk(ProtectedChunk chunk) {
+        return coreChunk.equals(chunk);
+    }
+
+    /**
+     * Check if a chunk is protected by this beacon.
      */
     public boolean isProtectedChunk(Chunk chunk) {
-        return protectedChunks.stream().anyMatch(protectedChunk -> protectedChunk.toChunk().equals(chunk));
+        return isProtectedChunk(new ProtectedChunk(chunk));
+    }
+
+    /**
+     * Check if a chunk is protected by this beacon.
+     */
+    public boolean isProtectedChunk(ProtectedChunk chunk) {
+        return protectedChunks.contains(chunk);
     }
 
     /**
      * Get the PDC manager for this BeaconShield.
-     *
-     * @return The PDC manager.
      */
     public BeaconPDCManager getPdcManager() {
         return pdcManager;
@@ -337,40 +316,36 @@ public class BeaconShieldBlock implements Serializable {
     }
 
     /**
-     * Check if a player has the required permission level.
-     *
-     * @param player The player.
-     * @param role The required role.
-     * @param serverAdminBypass Whether server admins can bypass permissions.
-     * @return true if the player has the permission, false otherwise.
+     * Check if a player has at least the given role in this beacon.
+     * This is a pure role check: bypass permissions are ignored, so use
+     * it to validate the <em>target</em> of an action.
      */
-    public boolean hasPermissionLevel(OfflinePlayer player, PlayerRole role, boolean serverAdminBypass) {
+    public boolean hasRole(@NotNull OfflinePlayer player, @NotNull PlayerRole role) {
         PlayerRole playerRole = getPlayerRole(player);
-
-        Player onlinePlayer = player.getPlayer();
-        if (onlinePlayer != null && onlinePlayer.hasPermission("beaconshield.bypass") && !serverAdminBypass) {
-            return true;
-        }
-
         return playerRole != null && playerRole.getPermissionLevel() >= role.getPermissionLevel();
     }
 
     /**
-     * Check if a player has the required permission level.
-     *
-     * @param player The player.
-     * @param role The required role.
-     * @return true if the player has the permission, false otherwise.
+     * Check if a player is allowed to act with at least the given role.
+     * Operators and players with the bypass permission are always allowed,
+     * so use it to validate the <em>actor</em> of an action.
      */
-    public boolean hasPermissionLevel(OfflinePlayer player, PlayerRole role) {
-        return hasPermissionLevel(player, role, false);
+    public boolean hasPermissionLevel(@NotNull OfflinePlayer player, @NotNull PlayerRole role) {
+        return hasBypass(player) || hasRole(player, role);
     }
 
     /**
-     * Get the role of a player.
-     *
-     * @param player The player.
-     * @return The role of the player, or null if they have no role.
+     * Check if a player bypasses the beacon permissions (operator or
+     * bypass permission). Offline players never bypass.
+     */
+    private static boolean hasBypass(@NotNull OfflinePlayer player) {
+        Player onlinePlayer = player.getPlayer();
+        return onlinePlayer != null
+                && (onlinePlayer.isOp() || onlinePlayer.hasPermission(BYPASS_PERMISSION));
+    }
+
+    /**
+     * Get the role of a player, or null if they have no role.
      */
     @Nullable
     public PlayerRole getPlayerRole(@NotNull OfflinePlayer player) {
@@ -379,9 +354,6 @@ public class BeaconShieldBlock implements Serializable {
 
     /**
      * Set the role of a player.
-     *
-     * @param player The player.
-     * @param role The role.
      */
     public void setPlayerRole(@NotNull OfflinePlayer player, PlayerRole role) {
         allowedPlayers.put(player.getUniqueId(), role);
@@ -400,105 +372,87 @@ public class BeaconShieldBlock implements Serializable {
 
         /**
          * Get the items stored in the PDC.
-         *
-         * @return A map of stored items.
          */
         public Map<Integer, ItemStack> getStoredItems() {
-            return this.pdc.getOrDefault(DataKeys.BEACONSHIELD_INVENTORY, DataType.asMap(DataType.INTEGER, DataType.ITEM_STACK), new HashMap<>());
-        }
-
-        /**
-         * Check if there are items stored in the PDC.
-         *
-         * @return true if there are stored items, false otherwise.
-         */
-        public boolean hasInventory() {
-            return this.pdc.has(DataKeys.BEACONSHIELD_INVENTORY, DataType.asMap(DataType.INTEGER, DataType.ITEM_STACK));
+            return this.pdc.getOrDefault(DataKeys.BEACONSHIELD_INVENTORY,
+                    DataType.asMap(DataType.INTEGER, DataType.ITEM_STACK), new HashMap<>());
         }
 
         /**
          * Set the items stored in the PDC.
-         *
-         * @param storedItems The map of items to store.
          */
         public void setStoredItems(Map<Integer, ItemStack> storedItems) {
-            this.pdc.set(DataKeys.BEACONSHIELD_INVENTORY, DataType.asMap(DataType.INTEGER, DataType.ITEM_STACK), storedItems);
+            this.pdc.set(DataKeys.BEACONSHIELD_INVENTORY,
+                    DataType.asMap(DataType.INTEGER, DataType.ITEM_STACK), storedItems);
         }
 
         /**
-         * Remove the stored items from the PDC.
+         * Remove all BeaconShield data from the block (stored items and
+         * the beacon shield mark).
          */
-        public void removeStoredItems() {
+        public void clear() {
             this.pdc.remove(DataKeys.BEACONSHIELD_INVENTORY);
+            this.pdc.remove(IS_BEACONSHIELD);
         }
     }
 
     /**
-     * Get the burning time of the fuel.
-     * @param fuel The fuel to get the burning time
-     * @return The burning time of the fuel
+     * Get the burn time of a fuel item, or 0 if the item is not a
+     * valid fuel.
      */
     public int getBurnTime(ItemStack fuel) {
         PluginConfiguration config = ConfigHandler.getInstance().getConfig();
-        List<Map<?, ?>> fuelList = config.getMapList("fuel-items");
+        boolean useFormula = config.getBoolean("fuel-use-formula");
+        String formula = config.getString("fuel-formula");
 
-        for (Map<?, ?> fuelEntry : fuelList) {
-            String itemName = (String) fuelEntry.get("item");
-            int burnTime = (int) fuelEntry.get("burn-time");
-            int customModelData = (int) fuelEntry.get("custom-model-data"); // 0 if not present
-            boolean useFormula = config.getBoolean("fuel-use-formula");
-            String formula = config.getString("fuel-formula");
+        for (Map<?, ?> fuelEntry : config.getMapList("fuel-items")) {
+            Material material = Material.matchMaterial(String.valueOf(fuelEntry.get("item")));
+            if (material == null || fuel.getType() != material) {
+                continue;
+            }
 
-            if (useFormula) {
+            if (!matchesCustomModelData(fuel, fuelEntry)) {
+                continue;
+            }
+
+            int burnTime = fuelEntry.get("burn-time") instanceof Number number ? number.intValue() : 0;
+
+            if (useFormula && formula != null) {
                 burnTime = (int) MathUtils.eval(formula
                         .replace("%burn_time%", String.valueOf(burnTime))
                         .replace("%chunks_owned%", String.valueOf(this.protectedChunks.size()))
                 );
             }
 
-            // Add the namespace if it doesn't have one
-            if (!itemName.startsWith("minecraft:")) {
-                itemName = "minecraft:" + itemName;
-            }
-
-            // Compare the custom model data
-            if (customModelData != 0) { // 0 if not present
-                // fuel not have custom model data, continue
-                // fuel have custom model data, but not equal to the custom model data in the config, continue
-                if (fuel.getItemMeta() == null || fuel.getItemMeta().getCustomModelData() != customModelData) {
-                    continue;
-                }
-            }
-
-            // Get the material
-            Material material = Material.matchMaterial(itemName);
-            if (material == null) {
-                continue;
-            }
-
-            // Check if the fuel is the same as the material
-            if (fuel.getType() == material) {
-                return burnTime;
-            }
+            return burnTime;
         }
 
         return 0;
     }
 
     /**
-     * Get the role permissions for this BeaconShieldBlock.
-     *
-     * @return A map of role permissions.
+     * Check if a fuel item matches the custom model data required by a
+     * fuel config entry (0 or missing means no requirement).
+     */
+    private static boolean matchesCustomModelData(ItemStack fuel, Map<?, ?> fuelEntry) {
+        int required = fuelEntry.get("custom-model-data") instanceof Number number ? number.intValue() : 0;
+        if (required == 0) {
+            return true;
+        }
+
+        ItemMeta meta = fuel.getItemMeta();
+        return meta != null && meta.hasCustomModelData() && meta.getCustomModelData() == required;
+    }
+
+    /**
+     * Get the minimum role required for a territory permission.
      */
     public PlayerRole getMinimumRoleForPermission(RolePermission permission) {
         return rolePermissions.getOrDefault(permission, PlayerRole.MEMBER);
     }
 
     /**
-     * Set the role permissions for this BeaconShieldBlock.
-     *
-     * @param role The role permission to set.
-     * @param permission The role permission to associate with the role.
+     * Set the minimum role required for a territory permission.
      */
     public void setRolePermissions(RolePermission permission, PlayerRole role) {
         this.rolePermissions.put(permission, role);
@@ -507,10 +461,7 @@ public class BeaconShieldBlock implements Serializable {
     // STATIC METHODS
 
     /**
-     * Get the BeaconShieldBlock associated with a block.
-     *
-     * @param block The block.
-     * @return The associated BeaconShieldBlock.
+     * Get the BeaconShieldBlock registered at the position of a block.
      */
     public static BeaconShieldBlock getBeaconShieldBlock(Block block) {
         return BeaconHandler.getInstance().getBeaconShieldBlock(block);
@@ -518,8 +469,6 @@ public class BeaconShieldBlock implements Serializable {
 
     /**
      * Create a BeaconShield item.
-     *
-     * @return The BeaconShield item.
      */
     public static @NotNull ItemStack createBeaconItem() {
         PluginConfiguration config = ConfigHandler.getInstance().getConfig();
@@ -534,6 +483,10 @@ public class BeaconShieldBlock implements Serializable {
         return item;
     }
 
+    /**
+     * Create the crafting recipe of the BeaconShield item, or null if
+     * the recipe is disabled in the config.
+     */
     public static @Nullable ShapedRecipe createRecipe() {
         PluginConfiguration config = ConfigHandler.getInstance().getConfig();
         if (!config.getBoolean("beacon-recipe.enabled", true)) {

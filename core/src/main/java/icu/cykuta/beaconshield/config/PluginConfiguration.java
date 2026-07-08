@@ -14,8 +14,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PluginConfiguration extends YamlConfiguration {
 
@@ -160,17 +158,17 @@ public class PluginConfiguration extends YamlConfiguration {
      * @param item The ItemStack to set.
      */
     public void setItemStack(String path, ItemStack item) {
-        set(path + ".item-id", item.getType().name());
+        // Keys must match the ones read by getItemStack
+        set(path + ".item", item.getType().name());
 
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            set(path + ".item-name", meta.hasDisplayName() ? meta.getDisplayName() : "");
+            set(path + ".name", meta.hasDisplayName() ? meta.getDisplayName() : "");
             set(path + ".lore", meta.hasLore() ? meta.getLore() : null);
             if (meta.hasCustomModelData()) {
                 set(path + ".custom-model-data", meta.getCustomModelData());
             }
         }
-        set(path + ".amount", item.getAmount());
     }
 
     /**
