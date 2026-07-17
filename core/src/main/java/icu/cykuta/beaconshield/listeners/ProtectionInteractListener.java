@@ -3,6 +3,7 @@ package icu.cykuta.beaconshield.listeners;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.protection.RolePermission;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
+import icu.cykuta.beaconshield.providers.ProtectionBypass;
 import icu.cykuta.beaconshield.utils.Chat;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -28,6 +29,16 @@ import java.util.Set;
  */
 public class ProtectionInteractListener implements Listener {
     private static final Set<Material> GENERATOR_SOURCES = Set.of(Material.LAVA, Material.WATER);
+
+    /** Optional hook that grants players (e.g. raiders) the right to act. */
+    private static ProtectionBypass protectionBypass;
+
+    /**
+     * Register (or clear, with {@code null}) the protection bypass hook.
+     */
+    public static void setProtectionBypass(ProtectionBypass bypass) {
+        protectionBypass = bypass;
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -121,8 +132,10 @@ public class ProtectionInteractListener implements Listener {
      */
     private boolean isActionDenied(Player player, Chunk chunk, RolePermission permission) {
         BeaconShieldBlock beacon = ProtectionHandler.getBeacon(chunk);
-        return beacon != null
-                && beacon.canProtect()
-                && !beacon.isAllowedPlayer(permission, player);
+        if (beacon == null || !beacon.canProtect() || beacon.isAllowedPlayer(permission, player)) {
+            return false;
+        }
+        // A registered bypass (e.g. a raider on a raided protection) is allowed.
+        return protectionBypass == null || !protectionBypass.allows(player, chunk);
     }
 }

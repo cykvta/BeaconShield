@@ -3,12 +3,17 @@ package icu.cykuta.beaconshield.data;
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.config.BeaconFile;
+import icu.cykuta.beaconshield.events.BeaconShieldDestroyedEvent;
 import icu.cykuta.beaconshield.gui.GUIHolder;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,6 +75,44 @@ public class BeaconHandler {
 
     public void removeBeaconShieldBlock(BeaconShieldBlock beacon) {
         this.beacons.remove(beacon);
+    }
+
+    /**
+     * Fully destroy a beacon shield: optionally drop the beacon item and
+     * its stored items, clear the persisted block data, break the block,
+     * unregister the protection, delete the data file and fire the
+     * {@link BeaconShieldDestroyedEvent}.
+     *
+     * <p>This is the single canonical destruction path, reused by the
+     * beacon menu and by API consumers (e.g. the raid expansion nexus).
+     *
+     * @param beacon    The beacon to destroy.
+     * @param destroyer The player responsible, or {@code null} if none.
+     * @param dropLoot  Whether to drop the beacon item and stored items.
+     */
+    public void destroyBeacon(@NotNull BeaconShieldBlock beacon, @Nullable Player destroyer, boolean dropLoot) {
+        World world = beacon.getWorld();
+        Location dropLocation = beacon.getBlock().getLocation();
+
+        if (dropLoot) {
+            world.dropItem(dropLocation, BeaconShieldBlock.createBeaconItem());
+            for (ItemStack stored : beacon.getPdcManager().getStoredItems().values()) {
+                if (stored != null && !stored.getType().isAir()) {
+                    world.dropItem(dropLocation, stored);
+                }
+            }
+        }
+
+        // Remove the persisted block data before removing the block itself
+        beacon.getPdcManager().clear();
+        beacon.getBlock().setType(Material.AIR);
+
+        // Unregister the beacon and delete its data file
+        ProtectionHandler.unregisterAllChunksForBeacon(beacon);
+        this.removeBeaconShieldBlock(beacon);
+        BeaconFile.deleteBeaconFile(beacon);
+
+        Bukkit.getPluginManager().callEvent(new BeaconShieldDestroyedEvent(destroyer, beacon));
     }
 
     public boolean isRegistered(BeaconShieldBlock beacon) {

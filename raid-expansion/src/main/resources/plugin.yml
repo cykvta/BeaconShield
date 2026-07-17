@@ -1,0 +1,20 @@
+name: BeaconShield-RaidExpansion
+version: '${project.version}'
+main: icu.cykuta.beaconshieldraid.BeaconShieldRaidExpansion
+api-version: '1.20'
+depend:
+  - BeaconShield
+
+# /bsraid is registered through the core command framework (CommandMap),
+# not here, so it is not declared under 'commands'.
+
+permissions:
+  beaconshield.raid.start:
+    description: Start a raid with /bsraid start
+    default: true
+  beaconshield.raid.join:
+    description: Request to join a raid and leave it
+    default: true
+  beaconshield.raid.admin:
+    description: Enable/disable, force/cancel raids and reload the expansion
+    default: op

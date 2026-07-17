@@ -15,6 +15,7 @@
       <module>core</module>
       <module>squaremap-integration</module>
       <module>dynmap-integration</module>
+      <module>raid-expansion</module>
   </modules>
 
   <profiles>
@@ -34,7 +35,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
-    <project.version>1.0</project.version>
+    <project.version>1.1</project.version>
   </properties>
 
   <pluginRepositories>
@@ -45,6 +46,19 @@
   </pluginRepositories>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <!-- Every module's shaded (final) jar is written to a shared .dist/
+             folder at the project root, instead of each module's target/. -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <configuration>
+            <outputFile>${project.parent.basedir}/.dist/${project.build.finalName}.jar</outputFile>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

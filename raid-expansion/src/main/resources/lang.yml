@@ -1,0 +1,81 @@
+# ============================================================
+#  BeaconShield-RaidExpansion — messages
+# ============================================================
+# Color codes with '&'. Set a value to "" to silence that message.
+
+prefix: "&8[&cRaid&8] &r"
+raids-enabled: "&cRaids are now ENABLED."
+raids-disabled: "&aRaids are now DISABLED."
+
+# --- Starting a raid (%initiator%, %owner%, %cost%, %seconds%) ---
+raid-start-success: "&aRaid started (cost: &6%cost%&a). Freeze window open; then capture and break the nexus."
+raids-not-active: "&cRaids are not active right now."
+not-enough-money: "&cYou need &6%cost%&c to start this raid."
+already-raided: "&eThat protection is already being raided. Use /bsraid request."
+no-active-raid: "&eNo raid here yet. Start one with /bsraid start."
+cannot-raid-own: "&cYou can't raid a protection you belong to."
+not-enough-defenders-online: "&cNot enough of this protection's members are online to raid it (&6%online%&c/&6%required%&c)."
+# Sent (nearby only) with the clickable request button appended
+raid-freeze-broadcast: "&c%initiator% &estarted a raid on &6%owner%&e! You have &6%seconds%s&e to join."
+raid-began: "&cThe raid on &6%owner%&c has begun!"
+raid-ended-beacon-removed: "&eThe raid on &6%owner%&e ended: the beacon was removed."
+raid-ended-no-fuel: "&eThe raid on &6%owner%&e ended: the beacon ran out of fuel and fell!"
+raid-ended-defenders-won: "&aThe defenders of &6%owner%&a's protection held out — the raid failed!"
+raid-ended-leader-left: "&eThe raid on &6%owner%&e ended: the leader left."
+raid-left: "&aYou left the raid."
+not-in-a-raid: "&eYou are not part of any raid."
+beacon-locked: "&cYou can't open the beacon while it is being raided."
+
+# --- Directed display (%seconds%, %captured%, %total%, %percent%, %health%, %max_health%) ---
+# Freeze countdown
+freeze-display-raider: "&eRaid starts in &6%seconds%s &7— /bsraid request to join"
+freeze-display-defender: "&cYour base is being raided! &6%seconds%s &cuntil it begins"
+# Capturing chunks. Raiders see, for the chunk they stand on: the capture
+# percent while taking it, or 'capture-display-captured' once it's taken.
+capture-display-raider: "&eCapturing &6%captured%&e/&6%total% &7(%percent%%)"
+capture-display-captured: "&a&lCaptured! &6%captured%&a/&6%total%"
+capture-display-defender: "&cDefend! Chunks lost &6%captured%&c/&6%total%"
+# Nexus phase
+nexus-display-raider: "&cBreak the beacon! &6%health%&c/&6%max_health%"
+nexus-display-defender: "&aProtect the beacon! &6%health%&a/&6%max_health%"
+# No raiders in the protection, defenders about to win
+defenders-winning-raider: "&cNo raiders in the protection! Raid fails in &6%seconds%s"
+defenders-winning-defender: "&aNo attackers! Raid fails in &6%seconds%s &a— hold the line"
+
+# --- Request / accept / reject flow ---
+raid-request-button: "&a&l[Request to join]"
+raid-request-hover: "&7Click to request to join the raid"
+raid-request-sent: "&aJoin request sent to the raid leader."
+already-requested: "&eYou already requested to join."
+join-window-closed: "&cThe join window has closed; the raid already started."
+join-too-far: "&cYou are too far from the raid to request (within %radius% blocks)."
+# Sent to the leader with clickable accept/reject buttons appended
+raid-request-received: "&6%player% &ewants to join your raid:"
+raid-accept-button: "&a&l[Accept]"
+raid-accept-hover: "&7Accept the request"
+raid-reject-button: "&c&l[Reject]"
+raid-reject-hover: "&7Reject the request"
+leader-accepted: "&aAccepted &6%player%&a into the raid."
+leader-rejected: "&aRejected &6%player%&a's request."
+request-accepted: "&aYour join request was accepted!"
+request-rejected: "&cYour join request was rejected."
+no-such-request: "&cNo pending request from that player."
+not-raid-leader: "&cOnly the raid leader can do that."
+not-in-freeze: "&cYou can only do that during the freeze time."
+
+# --- Leader invite / kick ---
+raid-invited: "&aInvited &6%player% &ato the raid."
+raid-invite-received: "&aYou were added to the raid on &6%owner%&a's protection."
+target-not-online: "&cThat player is not online."
+already-in-party: "&eThat player is already in the party."
+raid-kicked: "&aRemoved &6%player% &afrom the raid."
+raid-kick-received: "&cYou were removed from the raid."
+not-in-party: "&eThat player is not in the party."
+
+# --- Broadcasts ---
+# %x% %z% (chunk coords), %owner% (protection owner)
+chunk-captured: "&eA chunk of &6%owner%&e's protection has been captured! (%x%, %z%)"
+nexus-exposed: "&c%owner%&e's protection is fully breached — the nexus is now vulnerable!"
+# %owner%, %health%, %max_health%
+nexus-damaged: "&eNexus of &6%owner%&e: &c%health%&e/&c%max_health% &eHP left."
+nexus-destroyed: "&c%owner%&e's protection has fallen!"

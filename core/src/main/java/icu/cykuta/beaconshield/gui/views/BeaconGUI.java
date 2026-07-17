@@ -2,21 +2,14 @@ package icu.cykuta.beaconshield.gui.views;
 
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.protection.PlayerRole;
-import icu.cykuta.beaconshield.config.BeaconFile;
 import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.data.BeaconHandler;
-import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.data.UpgradeHandler;
-import icu.cykuta.beaconshield.events.BeaconShieldDestroyedEvent;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIClick;
 import icu.cykuta.beaconshield.utils.Chat;
 import icu.cykuta.beaconshield.utils.Text;
 import icu.cykuta.beaconshield.utils.Time;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -226,31 +219,12 @@ public class BeaconGUI extends GUI {
             return;
         }
 
-        World world = this.beacon.getWorld();
-        Location dropLocation = this.beacon.getBlock().getLocation();
-
-        // Drop the beacon item and the stored items
-        world.dropItem(dropLocation, BeaconShieldBlock.createBeaconItem());
-        for (ItemStack stored : this.beacon.getPdcManager().getStoredItems().values()) {
-            if (stored != null && !stored.getType().isAir()) {
-                world.dropItem(dropLocation, stored);
-            }
-        }
-
-        // Remove the persisted block data before removing the block itself
-        this.beacon.getPdcManager().clear();
-        this.beacon.getBlock().setType(Material.AIR);
-
-        // Unregister the beacon and delete its data file
-        ProtectionHandler.unregisterAllChunksForBeacon(this.beacon);
-        BeaconHandler.getInstance().removeBeaconShieldBlock(this.beacon);
-        BeaconFile.deleteBeaconFile(this.beacon);
+        // Drop loot, tear down the protection and fire the destroyed event
+        BeaconHandler.getInstance().destroyBeacon(this.beacon, player, true);
 
         // Close the GUI for everyone (copy the list to avoid concurrent modification)
         new ArrayList<>(this.inventory.getViewers()).forEach(HumanEntity::closeInventory);
         player.closeInventory();
         player.playSound(player.getLocation(), "block.beacon.deactivate", 1, 1);
-
-        Bukkit.getPluginManager().callEvent(new BeaconShieldDestroyedEvent(player, this.beacon));
     }
 }

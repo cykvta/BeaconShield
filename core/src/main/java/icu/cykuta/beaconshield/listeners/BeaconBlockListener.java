@@ -8,6 +8,7 @@ import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.data.BeaconHandler;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.events.BeaconShieldPlacedEvent;
+import icu.cykuta.beaconshield.providers.BeaconInteractionGuard;
 import icu.cykuta.beaconshield.utils.Chat;
 import icu.cykuta.beaconshield.utils.PermissionUtils;
 import org.bukkit.Bukkit;
@@ -32,6 +33,16 @@ import static icu.cykuta.beaconshield.data.DataKeys.IS_BEACONSHIELD;
  * opening the menu on right click.
  */
 public class BeaconBlockListener implements Listener {
+
+    /** Optional hook that can lock the beacon menu (e.g. during a raid). */
+    private static BeaconInteractionGuard interactionGuard;
+
+    /**
+     * Register (or clear, with {@code null}) the beacon interaction guard.
+     */
+    public static void setInteractionGuard(BeaconInteractionGuard guard) {
+        interactionGuard = guard;
+    }
 
     /**
      * Register a new beacon shield when a shield item is placed.
@@ -103,6 +114,13 @@ public class BeaconBlockListener implements Listener {
         }
 
         Player player = event.getPlayer();
+
+        // The menu can be locked externally (e.g. while the beacon is raided).
+        // The guard is responsible for messaging the player.
+        if (interactionGuard != null && interactionGuard.isLocked(beacon, player)) {
+            return;
+        }
+
         if (!beacon.isAllowedPlayer(RolePermission.BEACON_USE, player)) {
             Chat.send(player, "no-permission-to-interact");
             return;

@@ -1,0 +1,136 @@
+# ============================================================
+#  BeaconShield-RaidExpansion
+# ============================================================
+# Raids let attackers capture a protection chunk by chunk (hot points)
+# and finally break the beacon like a nexus to bring the whole
+# protection down.
+
+# Messages live in lang.yml. This file (and lang.yml, and raids.db) is
+# stored under the core folder: plugins/BeaconShield/expansions/BeaconShield-RaidExpansion/
+
+# Whether raiding is allowed right now. Can be toggled at runtime with
+# /bsraid toggle. If the schedule is enabled it takes over this value.
+raiding-enabled: false
+
+capture:
+  # Seconds attackers must hold a chunk to capture it. A chunk only makes
+  # progress while the attackers inside outnumber the defenders.
+  time-seconds: 60
+
+  # Minimum number of attackers standing in a chunk for its capture to
+  # advance at all.
+  min-attackers: 1
+
+  # What happens to a chunk's capture progress while it is NOT being
+  # actively taken (attackers do not outnumber defenders):
+  #   PAUSE  -> keep the accumulated progress
+  #   RESET  -> drop back to zero immediately
+  #   DECAY  -> lose 'decay-per-second' seconds of progress each second
+  contested-behavior: DECAY
+  decay-per-second: 1
+
+nexus:
+  # Once every other chunk of a protection is captured, the beacon becomes
+  # the nexus. Attackers must break it this many times to drop the
+  # protection (the beacon is then destroyed and its loot drops).
+  health: 10
+
+  # Whether the destroyed nexus drops the beacon item and its stored items.
+  drop-loot: true
+
+  # Seconds without taking damage after which the nexus fully regenerates.
+  # Set to 0 to disable regeneration.
+  regen-seconds: 30
+
+# Seconds with NO raider standing in any protected chunk after which the
+# defenders win and the raid is cancelled (the beacon is kept). 0 disables.
+defenders-win-seconds: 120
+
+# When raiding is turned off (command or schedule), reset every in-progress
+# raid: restore protection on captured chunks and clear capture progress.
+reset-on-disable: true
+
+# While raiding is enabled, ignore ALL territory upgrades (disable_pvp,
+# disable_mob_spawning, disable_fall_damage, disable_drowning) inside every
+# protection, so attackers can actually fight. The upgrade items stay in
+# the beacon and come back the moment raiding is turned off.
+ignore-upgrades-during-raid: true
+
+# ------------------------------------------------------------
+#  Online defenders required to raid
+# ------------------------------------------------------------
+# Controls whether a protection can be raided while its members are offline,
+# and how many of them must be online otherwise. Admin-forced raids
+# (/bsraid force) ignore this.
+online-requirement:
+  # Allow starting a raid even if NONE of the protection's members are
+  # online. When true, 'required' below is ignored. Default: false.
+  allow-offline: false
+
+  # When allow-offline is false, how many members must be online to raid.
+  # Either a percentage of the members (rounded up) like "50%", or an exact
+  # count like "2". A percentage is always at least 1 and never more than
+  # the member count:
+  #   50% -> 1 member needs 1 online, 2 -> 1, 3 -> 2, 5 -> 3, 10 -> 5
+  required: "50%"
+
+# ------------------------------------------------------------
+#  Cost to start a raid (/bsraid start)
+# ------------------------------------------------------------
+# Charged to the player who starts the raid, through Vault. If no economy
+# plugin is installed the raid is free. The cost is a formula evaluated
+# with these placeholders:
+#   %chunks%          total chunks of the target protection (incl. core)
+#   %capturable%      non-core chunks that must be captured
+#   %members%         number of players allowed in the protection
+#   %online_members%  how many of those are online right now
+# Supports + - * / ^ ( ) and sqrt/sin/cos/tan. Default: a flat 100.
+start-cost:
+  enabled: true
+  formula: "100"
+
+# ------------------------------------------------------------
+#  Freeze window & joining
+# ------------------------------------------------------------
+# After /bsraid start there is a freeze window during which the raid has
+# not begun yet: only in this window can players request to join and the
+# leader accept/reject/invite/kick. Capture starts when it ends.
+join:
+  # Length of the freeze window, in seconds. 0 = no window (starts at once).
+  freeze-seconds: 30
+  # Players farther than this many blocks from where the raid was started
+  # cannot request to join, and do not receive the clickable announcement.
+  radius: 10
+  # Whether starting a raid announces the clickable "[Request to join]"
+  # invite to nearby outsiders. With it off players can still join through
+  # /bsraid request or a leader invite; the freeze window is unaffected.
+  invite: true
+
+# ------------------------------------------------------------
+#  Freeze / progress display (shown to raiders and defenders)
+# ------------------------------------------------------------
+# During the freeze it shows the countdown; during the raid it shows chunk
+# capture progress and the nexus HP. Text templates live in lang.yml
+# (freeze-display-*, capture-display-*, nexus-display-*).
+display:
+  # ACTIONBAR, BOSSBAR, CHAT or NONE.
+  type: ACTIONBAR
+  # For CHAT: minimum seconds between messages.
+  chat-interval-seconds: 5
+  # For BOSSBAR: color (PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE)
+  # and style (SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20).
+  bossbar-color: RED
+  bossbar-style: SEGMENTED_10
+
+# ------------------------------------------------------------
+#  Automatic schedule
+# ------------------------------------------------------------
+# When enabled, raiding is turned on inside the windows below and off
+# outside of them, overriding the manual on/off state. Times are the
+# server's local time in 24h HH:mm. Days: MON,TUE,WED,THU,FRI,SAT,SUN.
+schedule:
+  enabled: false
+  windows:
+    - days: [FRI, SAT, SUN]
+      from: "18:00"
+      to: "22:00"

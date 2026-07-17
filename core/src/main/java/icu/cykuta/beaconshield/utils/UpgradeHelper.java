@@ -8,6 +8,7 @@ import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.data.UpgradeHandler;
 import icu.cykuta.beaconshield.gui.views.BeaconGUI;
 import icu.cykuta.beaconshield.upgrade.Upgrade;
+import icu.cykuta.beaconshield.upgrade.UpgradeSuppressor;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -22,6 +23,19 @@ import java.util.List;
 import java.util.Map;
 
 public class UpgradeHelper {
+
+    /**
+     * Optional external hook (e.g. the raid expansion) that can disable
+     * upgrades on a chunk. May be {@code null}.
+     */
+    private static UpgradeSuppressor upgradeSuppressor;
+
+    /**
+     * Register (or clear, with {@code null}) the upgrade suppressor.
+     */
+    public static void setUpgradeSuppressor(UpgradeSuppressor suppressor) {
+        upgradeSuppressor = suppressor;
+    }
 
     /**
      * Create an item stack prepared to be an {@Upgrade} item.
@@ -76,6 +90,10 @@ public class UpgradeHelper {
 
         if (!beacon.canProtect()) {
             return false; // If beacon not have fuel, return
+        }
+
+        if (upgradeSuppressor != null && upgradeSuppressor.isSuppressed(chunk)) {
+            return false; // Upgrades disabled here (e.g. protection under raid)
         }
 
         for (Map.Entry<Integer, ItemStack> entry : beacon.getPdcManager().getStoredItems().entrySet()) {
