@@ -20,9 +20,15 @@ public final class BeaconShield extends JavaPlugin {
         instance = this;
         api = new BeaconShieldAPI();
 
-        // Anonymous usage metrics (bstats.org), can be disabled in config.yml
+        // Anonymous usage metrics (bstats.org), can be disabled in config.yml.
+        // Wrapped defensively: metrics must never stop the plugin from enabling
+        // (e.g. if bstats is missing from a mis-shaded jar).
         if (ConfigHandler.getInstance().getConfig().getBoolean("metrics-enabled", true)) {
-            new Metrics(this, 25023);
+            try {
+                new Metrics(this, 25023);
+            } catch (Throwable t) {
+                getLogger().warning("Could not start bStats metrics: " + t.getMessage());
+            }
         }
 
         // Register upgrades, commands, events and recipes

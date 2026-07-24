@@ -68,8 +68,11 @@ jobs:
             *SNAPSHOT*) prerelease="--prerelease" ;;
           esac
 
-          # Module jars, excluding the unshaded original-* left by the shade plugin
-          jars=$(find . -path '*/target/*.jar' ! -name 'original-*' ! -name '*-sources.jar' ! -name '*-javadoc.jar')
+          # Final shaded jars. The parent pom's shade config uses <outputFile>
+          # to write each module's shaded jar to .dist/ at the repo root, so the
+          # jars in */target/ are the UNSHADED compiles (no bstats) and must not
+          # be published.
+          jars=$(find .dist -name '*.jar')
 
           gh release create "$version" \
             --title "$version" \
