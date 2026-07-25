@@ -1,3 +1,6 @@
+
+![RAID EXPANSION](https://proxy.spigotmc.org/95b954c757473605de4f9373882c8376dd354a6a/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f63796b7674612f426561636f6e536869656c64406d61737465722f696d672f726169645f657870616e73696f6e2e706e67)
+![banner](https://proxy.spigotmc.org/d63d694f6f2e84a73618b723922bb9b827d96634/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f63796b7674612f426561636f6e536869656c64406d61737465722f696d672f62616e6e65722e706e67)
 # BeaconShield
 
 BeaconShield is a Minecraft plugin that allows you to protect chunks using a custom beacon with unique functionalities. It provides additional features like upgrades, fuel management, grief protection, member roles and economy integration to enhance server control.
