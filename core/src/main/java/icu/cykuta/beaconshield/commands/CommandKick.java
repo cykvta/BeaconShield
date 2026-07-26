@@ -7,15 +7,18 @@ import icu.cykuta.beaconshield.utils.Chat;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
 
 /**
  * Removes a member from the territory the sender is standing in.
  * Chat alternative to the member edit GUI.
  */
-public class CommandKick extends BaseCommand {
+public class CommandKick extends BeaconShieldCommand {
 
     public CommandKick() {
         super("kick", "beaconshield.kick", CommandMode.PLAYER_ONLY);
+        this.setDescription("Kick players from your territory with /bsd kick");
+        this.setPermissionDefault(PermissionDefault.TRUE);
     }
 
     @Override

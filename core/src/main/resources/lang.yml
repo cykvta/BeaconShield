@@ -7,6 +7,8 @@
 
 prefix: "&7[&bBeaconShield&7] &f"
 reload-config: "&aConfiguration reloaded successfully."
+# {0} latest version, {1} running version, {2} download page
+update-available: "&eVersion &b{0} &eis available &7(you are running {1})&e: &b{2}"
 no-permission: "&cYou do not have permission to use this command."
 insufficient-funds: "&cYou do not have enough money to do this."
 missing-argument: "&cMissing argument"

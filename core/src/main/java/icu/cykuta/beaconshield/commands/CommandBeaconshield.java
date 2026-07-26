@@ -2,14 +2,17 @@ package icu.cykuta.beaconshield.commands;
 
 import icu.cykuta.beaconshield.utils.Chat;
 import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandBeaconshield extends BaseCommand {
+public class CommandBeaconshield extends BeaconShieldCommand {
 
     public CommandBeaconshield() {
         super("BeaconShield", "beaconshield.command", CommandMode.BOTH);
+        this.setDescription("Use the /beaconshield base command");
+        this.setPermissionDefault(PermissionDefault.TRUE);
         this.registerAliases();
         this.registerSubcommands();
     }

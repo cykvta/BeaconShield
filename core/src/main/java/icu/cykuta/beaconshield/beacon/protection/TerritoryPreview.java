@@ -1,9 +1,9 @@
 package icu.cykuta.beaconshield.beacon.protection;
 
+import icu.cykuta.api.config.PluginConfiguration;
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.config.ConfigHandler;
-import icu.cykuta.beaconshield.config.PluginConfiguration;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;

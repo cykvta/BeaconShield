@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class CommandRaidStart extends RaidSubCommand {
 
     public CommandRaidStart(BeaconShieldRaidExpansion plugin, RaidManager manager) {
-        super("start", "beaconshield.raid.start", CommandMode.PLAYER_ONLY, plugin, manager);
+        super("start", PERMISSION_START, CommandMode.PLAYER_ONLY, plugin, manager);
     }
 
     @Override

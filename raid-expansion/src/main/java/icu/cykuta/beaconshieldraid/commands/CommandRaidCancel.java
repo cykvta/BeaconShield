@@ -36,7 +36,7 @@ public class CommandRaidCancel extends RaidSubCommand {
             return false;
         }
 
-        boolean admin = player.hasPermission("beaconshield.raid.admin");
+        boolean admin = player.hasPermission(PERMISSION_ADMIN);
         if (!admin && !raid.isLeader(player.getUniqueId())) {
             msg(sender, "not-raid-leader", "&cOnly the raid leader or an admin can cancel it.");
             return false;

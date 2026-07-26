@@ -5,9 +5,10 @@ import icu.cykuta.beaconshield.utils.Chat;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandGive extends BaseCommand {
+public class CommandGive extends BeaconShieldCommand {
     public CommandGive() {
         super("give", "beaconshield.give", CommandMode.BOTH);
+        this.setDescription("Give beacon shield items to players");
     }
 
     @Override

@@ -6,10 +6,11 @@ import icu.cykuta.beaconshield.utils.Chat;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandUpgrade extends BaseCommand {
+public class CommandUpgrade extends BeaconShieldCommand {
 
     protected CommandUpgrade() {
         super("upgrade", "beaconshield.upgrade", CommandMode.BOTH);
+        this.setDescription("Give upgrade items to players");
 
         // Add completion for all upgrades
         for(Upgrade upgrade : UpgradeHandler.getUpgrades()) {

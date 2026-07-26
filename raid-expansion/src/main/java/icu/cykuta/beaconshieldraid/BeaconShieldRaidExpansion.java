@@ -1,8 +1,8 @@
 package icu.cykuta.beaconshieldraid;
 
+import icu.cykuta.api.command.CommandRegistry;
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.BeaconShieldAPI;
-import icu.cykuta.beaconshield.utils.RegistryUtils;
 import icu.cykuta.beaconshieldraid.commands.CommandRaid;
 import icu.cykuta.beaconshieldraid.config.RaidConfig;
 import icu.cykuta.beaconshieldraid.listeners.NexusListener;
@@ -75,9 +75,10 @@ public final class BeaconShieldRaidExpansion extends JavaPlugin {
         // Nobody can open the beacon menu while it is being raided.
         api.setBeaconInteractionGuard(manager::handleBeaconLock);
 
-        // Register /bsraid through the core command framework (BaseCommand
-        // + the server CommandMap), same as the core commands.
-        RegistryUtils.getCommandMap().register("beaconshieldraid", new CommandRaid(this, manager));
+        // Register /bsraid through the API command framework (BaseCommand +
+        // the server CommandMap), same as the core commands. This also
+        // declares the permission nodes of every sub-command.
+        new CommandRegistry(this).register(new CommandRaid(this, manager));
 
         // Hot-point capture tick (touches the Bukkit API, must be sync).
         new RaidTickTask(manager).runTaskTimer(this, TICK_PERIOD, TICK_PERIOD);

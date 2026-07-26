@@ -1,5 +1,6 @@
 package icu.cykuta.beaconshield.utils;
 
+import icu.cykuta.api.command.CommandRegistry;
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.commands.CommandBeaconshield;
@@ -8,35 +9,14 @@ import icu.cykuta.beaconshield.listeners.*;
 import icu.cykuta.beaconshield.upgrade.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandMap;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.PluginManager;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class RegistryUtils {
-
-    /**
-     * Get the CommandMap of the server.
-     */
-    public static CommandMap getCommandMap() {
-        try {
-            return (CommandMap) Bukkit.getServer().getClass().getDeclaredMethod("getCommandMap")
-                    .invoke(Bukkit.getServer());
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Register a command to the server.
-     */
-    private static void registerCommand(Command command) {
-        getCommandMap().register("beaconshield", command);
-    }
 
     /**
      * Register an event listener to the server.
@@ -85,14 +65,16 @@ public class RegistryUtils {
     }
 
     /**
-     * Register all commands.
+     * Register all commands. Registering also declares their permission nodes
+     * (and their subcommands') in the server, so permission plugins list them.
      */
     public static void registerCommands() {
         List<Command> commands = List.of(
                 new CommandBeaconshield()
         );
 
-        commands.forEach(RegistryUtils::registerCommand);
+        CommandRegistry registry = new CommandRegistry(BeaconShield.getPlugin());
+        commands.forEach(registry::register);
     }
 
     /**

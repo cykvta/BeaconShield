@@ -1,11 +1,11 @@
 package icu.cykuta.beaconshield.providers.hooks;
 
+import icu.cykuta.api.util.Text;
 import icu.cykuta.beaconshield.BeaconShield;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.data.BeaconHandler;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
-import icu.cykuta.beaconshield.utils.Text;
 import icu.cykuta.beaconshield.utils.Time;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;

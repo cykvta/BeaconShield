@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 public class CommandRaidLeave extends RaidSubCommand {
 
     public CommandRaidLeave(BeaconShieldRaidExpansion plugin, RaidManager manager) {
-        super("leave", "beaconshield.raid.join", CommandMode.PLAYER_ONLY, plugin, manager);
+        super("leave", PERMISSION_JOIN, CommandMode.PLAYER_ONLY, plugin, manager);
     }
 
     @Override

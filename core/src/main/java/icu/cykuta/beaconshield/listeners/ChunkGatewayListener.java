@@ -1,11 +1,11 @@
 package icu.cykuta.beaconshield.listeners;
 
+import icu.cykuta.api.config.PluginConfiguration;
+import icu.cykuta.api.util.Text;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.config.ConfigHandler;
-import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.utils.Chat;
-import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

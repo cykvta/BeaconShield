@@ -17,6 +17,13 @@
 # Changing this requires a server restart.
 metrics-enabled: true
 
+# Check https://github.com/cykvta/BeaconShield for a newer release on startup.
+# When a new version is found it is logged once in the console, and players
+# with the permission "beaconshield.update-notify" are told when they join.
+# Nothing is downloaded or installed automatically.
+# Changing this requires a server restart.
+update-check-enabled: true
+
 #----------------------------------#
 #          Beacon Settings         #
 #----------------------------------#

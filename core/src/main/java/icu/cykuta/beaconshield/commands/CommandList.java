@@ -8,9 +8,10 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class CommandList extends BaseCommand {
+public class CommandList extends BeaconShieldCommand {
     public CommandList() {
         super("list", "beaconshield.list", CommandMode.BOTH);
+        this.setDescription("List all beacons on the server");
     }
 
     @Override

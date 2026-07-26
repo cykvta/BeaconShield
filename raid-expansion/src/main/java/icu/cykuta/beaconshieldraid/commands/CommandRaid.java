@@ -41,7 +41,7 @@ public class CommandRaid extends RaidSubCommand {
         reply(sender, "&f/bsraid leave &7- Leave the raid (leader leaving cancels it)");
         reply(sender, "&f/bsraid cancel &7- Leader/admin: cancel the raid");
         reply(sender, "&f/bsraid status &7- Show the raiding state");
-        if (sender.hasPermission("beaconshield.raid.admin")) {
+        if (sender.hasPermission(PERMISSION_ADMIN)) {
             reply(sender, "&f/bsraid toggle [on|off] &7- Enable/disable raiding");
             reply(sender, "&f/bsraid force &7- Force the raid where you stand");
             reply(sender, "&f/bsraid reload &7- Reload the config");

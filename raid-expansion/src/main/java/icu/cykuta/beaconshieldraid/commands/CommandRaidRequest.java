@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
 public class CommandRaidRequest extends RaidSubCommand {
 
     public CommandRaidRequest(BeaconShieldRaidExpansion plugin, RaidManager manager) {
-        super("request", "beaconshield.raid.join", CommandMode.PLAYER_ONLY, plugin, manager);
+        super("request", PERMISSION_JOIN, CommandMode.PLAYER_ONLY, plugin, manager);
     }
 
     @Override

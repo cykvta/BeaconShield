@@ -1,7 +1,7 @@
 package icu.cykuta.beaconshieldraid.config;
 
+import icu.cykuta.api.util.Text;
 import icu.cykuta.beaconshieldraid.BeaconShieldRaidExpansion;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -254,16 +254,18 @@ public class RaidConfig {
             return null;
         }
 
-        String result = prefix() + applyReplacements(raw, replacements);
-        return ChatColor.translateAlternateColorCodes('&', result);
+        return Text.color(prefix() + applyReplacements(raw, replacements));
     }
 
     /**
      * Colorize an ad-hoc message and prepend the prefix. Used for command
      * replies that are not backed by a lang key.
+     *
+     * @param message      The message to colorize.
+     * @param replacements Alternating placeholder/value pairs.
      */
-    public String format(String message) {
-        return ChatColor.translateAlternateColorCodes('&', prefix() + message);
+    public String format(String message, String... replacements) {
+        return Text.color(prefix() + applyReplacements(message, replacements));
     }
 
     /**
@@ -275,7 +277,7 @@ public class RaidConfig {
         if (raw == null || raw.isEmpty()) {
             raw = fallback;
         }
-        return ChatColor.translateAlternateColorCodes('&', raw);
+        return Text.color(raw);
     }
 
     /**
@@ -287,7 +289,7 @@ public class RaidConfig {
         if (raw == null || raw.isEmpty()) {
             raw = fallback;
         }
-        return ChatColor.translateAlternateColorCodes('&', applyReplacements(raw, replacements));
+        return Text.color(applyReplacements(raw, replacements));
     }
 
     private String prefix() {
@@ -295,6 +297,11 @@ public class RaidConfig {
         return prefix == null ? "" : prefix;
     }
 
+    /**
+     * Apply {@code %placeholder% -> value} pairs. Note this is not
+     * {@link Text#replace}, which fills positional {@code {0}} placeholders:
+     * the raid lang files use named ones.
+     */
     private String applyReplacements(String text, String... replacements) {
         String result = text;
         for (int i = 0; i + 1 < replacements.length; i += 2) {

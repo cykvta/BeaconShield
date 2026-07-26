@@ -4,6 +4,8 @@
 # Color codes with '&'. Set a value to "" to silence that message.
 
 prefix: "&8[&cRaid&8] &r"
+no-permission: "&cYou do not have permission to use this command."
+invalid-sender: "&cYou cannot execute this command."
 raids-enabled: "&cRaids are now ENABLED."
 raids-disabled: "&aRaids are now DISABLED."
 

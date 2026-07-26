@@ -73,6 +73,14 @@
     </repositories>
 
     <dependencies>
+        <!-- Shaded, and deliberately NOT relocated: the expansions and
+             integrations use icu.cykuta.api.* classes loaded from this jar. -->
+        <dependency>
+            <groupId>com.github.cykvta</groupId>
+            <artifactId>CykutaAPI</artifactId>
+            <version>${cykuta.api.version}</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>com.jeff-media</groupId>
             <artifactId>custom-block-data</artifactId>

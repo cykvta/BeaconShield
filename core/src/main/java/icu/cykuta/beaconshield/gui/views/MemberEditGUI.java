@@ -1,5 +1,6 @@
 package icu.cykuta.beaconshield.gui.views;
 
+import icu.cykuta.api.util.Text;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.protection.PlayerRole;
 import icu.cykuta.beaconshield.config.ConfigHandler;
@@ -7,7 +8,6 @@ import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIClick;
 import icu.cykuta.beaconshield.utils.Chat;
 import icu.cykuta.beaconshield.utils.HeadHelper;
-import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 

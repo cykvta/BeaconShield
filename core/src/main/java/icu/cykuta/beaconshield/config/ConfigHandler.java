@@ -1,52 +1,52 @@
 package icu.cykuta.beaconshield.config;
 
+import icu.cykuta.api.config.ConfigManager;
+import icu.cykuta.api.config.PluginConfiguration;
+import icu.cykuta.beaconshield.BeaconShield;
+
+/**
+ * Named access to BeaconShield's yml files, backed by the API's
+ * {@link ConfigManager} — which handles creating them from the bundled
+ * resources, merging in keys added by an update, saving and reloading.
+ */
 public class ConfigHandler {
     private static final ConfigHandler instance = new ConfigHandler();
 
-    private final ConfigFile config = new ConfigFile("config.yml");
-    private final ConfigFile lang = new ConfigFile("lang.yml");
-    private final ConfigFile gui = new ConfigFile("gui.yml");
-    private final ConfigFile upgrade = new ConfigFile("upgrade.yml");
+    private final ConfigManager manager = new ConfigManager(BeaconShield.getPlugin());
 
     public ConfigHandler() {
         this.register();
     }
 
     public void register() {
-        this.config.register();
-        this.lang.register();
-        this.gui.register();
-        this.upgrade.register();
+        this.manager.register("config.yml");
+        this.manager.register("lang.yml");
+        this.manager.register("gui.yml");
+        this.manager.register("upgrade.yml");
     }
 
     public void save() {
-        this.config.save();
-        this.lang.save();
-        this.gui.save();
-        this.upgrade.save();
+        this.manager.saveAll();
     }
 
     public void reload() {
-        this.config.reload();
-        this.lang.reload();
-        this.gui.reload();
-        this.upgrade.reload();
+        this.manager.reloadAll();
     }
 
     public PluginConfiguration getConfig() {
-        return this.config.getFileConfiguration();
+        return this.manager.get("config.yml");
     }
 
     public PluginConfiguration getLang() {
-        return this.lang.getFileConfiguration();
+        return this.manager.get("lang.yml");
     }
 
     public PluginConfiguration getGui() {
-        return this.gui.getFileConfiguration();
+        return this.manager.get("gui.yml");
     }
 
     public PluginConfiguration getUpgrade() {
-        return this.upgrade.getFileConfiguration();
+        return this.manager.get("upgrade.yml");
     }
 
     public static ConfigHandler getInstance() {

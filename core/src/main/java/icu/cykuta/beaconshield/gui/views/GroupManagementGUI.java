@@ -1,13 +1,13 @@
 package icu.cykuta.beaconshield.gui.views;
 
+import icu.cykuta.api.config.PluginConfiguration;
+import icu.cykuta.api.util.Text;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.protection.PlayerRole;
 import icu.cykuta.beaconshield.beacon.protection.RolePermission;
 import icu.cykuta.beaconshield.config.ConfigHandler;
-import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.utils.Chat;
-import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -56,7 +56,7 @@ public class GroupManagementGUI extends GUI {
     private ItemStack createPermissionItem(String configPath, RolePermission permission) {
         PluginConfiguration lang = ConfigHandler.getInstance().getLang();
 
-        ItemStack item = this.guiConfig.getItemStack(configPath);
+        ItemStack item = this.guiItem(configPath);
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
             return item;

@@ -1,7 +1,8 @@
 package icu.cykuta.beaconshield.utils;
 
+import icu.cykuta.api.config.PluginConfiguration;
+import icu.cykuta.api.util.Text;
 import icu.cykuta.beaconshield.config.ConfigHandler;
-import icu.cykuta.beaconshield.config.PluginConfiguration;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

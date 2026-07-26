@@ -4,6 +4,7 @@ import icu.cykuta.beaconshield.config.ConfigHandler;
 import icu.cykuta.beaconshield.data.BeaconHandler;
 import icu.cykuta.beaconshield.beacon.fuel.FuelConsumeTask;
 import icu.cykuta.beaconshield.providers.hooks.BeaconShieldExpansion;
+import icu.cykuta.beaconshield.update.UpdateNotifier;
 import icu.cykuta.beaconshield.utils.RegistryUtils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,6 +31,9 @@ public final class BeaconShield extends JavaPlugin {
                 getLogger().warning("Could not start bStats metrics: " + t.getMessage());
             }
         }
+
+        // Warn about a newer GitHub release, can be disabled in config.yml
+        new UpdateNotifier(this).start();
 
         // Register upgrades, commands, events and recipes
         RegistryUtils.registerUpgrades();

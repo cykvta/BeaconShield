@@ -6,9 +6,10 @@ import icu.cykuta.beaconshield.data.UpgradeHandler;
 import icu.cykuta.beaconshield.utils.Chat;
 import org.bukkit.command.CommandSender;
 
-public class CommandReload extends BaseCommand {
+public class CommandReload extends BeaconShieldCommand {
     public CommandReload() {
         super("reload", "beaconshield.reload", CommandMode.BOTH);
+        this.setDescription("Reload the plugin configuration");
     }
 
     @Override

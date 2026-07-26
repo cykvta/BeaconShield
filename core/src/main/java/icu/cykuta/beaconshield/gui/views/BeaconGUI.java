@@ -1,5 +1,6 @@
 package icu.cykuta.beaconshield.gui.views;
 
+import icu.cykuta.api.util.Text;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.protection.PlayerRole;
 import icu.cykuta.beaconshield.config.ConfigHandler;
@@ -8,7 +9,6 @@ import icu.cykuta.beaconshield.data.UpgradeHandler;
 import icu.cykuta.beaconshield.gui.GUI;
 import icu.cykuta.beaconshield.gui.GUIClick;
 import icu.cykuta.beaconshield.utils.Chat;
-import icu.cykuta.beaconshield.utils.Text;
 import icu.cykuta.beaconshield.utils.Time;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -172,8 +172,8 @@ public class BeaconGUI extends GUI {
         }
 
         ItemStack item = this.beacon.canProtect() ?
-                this.guiConfig.getItemStack("beacon-gui.info-protected") :
-                this.guiConfig.getItemStack("beacon-gui.info-unprotected");
+                this.guiItem("beacon-gui.info-protected") :
+                this.guiItem("beacon-gui.info-unprotected");
 
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {

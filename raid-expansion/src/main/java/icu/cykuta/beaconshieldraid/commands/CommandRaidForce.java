@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class CommandRaidForce extends RaidSubCommand {
 
     public CommandRaidForce(BeaconShieldRaidExpansion plugin, RaidManager manager) {
-        super("force", "beaconshield.raid.admin", CommandMode.PLAYER_ONLY, plugin, manager);
+        super("force", PERMISSION_ADMIN, CommandMode.PLAYER_ONLY, plugin, manager);
     }
 
     @Override

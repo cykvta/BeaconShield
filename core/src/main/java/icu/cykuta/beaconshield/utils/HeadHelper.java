@@ -1,5 +1,6 @@
 package icu.cykuta.beaconshield.utils;
 
+import icu.cykuta.api.util.Text;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;

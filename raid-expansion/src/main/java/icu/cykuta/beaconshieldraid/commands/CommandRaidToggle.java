@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 public class CommandRaidToggle extends RaidSubCommand {
 
     public CommandRaidToggle(BeaconShieldRaidExpansion plugin, RaidManager manager) {
-        super("toggle", "beaconshield.raid.admin", CommandMode.BOTH, plugin, manager);
+        super("toggle", PERMISSION_ADMIN, CommandMode.BOTH, plugin, manager);
     }
 
     @Override

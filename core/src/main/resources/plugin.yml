@@ -4,28 +4,13 @@ main: icu.cykuta.beaconshield.BeaconShield
 api-version: '1.20'
 soft-depend: [Vault, WorldGuard, WorldEdit, PlaceholderAPI]
 
+# Command permissions (beaconshield.command, .give, .invite, ...) are declared
+# by the commands themselves and registered on startup, so they are not
+# repeated here. Only the nodes that belong to no command are listed below.
 permissions:
-  beaconshield.command:
-    description: Use the /beaconshield base command
-    default: true
-  beaconshield.invite:
-    description: Invite players to your territory with /bsd invite
-    default: true
-  beaconshield.kick:
-    description: Kick players from your territory with /bsd kick
-    default: true
-  beaconshield.reload:
-    description: Reload the plugin configuration
-    default: op
-  beaconshield.give:
-    description: Give beacon shield items to players
-    default: op
-  beaconshield.upgrade:
-    description: Give upgrade items to players
-    default: op
-  beaconshield.list:
-    description: List all beacons on the server
-    default: op
   beaconshield.bypass:
     description: Bypass all territory protection checks
+    default: op
+  beaconshield.update-notify:
+    description: Be told on join when a new version is available
     default: op

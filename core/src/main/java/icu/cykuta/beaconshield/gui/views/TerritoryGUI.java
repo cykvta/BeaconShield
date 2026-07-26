@@ -1,11 +1,12 @@
 package icu.cykuta.beaconshield.gui.views;
 
+import icu.cykuta.api.config.PluginConfiguration;
+import icu.cykuta.api.util.Text;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.beacon.protection.PlayerRole;
 import icu.cykuta.beaconshield.beacon.protection.ProtectedChunk;
 import icu.cykuta.beaconshield.beacon.protection.TerritoryPreview;
 import icu.cykuta.beaconshield.config.ConfigHandler;
-import icu.cykuta.beaconshield.config.PluginConfiguration;
 import icu.cykuta.beaconshield.data.HookHandler;
 import icu.cykuta.beaconshield.data.ProtectionHandler;
 import icu.cykuta.beaconshield.events.ProtectionChunkAddedEvent;
@@ -15,7 +16,6 @@ import icu.cykuta.beaconshield.providers.hooks.WorldGuardHook;
 import icu.cykuta.beaconshield.utils.Chat;
 import icu.cykuta.beaconshield.utils.MathUtils;
 import icu.cykuta.beaconshield.utils.PermissionUtils;
-import icu.cykuta.beaconshield.utils.Text;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -164,11 +164,11 @@ public class TerritoryGUI extends GUI {
                 int slot = MAP_SLOTS.get(row * 3 + col);
 
                 ItemStack item = switch (chunkType) {
-                    case CORE -> this.guiConfig.getItemStack("territory-gui.chunk-core");
-                    case CLAIMED -> this.guiConfig.getItemStack("territory-gui.chunk-claimed");
-                    case OCCUPIED -> this.guiConfig.getItemStack("territory-gui.chunk-occupied");
-                    case AVAILABLE -> this.guiConfig.getItemStack("territory-gui.chunk-available");
-                    case UNREACHABLE -> this.guiConfig.getItemStack("territory-gui.chunk-unreachable");
+                    case CORE -> this.guiItem("territory-gui.chunk-core");
+                    case CLAIMED -> this.guiItem("territory-gui.chunk-claimed");
+                    case OCCUPIED -> this.guiItem("territory-gui.chunk-occupied");
+                    case AVAILABLE -> this.guiItem("territory-gui.chunk-available");
+                    case UNREACHABLE -> this.guiItem("territory-gui.chunk-unreachable");
                 };
 
                 ItemMeta meta = item.getItemMeta();

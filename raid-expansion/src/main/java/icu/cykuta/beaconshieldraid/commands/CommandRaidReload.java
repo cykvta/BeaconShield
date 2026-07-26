@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 public class CommandRaidReload extends RaidSubCommand {
 
     public CommandRaidReload(BeaconShieldRaidExpansion plugin, RaidManager manager) {
-        super("reload", "beaconshield.raid.admin", CommandMode.BOTH, plugin, manager);
+        super("reload", PERMISSION_ADMIN, CommandMode.BOTH, plugin, manager);
     }
 
     @Override

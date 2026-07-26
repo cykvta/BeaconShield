@@ -1,11 +1,12 @@
 package icu.cykuta.beaconshield.gui;
 
+import icu.cykuta.api.config.PluginConfiguration;
+import icu.cykuta.api.util.Text;
 import icu.cykuta.beaconshield.beacon.BeaconShieldBlock;
 import icu.cykuta.beaconshield.config.ConfigHandler;
-import icu.cykuta.beaconshield.config.PluginConfiguration;
+import icu.cykuta.beaconshield.config.ConfigItems;
 import icu.cykuta.beaconshield.data.BeaconHandler;
 import icu.cykuta.beaconshield.gui.views.ConfirmationGUI;
-import icu.cykuta.beaconshield.utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -100,10 +101,17 @@ public abstract class GUI {
     }
 
     /**
+     * Read an item from gui.yml.
+     */
+    protected ItemStack guiItem(String configPath) {
+        return ConfigItems.get(this.guiConfig, configPath);
+    }
+
+    /**
      * Add a clickable button whose item is read from gui.yml.
      */
     protected void addButton(int slot, String configPath, Consumer<GUIClick> action) {
-        this.addButton(slot, this.guiConfig.getItemStack(configPath), action);
+        this.addButton(slot, this.guiItem(configPath), action);
     }
 
     /**
@@ -118,7 +126,7 @@ public abstract class GUI {
      * Fill the given slots with the decoration item.
      */
     protected void addDecoration(int... slots) {
-        ItemStack decoration = this.guiConfig.getItemStack("global.decoration");
+        ItemStack decoration = this.guiItem("global.decoration");
         for (int slot : slots) {
             this.decorationSlots.add(slot);
             this.inventory.setItem(slot, decoration);

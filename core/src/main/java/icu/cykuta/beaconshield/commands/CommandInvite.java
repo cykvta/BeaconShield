@@ -8,15 +8,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
 
 /**
  * Adds a player as member of the territory the sender is standing in.
  * Chat alternative to the invite GUI.
  */
-public class CommandInvite extends BaseCommand {
+public class CommandInvite extends BeaconShieldCommand {
 
     public CommandInvite() {
         super("invite", "beaconshield.invite", CommandMode.PLAYER_ONLY);
+        this.setDescription("Invite players to your territory with /bsd invite");
+        this.setPermissionDefault(PermissionDefault.TRUE);
     }
 
     @Override
